@@ -1,0 +1,1578 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Protein Pan</title>
+<meta name="description" content="High-protein recipes, one step at a time.">
+<meta name="theme-color" content="#F5F7F2">
+<meta name="theme-color" content="#111511" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Protein Pan">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" href="icons/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}body{margin:0;font:14px system-ui,-apple-system,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<style>
+/* Layout: phone-first single column (max 520px). Shelf of photo cards → recipe sheet over full-bleed photo → full-screen colour field, one step at a time, thumb-zone controls */
+:root{
+  --bg:#F5F7F2; --surface:#FFFFFF; --ink:#1C231E; --muted:#5D6A61; --line:#DFE6DD;
+  --accent:#17694A; --accent-ink:#FFFFFF; --pop:#E89A06; --pop-soft:#FDF0D3; --warn:#B4541A; --af:#1F4FA8; --af-soft:#E3EBFA;
+  --display:"Young Serif", Georgia, "Times New Roman", serif;
+  --body:"DM Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#111511; --surface:#1A201B; --ink:#ECF1EA; --muted:#9BA89F; --line:#2B342D;
+  --accent:#5CCF97; --accent-ink:#0D1A12; --pop:#F5B63E; --pop-soft:#3A2E14; --warn:#F09A5F; --af:#9DB9F2; --af-soft:#1C2740; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111511; --surface:#1A201B; --ink:#ECF1EA; --muted:#9BA89F; --line:#2B342D;
+  --accent:#5CCF97; --accent-ink:#0D1A12; --pop:#F5B63E; --pop-soft:#3A2E14; --warn:#F09A5F; --af:#9DB9F2; --af-soft:#1C2740; color-scheme:dark}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{height:100%}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;-webkit-font-smoothing:antialiased;overscroll-behavior-y:none}
+button{font:inherit;color:inherit;cursor:pointer;touch-action:manipulation}
+button:focus-visible{outline:3px solid var(--pop);outline-offset:2px}
+h1,h2,h3{font-family:var(--display);font-weight:400;text-wrap:balance;margin:0;letter-spacing:-.01em}
+.num{font-variant-numeric:tabular-nums}
+.col{max-width:520px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* ---------- home ---------- */
+.home{padding-block:16px 40px}
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:48px}
+.brand{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;letter-spacing:.01em}
+.kcal-btn{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 14px;font-size:13.5px;font-weight:600;min-height:40px;display:flex;align-items:center;gap:8px;color:var(--muted)}
+.kcal-btn i{width:28px;height:16px;border-radius:8px;background:var(--line);position:relative;transition:background .2s}
+.kcal-btn i::after{content:"";position:absolute;left:2px;top:2px;width:12px;height:12px;border-radius:50%;background:var(--surface);transition:transform .2s}
+.kcal-btn[aria-checked="true"]{color:var(--ink)}
+.kcal-btn[aria-checked="true"] i{background:var(--accent)}
+.kcal-btn[aria-checked="true"] i::after{transform:translateX(12px)}
+.hello{margin:18px 0 6px}
+.hello h1{font-size:34px;line-height:1.08}
+.hello p{margin:8px 0 0;color:var(--muted);font-size:15.5px}
+/* sticky category tabs + quick filters */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.tabs-wrap{position:sticky;top:env(safe-area-inset-top,0px);z-index:6;background:var(--bg);margin:14px 0 0;padding:8px 0 6px}
+.tabs-wrap::after{content:"";position:absolute;left:0;right:0;bottom:0;height:1px;background:var(--line);opacity:var(--sh,0)}
+.tabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:0 max(16px,env(safe-area-inset-left,0px))}
+.tabs::-webkit-scrollbar,.quick::-webkit-scrollbar,.row::-webkit-scrollbar{display:none}
+.tab{flex:none;border:0;background:var(--surface);border-radius:14px;padding:8px 14px;min-height:44px;font-size:14.5px;font-weight:700;color:var(--muted);display:flex;align-items:center;gap:7px;box-shadow:inset 0 0 0 1px var(--line)}
+.tab i{font-style:normal;font-size:12px;font-weight:700;background:var(--bg);border-radius:999px;padding:1px 7px;color:var(--muted)}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--bg);box-shadow:none}
+.tab[aria-selected="true"] i{background:rgba(255,255,255,.18);color:var(--bg)}
+.quick{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;margin:8px calc(-1 * max(16px,env(safe-area-inset-left,0px))) 0;padding:0 max(16px,env(safe-area-inset-left,0px))}
+.qchip{flex:none;border:0;background:none;border-radius:999px;padding:6px 11px;min-height:36px;font-size:13px;font-weight:600;color:var(--muted);display:flex;align-items:center;gap:5px;box-shadow:inset 0 0 0 1px var(--line)}
+.qchip[aria-pressed="true"]{background:var(--pop-soft);color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--pop)}
+/* sections of compact cards */
+.sec{margin-top:22px}
+.sec-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:10px}
+.sec-top h2{font-size:23px}
+.sec-top p{margin:2px 0 0;color:var(--muted);font-size:13.5px}
+.see{border:0;background:none;color:var(--accent);font-weight:700;font-size:14px;padding:8px 0;min-height:40px;white-space:nowrap}
+.row{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:0 max(16px,env(safe-area-inset-left,0px)) 4px;scroll-padding-inline:max(16px,env(safe-area-inset-left,0px))}
+.row .mini{flex:0 0 calc((100% - 12px) / 2.3);scroll-snap-align:start}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 12px;margin-top:14px}
+.mini{border:0;padding:0;background:none;text-align:left;display:flex;flex-direction:column;gap:8px;min-width:0}
+.mini:active .mph{transform:scale(.97)}
+.mph{position:relative;aspect-ratio:1/1;max-width:100%;border-radius:20px;overflow:hidden;background:var(--tint);transition:transform .15s}
+.mph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.badges{position:absolute;top:8px;left:8px;display:flex;gap:4px}
+.badges span{width:26px;height:26px;border-radius:50%;background:rgba(255,255,255,.94);color:#1C231E;display:grid;place-items:center;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.pg{position:absolute;left:8px;bottom:8px;background:rgba(255,255,255,.95);color:#1C231E;border-radius:999px;padding:4px 9px 4px 7px;font-size:13px;font-weight:700;display:flex;align-items:center;gap:5px;box-shadow:0 2px 8px rgba(0,0,0,.15)}
+.pg::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--pop)}
+.mini h3{font-family:var(--body);font-weight:700;font-size:15px;line-height:1.25;letter-spacing:0;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.mini .m{font-size:13px;color:var(--muted);margin-top:-4px}
+@media (min-width:640px){.grid2{grid-template-columns:repeat(3,minmax(0,1fr))}.row .mini{flex-basis:200px}}
+@media (min-width:900px){.home .col{max-width:980px}.grid2{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.eyebrow{font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;color:var(--accent);margin-bottom:6px}
+.list{display:grid;grid-template-columns:minmax(0,1fr);gap:16px;margin-top:10px}
+.card{border:0;padding:0;text-align:left;background:var(--surface);border-radius:24px;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 1px 0 var(--line),0 10px 28px -18px rgba(20,40,25,.45);transition:transform .15s}
+.card:active{transform:scale(.985)}
+.ph{position:relative;aspect-ratio:16/11;max-width:100%;background:var(--tint);overflow:hidden}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 50%;display:block}
+.tags{position:absolute;left:12px;top:12px;display:flex;gap:6px;flex-wrap:wrap}
+.tag{font-size:12px;font-weight:700;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.94);color:#1C231E;display:inline-flex;gap:5px;align-items:center;box-shadow:0 2px 8px rgba(0,0,0,.12)}
+.tag svg{flex:none}
+.card .body{display:flex;gap:12px;align-items:flex-end;padding:14px 16px 16px}
+.card .txt{flex:1;min-width:0}
+.card h3{font-size:22px;line-height:1.15}
+.card .sub{color:var(--muted);font-size:14px;margin-top:4px}
+.pro{flex:none;text-align:right}
+.pro b{font-family:var(--display);font-weight:400;font-size:30px;line-height:1;color:var(--pop)}
+.pro b small{font-family:var(--body);font-size:14px;font-weight:700;margin-left:1px}
+.pro span{display:block;font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-top:4px}
+.foot{color:var(--muted);font-size:13px;margin-top:20px;text-align:center}
+.empty{color:var(--muted);text-align:center;padding:40px 0}
+
+/* ---------- detail ---------- */
+.hero{position:relative;height:min(56vh,440px);background:var(--tint);overflow:hidden}
+.hero img{width:100%;height:100%;object-fit:cover;display:block}
+.fab{position:absolute;top:calc(12px + env(safe-area-inset-top,0px));left:max(16px,env(safe-area-inset-left,0px));width:44px;height:44px;border-radius:50%;border:0;background:rgba(255,255,255,.94);color:#1C231E;display:grid;place-items:center;box-shadow:0 4px 14px rgba(0,0,0,.2);z-index:2}
+.sheet{position:relative;background:var(--bg);border-radius:28px 28px 0 0;margin-top:-28px;padding-block:22px 140px}
+.sheet .col{display:flex;flex-direction:column}
+.needs{display:flex;gap:12px;align-items:center;background:var(--af-soft);color:var(--af);border-radius:16px;padding:12px 14px;margin-bottom:16px;font-size:14.5px;line-height:1.35}
+.needs svg{flex:none}
+.needs b{display:block;font-size:15px}
+.needs span{color:var(--ink);opacity:.8}
+.sheet h2{font-size:34px;line-height:1.08}
+.lede{color:var(--muted);margin:10px 0 0;font-size:15.5px}
+.stats{display:grid;grid-template-columns:repeat(var(--n),minmax(0,1fr));margin:20px 0 6px;background:var(--surface);border-radius:18px;border:1px solid var(--line)}
+.stat{padding:14px 8px;text-align:center}
+.stat+.stat{border-left:1px solid var(--line)}
+.stat .v{font-family:var(--display);font-size:26px;line-height:1}
+.stat .v small{font-family:var(--body);font-size:13px;font-weight:700;margin-left:2px}
+.stat .l{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-top:6px}
+.stat.p .v{color:var(--pop)}
+.delta{font-size:13.5px;color:var(--warn);font-weight:600;min-height:20px;text-align:center}
+.note{background:var(--pop-soft);border-radius:14px;padding:12px 14px;font-size:14.5px;margin-top:10px}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:26px 0 4px}
+.sec-h h3{font-size:24px}
+.sec-h span{color:var(--muted);font-size:13.5px;font-weight:600}
+.help{color:var(--muted);font-size:14.5px;margin:2px 0 10px}
+.ings{list-style:none;margin:0;padding:0}
+.ing{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:12px 12px 12px 14px;margin-bottom:8px}
+.ing.miss{border-color:color-mix(in srgb,var(--warn) 45%,var(--line))}
+.ing-row{display:flex;align-items:center;gap:10px}
+.ing-name{flex:1;min-width:0}
+.ing-name b{font-weight:600;font-size:15.5px;display:block;line-height:1.3}
+.ing-name .q{color:var(--muted);font-size:13.5px}
+.ing.off .ing-name b{text-decoration:line-through;color:var(--muted)}
+.seg{display:inline-flex;border-radius:999px;padding:3px;background:var(--bg);flex:none}
+.seg button{border:0;background:none;padding:8px 12px;min-height:38px;border-radius:999px;font-size:13.5px;font-weight:700;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.seg button.m[aria-pressed="true"]{background:var(--warn);color:#fff}
+.need{font-size:12.5px;font-weight:700;color:var(--muted);padding:0 6px}
+.opts{margin-top:10px;display:flex;flex-direction:column;gap:8px}
+.opts .lab{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1.5px solid var(--line);background:var(--bg);border-radius:14px;padding:9px 13px;min-height:42px;font-size:14px;font-weight:600;text-align:left;line-height:1.25}
+.chip small{display:block;font-weight:500;opacity:.75;font-size:12.5px}
+.chip[aria-pressed="true"]{border-color:var(--accent);background:var(--accent);color:var(--accent-ink)}
+.why{font-size:13.5px;color:var(--muted)}
+.cta-bar{position:fixed;left:0;right:0;bottom:0;z-index:5;padding:20px max(16px,env(safe-area-inset-right,0px)) calc(14px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));background:linear-gradient(to top,var(--bg) 62%,transparent)}
+.cta{display:flex;justify-content:center;align-items:center;gap:10px;width:100%;max-width:488px;margin:0 auto;border:0;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:17px;min-height:58px;border-radius:999px;box-shadow:0 12px 26px -12px rgba(23,105,74,.7)}
+.cta span{opacity:.75;font-weight:500}
+
+/* ---------- cook mode: one committed colour world ---------- */
+.cook{position:fixed;inset:0;z-index:20;color:#FFFFFF;overflow:hidden;background:var(--c4);display:flex;flex-direction:column;color-scheme:dark;
+  padding:calc(10px + env(safe-area-inset-top,0px)) max(16px,env(safe-area-inset-right,0px)) calc(12px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px))}
+.blob{position:absolute;border-radius:50%;filter:blur(60px);pointer-events:none}
+.b1{width:120vmax;height:120vmax;left:-50vmax;top:-60vmax;background:var(--c1);opacity:.95;animation:d1 18s ease-in-out infinite alternate}
+.b2{width:90vmax;height:90vmax;right:-45vmax;top:20vh;background:var(--c2);opacity:.85;animation:d2 22s ease-in-out infinite alternate}
+.b3{width:90vmax;height:90vmax;left:-20vmax;bottom:-55vmax;background:var(--c3);opacity:.8;animation:d3 26s ease-in-out infinite alternate}
+.vig{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.08),transparent 30%,transparent 60%,rgba(0,0,0,.28));pointer-events:none}
+@keyframes d1{to{transform:translate(20vmax,14vmax) scale(1.08)}}
+@keyframes d2{to{transform:translate(-18vmax,-10vmax) scale(.9)}}
+@keyframes d3{to{transform:translate(16vmax,-14vmax) scale(1.12)}}
+@media (prefers-reduced-motion:reduce){.blob{animation:none}.card{transition:none}}
+.cook>.ui{position:relative;z-index:1;display:flex;flex-direction:column;flex:1;min-height:0;max-width:560px;width:100%;margin:0 auto}
+.c-top{display:flex;align-items:center;gap:10px}
+.x{width:44px;height:44px;border-radius:50%;border:0;background:rgba(0,0,0,.24);color:#fff;display:grid;place-items:center;flex:none}
+.thumb{width:36px;height:36px;border-radius:50%;object-fit:cover;flex:none;border:2px solid rgba(255,255,255,.7)}
+.c-title{flex:1;min-width:0;font-weight:700;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;text-shadow:0 1px 8px rgba(0,0,0,.3)}
+.c-count{font-weight:700;font-size:13.5px;background:rgba(0,0,0,.24);padding:8px 12px;border-radius:999px;white-space:nowrap}
+.ibtn{width:44px;height:44px;border-radius:50%;border:0;background:rgba(0,0,0,.24);color:#fff;display:grid;place-items:center;flex:none;position:relative}
+.ibtn[aria-pressed="true"]{background:#fff;color:#1b1b1b}
+.ibtn.mic[aria-pressed="true"]::after{content:"";position:absolute;top:6px;right:6px;width:8px;height:8px;border-radius:50%;background:#E5484D;animation:pulse 1s infinite}
+@media (max-width:420px){.thumb{display:none}}
+.listen{display:flex;align-items:center;gap:8px;margin-top:10px;background:rgba(0,0,0,.28);border-radius:14px;padding:8px 12px;font-size:13.5px;line-height:1.35}
+.listen b{font-weight:700}
+.listen .heard{opacity:.8;margin-left:auto;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:40%}
+.s-head{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.again{border:0;background:rgba(255,255,255,.18);color:#fff;border-radius:999px;min-height:36px;padding:6px 12px;font-size:13.5px;font-weight:700;display:inline-flex;align-items:center;gap:6px}
+.again.on{background:#fff;color:#1b1b1b}
+.bars{display:flex;gap:4px;margin-top:12px}
+.bars i{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.3);transition:background .3s}
+.bars i.on{background:#fff}
+.running{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.run{border:0;background:#fff;color:#1b1b1b;font-weight:700;font-size:13.5px;min-height:36px;padding:6px 12px;border-radius:999px;display:inline-flex;gap:8px;align-items:center;box-shadow:0 6px 16px -6px rgba(0,0,0,.5)}
+.run.done{background:#FFE14D}
+.run i{width:8px;height:8px;border-radius:50%;background:#E5484D;animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.25}}
+.stage{flex:1;display:flex;flex-direction:column;justify-content:center;min-height:0;overflow-y:auto;padding:16px 0;touch-action:pan-y}
+.card-s{background:rgba(16,9,5,.30);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(255,255,255,.18);border-radius:28px;padding:24px 22px;display:flex;flex-direction:column;gap:18px;animation:rise .3s ease}
+@keyframes rise{from{opacity:.3;transform:translateY(12px)}}
+@media (prefers-reduced-motion:reduce){.card-s{animation:none}}
+.s-lab{font-size:12px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;opacity:.8}
+.s-text{font-family:var(--display);font-size:clamp(25px,7vw,34px);line-height:1.22;margin:0}
+.s-text .ing{background:rgba(255,255,255,.22);border-radius:8px;padding:0 6px;font-style:normal}
+.s-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.s-list li{background:rgba(255,255,255,.94);color:#1d1d1d;border-radius:14px;padding:11px 14px;font-weight:700;font-size:17px;display:flex;justify-content:space-between;gap:10px}
+.s-list li em{font-style:normal;font-weight:500;color:#555;font-size:15px}
+.s-chips{display:flex;flex-wrap:wrap;gap:8px}
+.s-chips span{font-size:14px;font-weight:700;background:rgba(255,255,255,.94);color:#1d1d1d;padding:7px 12px;border-radius:999px}
+.s-chips span em{font-style:normal;font-weight:500;color:#555}
+.tip{font-size:15px;line-height:1.45;opacity:.95;border-left:3px solid rgba(255,255,255,.65);padding-left:12px;margin:0}
+.timer{background:#fff;color:#1b1b1b;border-radius:22px;padding:16px;display:grid;grid-template-columns:auto minmax(0,1fr);gap:14px 16px;align-items:center;box-shadow:0 20px 40px -18px rgba(0,0,0,.55)}
+.ring{position:relative;width:92px;height:92px}
+.ring svg{width:100%;height:100%;transform:rotate(-90deg)}
+.ring .t{position:absolute;inset:0;display:grid;place-items:center;font-weight:700;font-size:22px;font-variant-numeric:tabular-nums}
+.timer .info b{display:block;font-size:16px;line-height:1.25}
+.timer .info span{font-size:13.5px;color:#666}
+.t-btns{grid-column:1 / -1;display:flex;gap:8px}
+.t-btns button{border:0;border-radius:999px;min-height:48px;padding:0 16px;font-weight:700;font-size:15px;background:#EFEFEA;color:#1b1b1b}
+.t-btns .go{flex:1;background:var(--c4);color:#fff}
+.timer.finished{animation:ding .6s ease 3}
+@keyframes ding{50%{transform:scale(1.03);box-shadow:0 0 0 8px rgba(255,225,77,.75)}}
+.swipe{text-align:center;font-size:12.5px;opacity:.75;margin:0 0 8px}
+.nav{display:flex;gap:10px}
+.nav button{border:0;border-radius:999px;min-height:60px;font-weight:700;font-size:17px}
+.nav .prev{background:rgba(0,0,0,.26);color:#fff;width:72px;flex:none}
+.nav .prev:disabled{opacity:.35}
+.nav .next{flex:1;background:#fff;color:#1b1b1b;box-shadow:0 14px 30px -14px rgba(0,0,0,.6)}
+.done{align-items:center;text-align:center}
+.done img{width:150px;height:150px;border-radius:50%;object-fit:cover;border:4px solid rgba(255,255,255,.85);box-shadow:0 16px 40px -14px rgba(0,0,0,.55)}
+.done .big{font-family:var(--display);font-size:64px;line-height:1}
+.done p{margin:0;font-size:17px;opacity:.95}
+.done .row{display:flex;flex-direction:column;gap:10px;width:100%}
+.done .row button{border:0;border-radius:999px;min-height:54px;font-weight:700;font-size:16px;background:#fff;color:#1b1b1b}
+.done .row .ghost{background:rgba(0,0,0,.26);color:#fff}
+.toast{position:fixed;left:50%;bottom:calc(100px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#1b1b1b;color:#fff;padding:12px 18px;border-radius:999px;font-weight:700;z-index:40;box-shadow:0 10px 30px rgba(0,0,0,.4);max-width:calc(100% - 32px);text-align:center}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+/* ---------- My kitchen ---------- */
+.top-r{display:flex;align-items:center;gap:8px}
+.kbtn{border:1px solid var(--line);background:var(--surface);border-radius:999px;padding:8px 12px;min-height:40px;font-size:13.5px;font-weight:700;display:flex;align-items:center;gap:6px;color:var(--ink)}
+.kbtn i{font-style:normal;background:var(--pop);color:#1C231E;border-radius:999px;font-size:11.5px;padding:1px 7px}
+@media (max-width:380px){.kbtn .kl{display:none}}
+.kstrip{margin-top:14px}
+.kthumb{flex:0 0 84px;border:0;background:none;padding:0;display:flex;flex-direction:column;gap:5px;text-align:left;scroll-snap-align:start}
+.kthumb img{width:84px;height:84px;object-fit:cover;border-radius:16px;display:block;background:var(--line)}
+.kthumb span{font-size:12px;color:var(--muted);font-weight:600}
+.mine{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px;margin-top:14px;display:flex;flex-direction:column;gap:10px}
+.mine .row{margin:0;padding:0}
+.mine-h{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.mine .note{margin:0}
+.linkbtn{border:0;background:none;color:var(--accent);font-weight:700;font-size:14.5px;display:inline-flex;align-items:center;gap:8px;padding:10px 0;min-height:44px;align-self:flex-start}
+.mine-add{margin-top:8px}
+.kback{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);display:grid;place-items:center}
+.k-title{font-size:26px}
+.kstats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:18px 0 20px}
+.kstats .stat{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;text-align:left}
+.kstats .stat+.stat{border-left:1px solid var(--line)}
+.kstats .v{font-family:var(--display);font-size:28px;line-height:1}
+.kstats .v small{font-family:var(--body);font-size:13px;font-weight:700;margin-left:2px;color:var(--muted)}
+.kstats .l{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-top:6px}
+@media (min-width:560px){.kstats{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.kgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 12px}
+@media (min-width:640px){.kgrid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.kcard{border:0;background:none;padding:0;text-align:left;display:flex;flex-direction:column;gap:6px;min-width:0}
+.kcard b{font-size:14.5px;line-height:1.25}
+.kcard span.num{font-size:12.5px;color:var(--muted);margin-top:-2px}
+.kph{position:relative;aspect-ratio:1/1;max-width:100%;border-radius:20px;overflow:hidden;background:var(--tint)}
+.kph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.krate{position:absolute;left:8px;bottom:8px;background:rgba(255,255,255,.94);color:#1C231E;font-size:12px;font-weight:700;padding:4px 9px;border-radius:999px}
+.nophoto{position:absolute;right:8px;top:8px;background:rgba(0,0,0,.55);color:#fff;font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:999px}
+.kempty{background:var(--surface);border:1px dashed var(--line);border-radius:22px;padding:28px 20px;text-align:center;display:flex;flex-direction:column;align-items:center;gap:10px}
+.kempty h2{font-size:22px}
+.kempty p{margin:0;color:var(--muted);max-width:36ch}
+.kempty-ic{width:68px;height:68px;border-radius:50%;background:var(--pop-soft);display:grid;place-items:center;color:var(--ink)}
+.btn-p{border:0;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:16px;min-height:52px;padding:0 22px;border-radius:999px;flex:1}
+.btn-g{border:1px solid var(--line);background:var(--surface);color:var(--ink);font-weight:700;font-size:16px;min-height:52px;padding:0 20px;border-radius:999px}
+.btn-p.danger{background:#C2412D;color:#fff}.btn-g.danger{color:#C2412D}
+/* bottom sheet */
+.sheet-ov{position:fixed;inset:0;z-index:30;background:rgba(8,12,9,.55);display:flex;align-items:flex-end;justify-content:center;animation:fade .2s ease}
+.sheet-p{background:var(--bg);color:var(--ink);width:100%;max-width:520px;border-radius:26px 26px 0 0;padding:18px max(16px,env(safe-area-inset-right,0px)) calc(18px + env(safe-area-inset-bottom,0px)) max(16px,env(safe-area-inset-left,0px));max-height:94vh;overflow-y:auto;display:flex;flex-direction:column;gap:14px;animation:up .28s cubic-bezier(.2,.8,.2,1)}
+@keyframes fade{from{opacity:0}}@keyframes up{from{transform:translateY(40px);opacity:.4}}
+@media (prefers-reduced-motion:reduce){.sheet-ov,.sheet-p{animation:none}}
+.sheet-img{position:relative;width:100%;max-width:100%;aspect-ratio:1/1;max-height:44vh;border-radius:20px;overflow:hidden;background:var(--tint)}
+.sheet-img img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.sheet-t{font-size:26px;line-height:1.1}
+.sheet-m{color:var(--muted);font-size:14px;margin-top:4px}
+.field{display:flex;flex-direction:column;gap:8px}
+.field .lab{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700}
+.field textarea{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;resize:none;width:100%}
+.field textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+.sheet-btns{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.confirm{flex-basis:100%;font-weight:600;font-size:15px}
+/* done screen photo actions */
+.done .row .cam{display:flex;align-items:center;justify-content:center;gap:8px}
+.done .skip{border:0;background:none;color:#fff;opacity:.85;font-weight:600;font-size:14.5px;min-height:40px;text-decoration:underline;text-underline-offset:3px}
+.done .saved{display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.2);border-radius:999px;padding:6px 12px;font-weight:700;font-size:14px}
+.done img.mine-photo{border-radius:24px;width:200px;height:200px}
+</style>
+
+<div id="app"></div>
+<div id="cook-root"></div>
+<div class="sr" aria-live="polite" id="live"></div>
+
+<script>
+// ---------- Recipes (1 serving; protein & kcal approximate) ----------
+// Step text: {id} = ingredient name, [id|text] = text kept only when that ingredient isn't skipped.
+// only:[id,state] state = have | alt | altN | notaltN | skip | notskip ;  any:[ids] = show if any not skipped ;  list:[ids] = prep checklist
+const RECIPES=[
+{
+  id:"bhurji",cat:"meals",name:"Paneer Bhurji",time:20,img:"img/bhurji.webp",tint:"#FEC94E",
+  cook:["#FFB627","#FF7A35","#F7C548","#7A2E0B"],
+  lede:"Scrambled paneer with peas and tomato. One pan, no special skills. Eat it with roti or toast.",
+  ings:[
+    {id:"paneer",name:"paneer",qty:"120 g",p:22,k:320,ess:true,alts:[{name:"firm tofu",qty:"150 g",p:22,k:215,note:"Press out water with a towel first."},{name:"eggs",qty:"3 large",p:19,k:215,egg:true,note:"Turns it into egg bhurji. The steps change to match."}]},
+    {id:"oil",name:"oil or ghee",qty:"1 tsp",p:0,k:40,ess:true,alts:[{name:"butter",qty:"1 tsp",p:0,k:35}]},
+    {id:"cumin",name:"cumin seeds (jeera)",qty:"½ tsp",p:0,k:5,alts:[]},
+    {id:"onion",name:"onion",qty:"1 small",p:1,k:40,alts:[{name:"spring onion",qty:"2 stalks",p:0.5,k:10}]},
+    {id:"tomato",name:"tomato",qty:"1 medium",p:1,k:20,alts:[]},
+    {id:"chilli",name:"green chilli",qty:"1",p:0,k:2,alts:[{name:"red chilli powder",qty:"a pinch",p:0,k:1}]},
+    {id:"turmeric",name:"turmeric (haldi)",qty:"¼ tsp",p:0,k:2,ess:true,alts:[{name:"curry powder",qty:"½ tsp",p:0,k:5}]},
+    {id:"salt",name:"salt",qty:"½ tsp",p:0,k:0,ess:true,alts:[]},
+    {id:"peas",name:"frozen green peas",qty:"½ cup",p:4,k:60,alts:[{name:"sweet corn",qty:"½ cup",p:2,k:65}]},
+    {id:"coriander",name:"fresh coriander",qty:"a handful",p:0,k:2,alts:[]}
+  ],
+  steps:[
+    {t:"Chop these finely.",list:["onion","tomato","chilli"]},
+    {t:"Crumble the {paneer} with your fingers into small bits, like scrambled egg. Keep aside.",only:["paneer","notalt1"],tip:"Uneven bits are fine. They give it texture."},
+    {t:"Crack the {paneer} into a bowl. Add a pinch of salt and beat with a fork until smooth.",only:["paneer","alt1"]},
+    {t:"Put a pan on medium heat. Add the {oil} and let it warm up.",timer:60},
+    {t:"Add the {cumin}. Wait till they sizzle and smell toasty.",timer:20,only:["cumin","notskip"]},
+    {t:"Add the {onion}[chilli| and {chilli}]. Stir now and then until soft and light golden.",timer:180,only:["onion","notskip"],tip:"If it starts sticking, lower the heat a little."},
+    {t:"Add the {turmeric} and {salt}.[tomato| Then add the {tomato} and cook until soft and mushy.]",timer:120},
+    {t:"Add the {peas}. Cover with a lid and let them cook.",timer:180,only:["peas","notskip"]},
+    {t:"Add the crumbled {paneer}. Mix well and cook for 2 minutes.",timer:120,only:["paneer","notalt1"],tip:"Don't go longer. Overcooked paneer turns rubbery."},
+    {t:"Lower the heat. Pour in the beaten {paneer} and stir slowly until just set and still soft.",timer:90,only:["paneer","alt1"],tip:"Take it off the heat while it still looks slightly wet. It keeps cooking."},
+    {t:"Turn off the heat. Taste and add a pinch more salt if needed.[coriander| Sprinkle {coriander} on top.]"}
+  ]
+},
+{
+  id:"omelette",cat:"breakfast",name:"Masala Omelette",time:15,img:"img/omelette.webp",tint:"#F35A4A",
+  cook:["#FF6B5B","#FFA24C","#FF8FA3","#6E1414"],
+  lede:"A fluffy Indian-style omelette with onion and tomato, plus cheese and toast. The fastest 30 g of protein you'll make.",
+  ings:[
+    {id:"eggs",name:"eggs",qty:"3 large",p:19,k:215,ess:true,egg:true,alts:[]},
+    {id:"milk",name:"milk",qty:"2 tbsp",p:1,k:20,alts:[{name:"water",qty:"2 tbsp",p:0,k:0}]},
+    {id:"salt",name:"salt",qty:"a pinch",p:0,k:0,ess:true,alts:[]},
+    {id:"pepper",name:"black pepper",qty:"a pinch",p:0,k:1,alts:[]},
+    {id:"onion",name:"onion",qty:"½ small",p:0.5,k:20,alts:[]},
+    {id:"tomato",name:"tomato",qty:"½",p:0.5,k:10,alts:[]},
+    {id:"chilli",name:"green chilli",qty:"1",p:0,k:2,alts:[]},
+    {id:"coriander",name:"fresh coriander",qty:"1 tbsp",p:0,k:1,alts:[]},
+    {id:"oil",name:"butter or oil",qty:"1 tsp",p:0,k:40,ess:true,alts:[]},
+    {id:"cheese",name:"cheese slice",qty:"1",p:4,k:60,alts:[{name:"grated paneer",qty:"30 g",p:5,k:80}]},
+    {id:"bread",name:"whole wheat bread",qty:"2 slices",p:7,k:160,alts:[{name:"rotis",qty:"2",p:6,k:200}]}
+  ],
+  steps:[
+    {t:"Chop these very finely.",list:["onion","tomato","chilli","coriander"]},
+    {t:"Crack the {eggs} into a bowl. Add {salt}[pepper|, {pepper}][milk| and {milk}]."},
+    {t:"Beat with a fork until the yolks and whites fully mix and it looks a little frothy.",timer:30},
+    {t:"Stir in everything you chopped.",any:["onion","tomato","chilli","coriander"]},
+    {t:"Put a non-stick pan on medium heat. Add the {oil} and swirl it around.",timer:60},
+    {t:"Pour in the eggs. Tilt the pan so they spread evenly. Don't stir."},
+    {t:"Let it cook until the edges are set and the top is almost firm.",timer:90,tip:"If the bottom browns too fast, turn the heat down."},
+    {t:"Lay the {cheese} on one half.",only:["cheese","notskip"]},
+    {t:"Slide a spatula under one side and fold it over. Cook 30 seconds more, then slide it onto a plate.",timer:30},
+    {t:"Toast or warm the {bread} and eat it with the omelette.",only:["bread","notskip"]}
+  ]
+},
+{
+  id:"muffins",cat:"breakfast",name:"Egg Muffins",time:25,af:true,img:"img/muffins.webp",tint:"#8FB38E",
+  cook:["#6DBA6A","#B6E07A","#2F9E78","#123A1E"],
+  lede:"Six little egg cups packed with spinach, capsicum and paneer. Great for breakfast, and they keep 3 days in the fridge.",
+  needs:"6 silicone muffin cups or small steel katoris that fit your basket.",
+  ings:[
+    {id:"eggs",name:"eggs",qty:"3 large",p:19,k:215,ess:true,egg:true,alts:[]},
+    {id:"paneer",name:"paneer",qty:"50 g",p:9,k:130,alts:[{name:"grated cheese",qty:"30 g",p:7,k:120}]},
+    {id:"milk",name:"milk",qty:"2 tbsp",p:1,k:20,alts:[]},
+    {id:"spinach",name:"spinach",qty:"a handful",p:1,k:7,alts:[{name:"green capsicum",qty:"¼",p:0.3,k:6}]},
+    {id:"capsicum",name:"red capsicum",qty:"¼",p:0.3,k:8,alts:[{name:"tomato",qty:"½",p:0.5,k:10}]},
+    {id:"onion",name:"onion",qty:"¼",p:0.3,k:10,alts:[]},
+    {id:"salt",name:"salt",qty:"¼ tsp",p:0,k:0,ess:true,alts:[]},
+    {id:"pepper",name:"black pepper or oregano",qty:"a pinch",p:0,k:1,alts:[]},
+    {id:"oil",name:"oil, for greasing",qty:"1 tsp",p:0,k:40,ess:true,alts:[{name:"butter",qty:"1 tsp",p:0,k:35}]}
+  ],
+  steps:[
+    {t:"Chop these finely.",list:["spinach","capsicum","onion"]},
+    {t:"Crumble the {paneer} into small bits.",only:["paneer","notskip"]},
+    {t:"Crack the {eggs} into a bowl. Add {salt}[pepper|, {pepper}][milk| and {milk}]. Beat with a fork until smooth."},
+    {t:"Stir in everything you chopped[paneer| and the {paneer}].",any:["spinach","capsicum","onion","paneer"]},
+    {t:"Brush the inside of each muffin cup with {oil}."},
+    {t:"Preheat the air fryer at 160°C.",timer:180,tip:"No preheat button? Just run it empty for 3 minutes."},
+    {t:"Pour the mix into the cups, about ¾ full. They puff up as they cook."},
+    {t:"Put the cups in the basket and air fry at 160°C.",timer:600,tip:"They're done when a toothpick poked in the middle comes out clean."},
+    {t:"Let them cool for 2 minutes, then pop them out of the cups.",timer:120}
+  ]
+},
+{
+  id:"tikka",cat:"meals",name:"Paneer Tikka",time:30,af:true,img:"img/tikka.webp",tint:"#FE8876",
+  cook:["#FF7F6B","#FFB36B","#F25C8A","#5E1712"],
+  lede:"Smoky, charred paneer in a spiced yogurt marinade. The air fryer does all the work.",
+  ings:[
+    {id:"paneer",name:"paneer",qty:"120 g",p:22,k:320,ess:true,alts:[{name:"firm tofu",qty:"180 g",p:25,k:260,note:"Press it in a towel for 10 minutes first."}]},
+    {id:"curd",name:"hung curd or thick curd",qty:"3 tbsp",p:5,k:50,ess:true,alts:[{name:"regular curd",qty:"3 tbsp",p:2,k:35,note:"Squeeze it in a cloth so it isn't watery."}]},
+    {id:"besan",name:"besan (gram flour)",qty:"1 tbsp",p:2,k:35,alts:[{name:"cornflour",qty:"1 tbsp",p:0,k:30}]},
+    {id:"gg",name:"ginger-garlic paste",qty:"1 tsp",p:0,k:10,alts:[]},
+    {id:"chilli",name:"red chilli powder",qty:"½ tsp",p:0,k:3,alts:[{name:"paprika",qty:"½ tsp",p:0,k:3}]},
+    {id:"garam",name:"garam masala",qty:"½ tsp",p:0,k:5,alts:[]},
+    {id:"turmeric",name:"turmeric",qty:"a pinch",p:0,k:1,alts:[]},
+    {id:"salt",name:"salt",qty:"½ tsp",p:0,k:0,ess:true,alts:[]},
+    {id:"lemon",name:"lemon",qty:"½",p:0,k:5,alts:[]},
+    {id:"oil",name:"oil",qty:"1 tsp",p:0,k:40,ess:true,alts:[]},
+    {id:"onion",name:"onion",qty:"1 medium",p:1,k:40,alts:[]},
+    {id:"capsicum",name:"green capsicum",qty:"1",p:1,k:30,alts:[{name:"red or yellow capsicum",qty:"1",p:1,k:30}]},
+    {id:"methi",name:"kasuri methi (dried fenugreek)",qty:"1 tsp",p:0,k:2,alts:[]}
+  ],
+  steps:[
+    {t:"Cut the {paneer} into large cubes, about 2–3 cm."},
+    {t:"Cut these into chunks the same size as the paneer.",list:["onion","capsicum"],tip:"Pull the onion layers apart into petals."},
+    {t:"In a big bowl, mix {curd}[besan|, {besan}][gg|, {gg}][chilli|, {chilli}][garam|, {garam}][turmeric|, {turmeric}], {salt} and {oil} into a thick paste.[lemon| Squeeze in the {lemon}.]"},
+    {t:"Add the paneer and vegetables. Toss gently with your hands until everything is coated."},
+    {t:"Cover the bowl and let it marinate.",timer:1200,tip:"Longer is better. You can leave it overnight in the fridge."},
+    {t:"Preheat the air fryer at 200°C.",timer:180},
+    {t:"Brush the basket with a little oil. Lay the pieces in one layer with gaps between them.",tip:"Crowded pieces steam instead of char. Cook in two batches if needed."},
+    {t:"Air fry at 200°C.",timer:480},
+    {t:"Pull out the basket and flip each piece. Air fry again until the edges look charred.",timer:240},
+    {t:"[methi|Crush the {methi} between your palms and sprinkle it on top. ]Serve hot, with green chutney if you have some."}
+  ]
+},
+{
+  id:"chilla",cat:"breakfast",name:"Moong Dal Chilla",time:25,img:"img/chilla.webp",tint:"#C3D780",
+  cook:["#9BD15B","#F2C14E","#3FA36B","#1E4A16"],
+  lede:"Savory lentil pancakes stuffed with paneer. Your first one may come out messy. That's normal, and the rest get easier.",
+  ings:[
+    {id:"moong",name:"yellow moong dal",qty:"80 g (dry)",p:19,k:280,ess:true,alts:[{name:"besan (gram flour)",qty:"80 g",p:18,k:310,note:"No soaking or blending needed."}]},
+    {id:"paneer",name:"paneer",qty:"50 g",p:9,k:130,alts:[{name:"firm tofu",qty:"60 g",p:9,k:85}]},
+    {id:"salt",name:"salt",qty:"½ tsp",p:0,k:0,ess:true,alts:[]},
+    {id:"ginger",name:"ginger",qty:"1 small piece",p:0,k:2,alts:[]},
+    {id:"chilli",name:"green chilli",qty:"1",p:0,k:2,alts:[{name:"red chilli powder",qty:"a pinch",p:0,k:1}]},
+    {id:"cumin",name:"cumin seeds (jeera)",qty:"½ tsp",p:0,k:5,alts:[]},
+    {id:"onion",name:"onion",qty:"1 small",p:1,k:40,alts:[]},
+    {id:"oil",name:"oil",qty:"2 tsp",p:0,k:80,ess:true,alts:[{name:"ghee",qty:"2 tsp",p:0,k:90}]}
+  ],
+  before:[{t:"<b>Soak the moong dal first.</b> Cover it with water for 2–4 hours or overnight. To cook right now, mark it missing and switch to besan.",only:["moong","have"]}],
+  steps:[
+    {t:"Drain the soaked {moong} and put it in a blender. Add {salt}[ginger|, {ginger}][chilli|, {chilli}] and ¼ cup water.",only:["moong","have"]},
+    {t:"Blend into a smooth batter that pours like pancake batter.[cumin| Stir in the {cumin}.]",only:["moong","have"],tip:"Too thick? Add water one spoon at a time."},
+    {t:"Put the {moong} in a bowl. Add {salt}[ginger|, grated {ginger}][chilli|, chopped {chilli}][cumin| and {cumin}].",only:["moong","alt"]},
+    {t:"Slowly whisk in about ½ cup water until there are no lumps. Let it rest.",timer:300,only:["moong","alt"]},
+    {t:"Finely chop the {onion}.",only:["onion","notskip"]},
+    {t:"Grate the {paneer} into a small bowl[onion| and mix in the chopped {onion}]. This is your filling.",only:["paneer","notskip"]},
+    {t:"Put a flat pan (tawa) on medium heat. Brush it with a few drops of {oil} and let it heat.",timer:90},
+    {t:"Pour one ladle of batter in the centre. Spread it outward in circles with the back of the ladle, quick and thin.",tip:"Lift the pan off the heat for a moment if it sets before you can spread it."},
+    {t:"Drizzle a few drops of {oil} around the edges. Cook until the bottom is golden and the top looks dry.",timer:120},
+    {t:"Slide a flat spatula under it and flip. Cook the other side.",timer:60},
+    {t:"Spread some filling on one half, fold it over, and press gently.",only:["paneer","notskip"]},
+    {t:"Move it to a plate. Repeat with the rest of the batter. You'll get about 3 chillas."}
+  ]
+},
+{
+  id:"tofu",cat:"meals",name:"Crispy Peanut Tofu",time:30,af:true,img:"img/tofu.webp",tint:"#C45831",
+  cook:["#F28C50","#E5484D","#F9C46B","#4A1410"],
+  lede:"Air-fried tofu that actually gets crispy, tossed with vegetables in a 4-ingredient peanut sauce.",
+  ings:[
+    {id:"tofu",name:"firm tofu",qty:"150 g",p:21,k:210,ess:true,alts:[{name:"paneer",qty:"120 g",p:22,k:320}]},
+    {id:"cornstarch",name:"cornflour",qty:"1 tsp",p:0,k:10,alts:[]},
+    {id:"pb",name:"peanut butter",qty:"1 tbsp",p:4,k:95,ess:true,alts:[{name:"crushed roasted peanuts",qty:"1½ tbsp",p:4,k:90}]},
+    {id:"soy",name:"soy sauce",qty:"1 tbsp",p:1,k:10,ess:true,alts:[{name:"salt",qty:"¼ tsp",p:0,k:0}]},
+    {id:"lemon",name:"lemon juice or vinegar",qty:"1 tsp",p:0,k:2,alts:[]},
+    {id:"garlic",name:"garlic",qty:"2 cloves",p:0,k:8,alts:[{name:"garlic powder",qty:"¼ tsp",p:0,k:3}]},
+    {id:"pepper",name:"red capsicum",qty:"½",p:1,k:20,alts:[{name:"onion",qty:"½",p:0.5,k:20}]},
+    {id:"broccoli",name:"broccoli",qty:"1 cup florets",p:2.5,k:30,alts:[{name:"green beans",qty:"1 cup",p:2,k:30}]},
+    {id:"oil",name:"oil",qty:"2 tsp",p:0,k:80,ess:true,alts:[]},
+    {id:"sesame",name:"sesame seeds",qty:"1 tsp",p:0.5,k:15,alts:[]}
+  ],
+  steps:[
+    {t:"Wrap the {tofu} in a clean kitchen towel and put something heavy on top, like a pan. This squeezes out the water.",timer:600,only:["tofu","have"],tip:"Do the next two steps while it presses."},
+    {t:"Make the sauce: in a small bowl, mix {pb}, {soy}[lemon|, {lemon}] and 2 tbsp warm water until smooth."},
+    {t:"Chop the vegetables.",list:["garlic","pepper","broccoli"],tip:"Garlic finely, capsicum in strips, broccoli in small florets."},
+    {t:"Cut the {tofu} into bite-sized cubes. Toss them with[cornstarch| {cornstarch},] a pinch of salt and 1 tsp of the {oil}."},
+    {t:"Preheat the air fryer at 200°C.",timer:180},
+    {t:"Spread the cubes in one layer in the basket. Air fry at 200°C.",timer:480},
+    {t:"Shake the basket so the cubes turn over. Air fry until golden and crisp.",timer:360},
+    {t:"Meanwhile, heat the rest of the {oil} in a pan on medium-high.[garlic| Add the {garlic} and stir for 30 seconds.]",timer:30},
+    {t:"Add the [pepper|{pepper}][broccoli| and {broccoli}] with a splash of water. Stir-fry until bright and just tender.",timer:180,any:["pepper","broccoli"]},
+    {t:"Add the crispy cubes and pour in the sauce. Toss until everything is glossy.",timer:60},
+    {t:"Turn off the heat.[sesame| Sprinkle {sesame} on top.] Eat on its own or over rice."}
+  ]
+},
+{
+  id:"pulao",cat:"meals",name:"Soya Chunk Pulao",time:35,img:"img/pulao.webp",tint:"#F9C58B",
+  cook:["#F2A66B","#F6C28B","#D9735E","#4A2416"],
+  lede:"One-pot rice with soya chunks and vegetables. Soya chunks are the cheapest protein in an Indian kitchen.",
+  ings:[
+    {id:"soya",name:"soya chunks",qty:"50 g (dry)",p:26,k:172,ess:true,alts:[{name:"paneer",qty:"100 g",p:18,k:265}]},
+    {id:"rice",name:"basmati rice",qty:"⅓ cup (60 g)",p:4,k:215,ess:true,alts:[{name:"brown rice",qty:"⅓ cup",p:5,k:210,note:"Needs 1 extra whistle."}]},
+    {id:"oil",name:"oil or ghee",qty:"2 tsp",p:0,k:80,ess:true,alts:[]},
+    {id:"whole",name:"whole spices (bay leaf, 2 cloves, cinnamon)",qty:"",p:0,k:5,alts:[{name:"cumin seeds",qty:"½ tsp",p:0,k:5}]},
+    {id:"onion",name:"onion",qty:"1 small",p:1,k:40,alts:[]},
+    {id:"gg",name:"ginger-garlic paste",qty:"1 tsp",p:0,k:10,alts:[]},
+    {id:"veg",name:"mixed vegetables",qty:"½ cup",p:2,k:40,alts:[{name:"frozen peas",qty:"½ cup",p:4,k:60}]},
+    {id:"curd",name:"curd (dahi)",qty:"2 tbsp",p:1,k:20,alts:[{name:"lemon juice",qty:"1 tsp",p:0,k:2}]},
+    {id:"garam",name:"garam masala",qty:"½ tsp",p:0,k:5,alts:[]},
+    {id:"salt",name:"salt",qty:"¾ tsp",p:0,k:0,ess:true,alts:[]}
+  ],
+  steps:[
+    {t:"Boil 2 cups of water. Add the {soya} and turn off the heat. Let them soak and puff up.",timer:300,only:["soya","have"]},
+    {t:"Rinse the {rice} 2–3 times until the water looks mostly clear. Leave it soaking in fresh water.",tip:"Soaking makes the grains longer and fluffier."},
+    {t:"Drain the soya chunks and let them cool a little. Squeeze each handful hard to press out all the water.",only:["soya","have"],tip:"This removes the raw smell. Don't skip it."},
+    {t:"Cut the {soya} into bite-sized cubes.",only:["soya","alt"]},
+    {t:"Peel and thinly slice the {onion}.",only:["onion","notskip"]},
+    {t:"Heat {oil} in a pressure cooker or deep pot on medium heat.[whole| Add the {whole} and let them sizzle.]",timer:60},
+    {t:"Add the {onion} and cook until golden brown.",timer:240,only:["onion","notskip"]},
+    {t:"[gg|Add {gg} and stir for 30 seconds. ]Add the {soya}[veg| and {veg}]. Stir-fry for 2 minutes.",timer:120},
+    {t:"Add {salt}[garam|, {garam}][curd| and {curd}]. Mix for a minute so everything is coated."},
+    {t:"Drain the {rice} and add it. Pour in water, double the amount of rice (about ⅔ cup). Stir gently once.",tip:"Taste the water. It should be a little saltier than you'd like."},
+    {t:"Close the lid. Pressure cooker: 2 whistles on medium, then turn off. Pot: cover and cook on the lowest heat for 12 minutes.",timer:720},
+    {t:"Let it rest without opening the lid. Then fluff gently with a fork.",timer:300}
+  ]
+},
+{
+  id:"bowl",cat:"meals",name:"Chickpea Curd Bowl",time:10,img:"img/bowl.webp",tint:"#3A9FA7",
+  cook:["#3FB7AE","#F49C9C","#9ED98A","#0E3A36"],
+  lede:"No stove at all. If you can open a tin and chop a cucumber, you can make this.",
+  ings:[
+    {id:"chana",name:"boiled chickpeas",qty:"¾ cup",p:11,k:200,ess:true,alts:[{name:"boiled rajma",qty:"¾ cup",p:11,k:170}]},
+    {id:"curd",name:"hung curd or Greek yogurt",qty:"150 g",p:15,k:145,ess:true,alts:[{name:"regular curd",qty:"200 g",p:7,k:120,note:"Thinner, and about half the protein."}]},
+    {id:"salt",name:"salt",qty:"a pinch",p:0,k:0,ess:true,alts:[]},
+    {id:"cucumber",name:"cucumber",qty:"½",p:0.5,k:8,alts:[]},
+    {id:"tomato",name:"tomato",qty:"1 small",p:0.5,k:15,alts:[]},
+    {id:"chaat",name:"chaat masala",qty:"½ tsp",p:0,k:3,alts:[{name:"black pepper + roasted jeera powder",qty:"a pinch each",p:0,k:3}]},
+    {id:"lemon",name:"lemon",qty:"½",p:0,k:5,alts:[]},
+    {id:"oilo",name:"olive oil",qty:"1 tsp",p:0,k:40,alts:[]},
+    {id:"peanuts",name:"roasted peanuts",qty:"2 tbsp",p:5,k:115,alts:[{name:"roasted chana",qty:"2 tbsp",p:5,k:75}]}
+  ],
+  steps:[
+    {t:"If your {chana} come from a tin, drain and rinse them under running water. If you boiled them yourself, just drain."},
+    {t:"Cut these into small cubes.",list:["cucumber","tomato"]},
+    {t:"Spoon the {curd} into a bowl. Add {salt} and stir until smooth and creamy."},
+    {t:"Spread the curd across the bottom of the bowl. Pile the {chana} on top.[cucumber| Add the {cucumber}.][tomato| Add the {tomato}.]"},
+    {t:"[chaat|Sprinkle {chaat} over everything.][lemon| Squeeze the {lemon} on top.][oilo| Drizzle with {oilo}.]",any:["chaat","lemon","oilo"]},
+    {t:"Scatter the {peanuts} on top for crunch.",only:["peanuts","notskip"]},
+    {t:"Mix a little as you eat. Best eaten right away, while the crunchy bits are still crunchy."}
+  ]
+},
+// ---- breakfast bowls ----
+{
+  id:"oats",cat:"breakfast",name:"Peanut Butter Banana Oats",time:10,img:"img/oats.webp",tint:"#DA9A9A",
+  cook:["#F09AA8","#F6C08A","#E57B9A","#5A1E2A"],
+  lede:"Warm, creamy oats cooked in milk, with peanut butter stirred through and thick curd on top. Keeps you full till lunch.",
+  ings:[
+    {id:"oats",name:"rolled oats",qty:"50 g (½ cup)",p:6.5,k:190,ess:true,alts:[{name:"quick oats",qty:"50 g",p:6.5,k:190,note:"Cook for just 2 minutes."}]},
+    {id:"milk",name:"milk",qty:"200 ml",p:6.5,k:120,ess:true,alts:[{name:"soy milk",qty:"200 ml",p:6,k:85},{name:"water",qty:"200 ml",p:0,k:0,note:"Less creamy, and about 6 g less protein."}]},
+    {id:"pb",name:"peanut butter",qty:"1 tbsp",p:4,k:95,ess:true,alts:[{name:"crushed roasted peanuts",qty:"1½ tbsp",p:4,k:90}]},
+    {id:"curd",name:"Greek yogurt or hung curd",qty:"100 g",p:10,k:95,alts:[{name:"regular curd",qty:"100 g",p:3.5,k:60}]},
+    {id:"banana",name:"banana",qty:"½",p:0.6,k:52,alts:[{name:"apple",qty:"½",p:0.2,k:45}]},
+    {id:"chia",name:"chia seeds",qty:"1 tbsp",p:2,k:60,alts:[{name:"flax seeds",qty:"1 tbsp",p:2,k:55}]},
+    {id:"cinnamon",name:"cinnamon powder",qty:"a pinch",p:0,k:2,alts:[]},
+    {id:"honey",name:"honey",qty:"1 tsp",p:0,k:20,alts:[{name:"jaggery powder",qty:"1 tsp",p:0,k:20}]}
+  ],
+  steps:[
+    {t:"Put the {oats} and {milk} in a small pot. Add a tiny pinch of salt[cinnamon| and the {cinnamon}]."},
+    {t:"Put it on medium heat. Stir every 30 seconds so it doesn't stick to the bottom.",timer:240,tip:"Ready when it's thick and creamy. Too thick? Add a splash of milk."},
+    {t:"Turn off the heat. Stir in the {pb} until it melts into the oats."},
+    {t:"Pour it into a bowl and let it cool for a minute.",timer:60},
+    {t:"Slice the {banana}.",only:["banana","notskip"]},
+    {t:"Add your toppings.",list:["curd","banana","chia","honey"]}
+  ]
+},
+{
+  id:"overnight",cat:"breakfast",name:"Apple Cinnamon Overnight Oats",time:5,img:"img/overnight.webp",tint:"#D1C3E7",
+  cook:["#B9A3F0","#F3B6C9","#8FD3C4","#2E1F4D"],
+  lede:"Five minutes at night, zero minutes in the morning. The oats soften in the fridge, no cooking at all.",
+  ings:[
+    {id:"oats",name:"rolled oats",qty:"50 g (½ cup)",p:6.5,k:190,ess:true,alts:[]},
+    {id:"curd",name:"Greek yogurt or hung curd",qty:"100 g",p:10,k:95,ess:true,alts:[{name:"regular curd",qty:"100 g",p:3.5,k:60,note:"Softer and about 6 g less protein."}]},
+    {id:"milk",name:"milk",qty:"150 ml",p:5,k:90,ess:true,alts:[{name:"soy milk",qty:"150 ml",p:4.5,k:65}]},
+    {id:"chia",name:"chia seeds",qty:"1 tbsp",p:2,k:60,alts:[]},
+    {id:"cinnamon",name:"cinnamon powder",qty:"¼ tsp",p:0,k:2,alts:[]},
+    {id:"honey",name:"honey",qty:"1 tsp",p:0,k:20,alts:[{name:"jaggery powder",qty:"1 tsp",p:0,k:20}]},
+    {id:"apple",name:"apple",qty:"½",p:0.2,k:45,alts:[{name:"banana",qty:"½",p:0.6,k:52},{name:"pomegranate seeds",qty:"¼ cup",p:0.7,k:36}]},
+    {id:"nuts",name:"walnuts or almonds",qty:"8–10",p:2.5,k:70,alts:[{name:"roasted peanuts",qty:"1 tbsp",p:2.5,k:55}]}
+  ],
+  before:[{t:"<b>Make this the night before.</b> It needs at least 4 hours in the fridge."}],
+  steps:[
+    {t:"In a jar or box with a lid, add the {oats}, {curd} and {milk}.[chia| Add the {chia}.][cinnamon| Add the {cinnamon}.]"},
+    {t:"Stir well until there are no dry oats left.[honey| Mix in the {honey}.]"},
+    {t:"Close the lid and put it in the fridge overnight, or for at least 4 hours.",tip:"The oats soak up the milk and turn soft and creamy on their own."},
+    {t:"In the morning, give it a good stir. Add a splash of milk if it's too thick."},
+    {t:"Chop the {apple} into small pieces.",only:["apple","notskip"]},
+    {t:"Add your toppings and eat it cold.",list:["apple","nuts"]}
+  ]
+},
+// ---- sandwiches ----
+{
+  id:"eggsand",cat:"sandwich",name:"Egg Mayo Sandwich",time:20,img:"img/eggsand.webp",tint:"#EECD7E",
+  cook:["#F7D16A","#F6A35B","#C7E07A","#5A3A06"],
+  lede:"Soft boiled-egg filling made with hung curd instead of mayo, so it's lighter and higher in protein.",
+  ings:[
+    {id:"eggs",name:"eggs",qty:"3",p:19,k:215,ess:true,egg:true,alts:[]},
+    {id:"curd",name:"hung curd",qty:"3 tbsp",p:5,k:50,ess:true,alts:[{name:"mayonnaise",qty:"1 tbsp",p:0,k:90,note:"Richer, and about 5 g less protein."}]},
+    {id:"bread",name:"whole wheat bread",qty:"2 slices",p:7,k:160,ess:true,alts:[{name:"multigrain bread",qty:"2 slices",p:8,k:170}]},
+    {id:"salt",name:"salt",qty:"a pinch",p:0,k:0,ess:true,alts:[]},
+    {id:"pepper",name:"black pepper",qty:"a pinch",p:0,k:1,alts:[]},
+    {id:"mustard",name:"mustard sauce",qty:"1 tsp",p:0,k:5,alts:[]},
+    {id:"onion",name:"spring onion",qty:"1 stalk",p:0,k:5,alts:[{name:"onion",qty:"2 tbsp, chopped",p:0,k:10}]},
+    {id:"lettuce",name:"lettuce or cucumber slices",qty:"a few",p:0,k:5,alts:[]}
+  ],
+  steps:[
+    {t:"Put the {eggs} in a small pot and cover them with cold water."},
+    {t:"Put it on high heat and wait for the water to boil with big bubbles."},
+    {t:"Turn the heat down to medium and let the eggs cook.",timer:600,tip:"10 minutes gives a fully set yolk."},
+    {t:"Move the eggs into a bowl of cold water to cool.",timer:300},
+    {t:"Tap each egg on the counter, roll it gently, and peel off the shell.",tip:"Peeling under running water is easier."},
+    {t:"Finely chop the {onion}.",only:["onion","notskip"]},
+    {t:"Mash the eggs in a bowl with a fork. Mix in the {curd} and {salt}.[pepper| Add {pepper}.][mustard| Add {mustard}.][onion| Stir in the {onion}.]"},
+    {t:"Toast the {bread} if you like it crunchy."},
+    {t:"Spread the egg mix on one slice.[lettuce| Add the {lettuce}.] Close with the other slice and cut it in half."}
+  ]
+},
+{
+  id:"paneersand",cat:"sandwich",name:"Grilled Paneer Chutney Sandwich",time:15,img:"img/paneersand.webp",tint:"#A5B79F",
+  cook:["#8FC79A","#D9E37A","#5FB3A1","#163A26"],
+  lede:"Mumbai-style grilled sandwich with crumbled paneer, green chutney and melted cheese. Crispy outside, soft inside.",
+  ings:[
+    {id:"paneer",name:"paneer",qty:"80 g",p:14.5,k:210,ess:true,alts:[{name:"firm tofu",qty:"100 g",p:14,k:145},{name:"boiled eggs, sliced",qty:"2",p:12.5,k:145,egg:true}]},
+    {id:"bread",name:"whole wheat bread",qty:"2 slices",p:7,k:160,ess:true,alts:[{name:"multigrain bread",qty:"2 slices",p:8,k:170}]},
+    {id:"cheese",name:"cheese slice",qty:"1",p:4,k:60,alts:[]},
+    {id:"chutney",name:"green chutney",qty:"2 tbsp",p:0.5,k:20,alts:[{name:"tomato ketchup",qty:"1 tbsp",p:0,k:20}]},
+    {id:"chaat",name:"chaat masala",qty:"¼ tsp",p:0,k:2,alts:[{name:"salt and black pepper",qty:"a pinch",p:0,k:0}]},
+    {id:"cucumber",name:"cucumber",qty:"¼",p:0.2,k:5,alts:[]},
+    {id:"tomato",name:"tomato",qty:"½",p:0.4,k:10,alts:[]},
+    {id:"onion",name:"onion",qty:"¼",p:0.2,k:10,alts:[]},
+    {id:"butter",name:"butter",qty:"1 tsp",p:0,k:35,ess:true,alts:[{name:"ghee or oil",qty:"1 tsp",p:0,k:40}]}
+  ],
+  steps:[
+    {t:"Crumble the {paneer} into a bowl with your fingers.[chaat| Mix in the {chaat}.]",only:["paneer","notalt1"]},
+    {t:"Slice the {paneer} into rounds.[chaat| Sprinkle with {chaat}.]",only:["paneer","alt1"]},
+    {t:"Slice these into thin rounds.",list:["cucumber","tomato","onion"]},
+    {t:"Spread the {chutney} on one side of both bread slices.",only:["chutney","notskip"]},
+    {t:"On one slice, spread the paneer.[cheese| Lay the {cheese} on top.] Add any sliced vegetables, then close with the other slice."},
+    {t:"Spread a little {butter} on the outside of both slices."},
+    {t:"Heat a pan on medium. Put the sandwich in and press it down with a spatula.",timer:120},
+    {t:"Flip it. Toast the other side until golden[cheese| and the cheese melts].",timer:120},
+    {t:"Cut it in half and eat it hot."}
+  ]
+},
+// ---- snacks ----
+{
+  id:"chickpeas",cat:"snack",name:"Crunchy Masala Chickpeas",time:25,af:true,img:"img/chickpeas.webp",tint:"#D99E45",
+  cook:["#F2B43C","#F27E3C","#E8D25A","#4D2C05"],
+  lede:"Crunchy like chips, but full of protein. Make a batch and snack on it for two days.",
+  ings:[
+    {id:"chana",name:"boiled chickpeas",qty:"1 cup",p:14.5,k:270,ess:true,alts:[{name:"boiled rajma",qty:"1 cup",p:15,k:225}]},
+    {id:"oil",name:"oil",qty:"1 tsp",p:0,k:40,ess:true,alts:[]},
+    {id:"chilli",name:"red chilli powder",qty:"½ tsp",p:0,k:3,alts:[{name:"paprika",qty:"½ tsp",p:0,k:3}]},
+    {id:"salt",name:"salt",qty:"¼ tsp",p:0,k:0,ess:true,alts:[]},
+    {id:"cumin",name:"roasted cumin powder",qty:"¼ tsp",p:0,k:2,alts:[]},
+    {id:"chaat",name:"chaat masala",qty:"½ tsp",p:0,k:3,alts:[]},
+    {id:"lemon",name:"lemon",qty:"½",p:0,k:5,alts:[]}
+  ],
+  steps:[
+    {t:"Drain the {chana}. If they're from a tin, rinse them first."},
+    {t:"Spread them on a clean kitchen towel and pat them completely dry. Pull off any loose skins.",tip:"This is the secret to crunch. Wet chickpeas stay soft."},
+    {t:"Preheat the air fryer at 200°C.",timer:180},
+    {t:"In a bowl, toss the chickpeas with the {oil} and {salt}[chilli|, {chilli}][cumin| and {cumin}]."},
+    {t:"Spread them in the basket in one layer. Air fry at 200°C.",timer:600},
+    {t:"Shake the basket well. Air fry again until they rattle and look deep golden.",timer:360,tip:"Bite one. If it's still soft inside, give it 2 more minutes."},
+    {t:"Tip them into a bowl while hot.[chaat| Toss with {chaat}.][lemon| Squeeze the {lemon} over.]"},
+    {t:"Let them cool for 5 minutes. They get even crunchier as they cool.",timer:300,tip:"Store leftovers in an airtight box for up to 2 days."}
+  ]
+},
+{
+  id:"yogurt",cat:"snack",name:"Greek Yogurt Fruit Cup",time:5,img:"img/yogurt.webp",tint:"#EDBDC9",
+  cook:["#F59DB5","#FFC38A","#E86A8E","#5A1530"],
+  lede:"Thick curd layered with fruit, nuts and seeds. Tastes like dessert, has the protein of a meal.",
+  ings:[
+    {id:"curd",name:"Greek yogurt or hung curd",qty:"200 g",p:20,k:190,ess:true,alts:[{name:"regular curd",qty:"200 g",p:7,k:120,note:"Much thinner, and 13 g less protein."}]},
+    {id:"honey",name:"honey",qty:"1 tsp",p:0,k:20,alts:[{name:"jaggery powder",qty:"1 tsp",p:0,k:20}]},
+    {id:"fruit",name:"mixed fruit (apple, banana, pomegranate)",qty:"½ cup",p:0.5,k:50,alts:[{name:"any one fruit you have",qty:"½ cup",p:0.5,k:50}]},
+    {id:"nuts",name:"almonds or walnuts",qty:"8–10",p:2.5,k:70,alts:[{name:"roasted peanuts",qty:"1 tbsp",p:2.5,k:55}]},
+    {id:"seeds",name:"pumpkin seeds",qty:"1 tbsp",p:3,k:55,alts:[{name:"sunflower seeds",qty:"1 tbsp",p:2,k:50}]},
+    {id:"cinnamon",name:"cinnamon powder",qty:"a pinch",p:0,k:1,alts:[]}
+  ],
+  steps:[
+    {t:"Chop the {fruit} into small bite-sized pieces.",only:["fruit","notskip"]},
+    {t:"Spoon the {curd} into a bowl or glass.[honey| Stir in the {honey}.][cinnamon| Add the {cinnamon}.]"},
+    {t:"Add the fruit on top.",only:["fruit","notskip"]},
+    {t:"Finish with the crunchy toppings and eat right away.",list:["nuts","seeds"]}
+  ]
+},
+{
+  id:"chaat",cat:"snack",name:"Peanut Chana Chaat",time:10,img:"img/chaat.webp",tint:"#2F6DB8",
+  cook:["#3C7FE0","#43C6B4","#F3C24D","#0D2350"],
+  lede:"Tangy, crunchy evening snack made from roasted chana and peanuts. No cooking, ready in 10 minutes.",
+  ings:[
+    {id:"chana",name:"roasted chana",qty:"40 g (¼ cup)",p:9,k:150,ess:true,alts:[{name:"boiled chickpeas",qty:"½ cup",p:7,k:135}]},
+    {id:"peanuts",name:"roasted peanuts",qty:"25 g (2 tbsp)",p:6.5,k:145,ess:true,alts:[{name:"roasted makhana",qty:"½ cup",p:2,k:70}]},
+    {id:"onion",name:"onion",qty:"½ small",p:0.5,k:20,alts:[]},
+    {id:"tomato",name:"tomato",qty:"½",p:0.4,k:10,alts:[]},
+    {id:"cucumber",name:"cucumber",qty:"¼",p:0.2,k:5,alts:[]},
+    {id:"chilli",name:"green chilli",qty:"1",p:0,k:2,alts:[]},
+    {id:"coriander",name:"fresh coriander",qty:"1 tbsp",p:0,k:1,alts:[]},
+    {id:"chaat",name:"chaat masala",qty:"½ tsp",p:0,k:3,ess:true,alts:[{name:"salt and black pepper",qty:"a pinch",p:0,k:0}]},
+    {id:"lemon",name:"lemon",qty:"½",p:0,k:5,alts:[]}
+  ],
+  steps:[
+    {t:"Chop these very finely.",list:["onion","tomato","cucumber","chilli","coriander"]},
+    {t:"Put the {chana} and {peanuts} in a bowl."},
+    {t:"Add everything you chopped.",any:["onion","tomato","cucumber","chilli","coriander"]},
+    {t:"Sprinkle the {chaat}.[lemon| Squeeze the {lemon} over.] Mix well."},
+    {t:"Eat right away, before the chana goes soft.",tip:"Taste first. Add a pinch of salt only if needed. Chaat masala is already salty."}
+  ]
+},
+// ================= café-style additions =================
+{
+  id:"acai",cat:"breakfast",name:"Açaí Berry Bowl",time:10,img:"img/acai.webp",tint:"#CDE9F5",
+  cook:["#8E6CE0","#5FB7E8","#F28DB2","#24164A"],
+  lede:"Thick, spoonable açaí blended with Greek yogurt so it actually keeps you full. Toppings in neat rows, café style.",
+  ings:[
+    {id:"acai",name:"frozen açaí pack",qty:"100 g",p:1,k:70,ess:true,alts:[{name:"açaí powder",qty:"1 tbsp",p:1,k:25,note:"Add 1 cup frozen mixed berries with it."},{name:"frozen mixed berries",qty:"1 cup",p:1,k:70,note:"Not açaí, but tastes close and looks the same."}]},
+    {id:"curd",name:"Greek yogurt or hung curd",qty:"150 g",p:15,k:145,ess:true,alts:[{name:"regular curd",qty:"150 g",p:5,k:90,note:"Thinner bowl, and 10 g less protein."}]},
+    {id:"banana",name:"frozen banana",qty:"½",p:0.6,k:52,alts:[{name:"fresh banana",qty:"½",p:0.6,k:52,note:"Add 3–4 ice cubes so it stays thick."}]},
+    {id:"milk",name:"milk",qty:"2–3 tbsp",p:1,k:15,ess:true,alts:[{name:"soy or almond milk",qty:"2–3 tbsp",p:0.5,k:10}]},
+    {id:"granola",name:"granola",qty:"3 tbsp",p:3,k:120,alts:[{name:"toasted oats",qty:"3 tbsp",p:2.5,k:90}]},
+    {id:"fruit",name:"fresh fruit (strawberry, kiwi, blueberry)",qty:"½ cup",p:0.7,k:40,alts:[{name:"any fruit you have",qty:"½ cup",p:0.5,k:45}]},
+    {id:"chia",name:"chia seeds",qty:"1 tbsp",p:2,k:60,alts:[]},
+    {id:"seeds",name:"pumpkin seeds",qty:"1 tbsp",p:3,k:55,alts:[{name:"sunflower seeds",qty:"1 tbsp",p:2,k:50}]}
+  ],
+  before:[{t:"<b>Tip:</b> keep peeled banana halves in the freezer. They make every smoothie bowl thick and creamy."}],
+  steps:[
+    {t:"If the {acai} is frozen solid, run the pack under warm water for 10 seconds, then break it into pieces.",only:["acai","have"]},
+    {t:"Put the {acai}[banana|, {banana}] and {curd} in a blender. Add {milk}."},
+    {t:"Blend until thick and smooth, like soft-serve ice cream.",timer:60,tip:"If the blades get stuck, stop, stir with a spoon and add one more spoon of milk. Keep it thick, or the toppings will sink."},
+    {t:"Scoop it into a bowl. Smooth the top with the back of a spoon."},
+    {t:"Slice the {fruit}.",only:["fruit","notskip"]},
+    {t:"Lay your toppings in neat rows across the top.",list:["granola","fruit","chia","seeds"]},
+    {t:"Eat right away, before it melts."}
+  ]
+},
+{
+  id:"pancakes",cat:"breakfast",name:"Banana Oat Protein Pancakes",time:20,img:"img/pancakes.webp",tint:"#E3B788",
+  cook:["#F2B26B","#F7D58B","#E58A5A","#4A2A0E"],
+  lede:"Fluffy flourless pancakes made from oats, eggs and banana, with thick yogurt on top. Weekend breakfast energy, any day.",
+  ings:[
+    {id:"eggs",name:"eggs",qty:"2",p:12.6,k:145,ess:true,egg:true,alts:[]},
+    {id:"oats",name:"rolled oats",qty:"40 g",p:5,k:150,ess:true,alts:[{name:"atta (whole wheat flour)",qty:"40 g",p:5,k:140,note:"No blending needed. Mix by hand."}]},
+    {id:"banana",name:"ripe banana",qty:"1",p:1.3,k:105,ess:true,alts:[]},
+    {id:"bp",name:"baking powder",qty:"½ tsp",p:0,k:2,alts:[]},
+    {id:"cinnamon",name:"cinnamon powder",qty:"a pinch",p:0,k:1,alts:[]},
+    {id:"oil",name:"butter or oil",qty:"1 tsp",p:0,k:40,ess:true,alts:[]},
+    {id:"curd",name:"Greek yogurt or hung curd",qty:"100 g",p:10,k:95,alts:[{name:"regular curd",qty:"100 g",p:3.5,k:60}]},
+    {id:"berries",name:"blueberries or banana slices",qty:"a handful",p:0.5,k:30,alts:[]},
+    {id:"honey",name:"honey",qty:"1 tsp",p:0,k:20,alts:[{name:"maple syrup",qty:"1 tsp",p:0,k:17}]}
+  ],
+  steps:[
+    {t:"Put the {oats} in a blender and blend into a fine flour.",only:["oats","have"]},
+    {t:"Add the {banana} and {eggs}[bp|, {bp}][cinnamon| and {cinnamon}]. Blend until smooth.",only:["oats","have"]},
+    {t:"In a bowl, mash the {banana} with a fork. Whisk in the {eggs}, then the {oats}[bp|, {bp}][cinnamon| and {cinnamon}].",only:["oats","alt"]},
+    {t:"Let the batter rest so it thickens a little.",timer:300},
+    {t:"Heat a non-stick pan on medium-low. Brush with a little {oil}.",timer:60},
+    {t:"Pour about 2 tbsp of batter per pancake. Keep them small, palm-sized. They're much easier to flip."},
+    {t:"Cook until small bubbles appear on top and the edges look dry.",timer:120,tip:"Low heat is the trick. Too hot and they burn before the middle sets."},
+    {t:"Flip with a spatula and cook the other side.",timer:60},
+    {t:"Repeat with the rest of the batter. You'll get 6–8 small pancakes."},
+    {t:"Stack them up and add your toppings.",list:["curd","berries","honey"]}
+  ]
+},
+{
+  id:"shakshuka",cat:"meals",name:"Shakshuka",time:25,img:"img/shakshuka.webp",tint:"#8B997F",
+  cook:["#E8553D","#F2A04A","#7FA36B","#3D120B"],
+  lede:"Eggs gently cooked in a spiced tomato and capsicum sauce. One pan, very forgiving, and you scoop it up with toast.",
+  ings:[
+    {id:"eggs",name:"eggs",qty:"3",p:19,k:215,ess:true,egg:true,alts:[]},
+    {id:"tomato",name:"tomatoes",qty:"3 medium",p:2,k:60,ess:true,alts:[{name:"tomato purée",qty:"1 cup",p:2,k:70}]},
+    {id:"onion",name:"onion",qty:"1",p:1,k:40,alts:[]},
+    {id:"capsicum",name:"red or green capsicum",qty:"1",p:1,k:30,alts:[]},
+    {id:"garlic",name:"garlic",qty:"2 cloves",p:0,k:8,alts:[{name:"garlic powder",qty:"¼ tsp",p:0,k:3}]},
+    {id:"oil",name:"olive oil or any oil",qty:"2 tsp",p:0,k:80,ess:true,alts:[]},
+    {id:"salt",name:"salt",qty:"½ tsp",p:0,k:0,ess:true,alts:[]},
+    {id:"cumin",name:"cumin powder",qty:"½ tsp",p:0,k:3,alts:[]},
+    {id:"paprika",name:"paprika or red chilli powder",qty:"½ tsp",p:0,k:3,alts:[]},
+    {id:"feta",name:"feta or crumbled paneer",qty:"30 g",p:5,k:80,alts:[]},
+    {id:"herbs",name:"fresh coriander or parsley",qty:"a handful",p:0,k:2,alts:[]},
+    {id:"bread",name:"sourdough or whole wheat bread",qty:"2 slices",p:7,k:160,alts:[{name:"pav",qty:"2",p:5,k:150}]}
+  ],
+  steps:[
+    {t:"Chop these.",list:["onion","capsicum","garlic"],tip:"Onion and capsicum in small pieces, garlic very fine."},
+    {t:"Chop the {tomato} into small pieces.",only:["tomato","have"]},
+    {t:"Heat {oil} in a pan that has a lid, on medium heat.",timer:60},
+    {t:"Add the [onion|{onion}][capsicum| and {capsicum}]. Cook until soft.",timer:300,any:["onion","capsicum"]},
+    {t:"[garlic|Add the {garlic}. ]Add {salt}.[cumin| Add {cumin}.][paprika| Add {paprika}.] Stir for 30 seconds until it smells good.",timer:30},
+    {t:"Add the {tomato}. Simmer, stirring now and then, until it turns into a thick sauce.",timer:480,tip:"Add a splash of water if it dries out too fast."},
+    {t:"With a spoon, make 3 small wells in the sauce. Crack one egg into each well."},
+    {t:"Cover with the lid and cook on low until the whites are set but the yolks are still soft.",timer:300,tip:"Like firm yolks? Give it 2 more minutes."},
+    {t:"Turn off the heat.[feta| Crumble the {feta} on top.][herbs| Scatter the {herbs}.]"},
+    {t:"Toast the {bread} and use it to scoop up the sauce and eggs.",only:["bread","notskip"]}
+  ]
+},
+{
+  id:"burrito",cat:"meals",name:"Burrito Rice Bowl",time:25,img:"img/burrito.webp",tint:"#3F7D6E",
+  cook:["#2E9E6E","#F2C14E","#E8553D","#0E2E22"],
+  lede:"California Burrito-style bowl at home: cilantro-lime rice, saucy rajma, seared paneer, salsa and sour cream.",
+  ings:[
+    {id:"beans",name:"boiled rajma or black beans",qty:"¾ cup",p:11,k:170,ess:true,alts:[{name:"boiled chickpeas",qty:"¾ cup",p:11,k:200}]},
+    {id:"rice",name:"cooked rice",qty:"½ cup",p:2,k:105,ess:true,alts:[{name:"cooked quinoa",qty:"½ cup",p:4,k:110},{name:"cooked brown rice",qty:"½ cup",p:2.5,k:110}]},
+    {id:"paneer",name:"paneer",qty:"50 g, cubed",p:9,k:130,alts:[{name:"firm tofu",qty:"70 g",p:10,k:100}]},
+    {id:"corn",name:"sweet corn",qty:"¼ cup",p:1,k:30,alts:[]},
+    {id:"tomato",name:"tomato",qty:"1",p:1,k:20,alts:[]},
+    {id:"onion",name:"onion",qty:"½",p:0.5,k:20,alts:[]},
+    {id:"coriander",name:"fresh coriander",qty:"a handful",p:0,k:2,alts:[]},
+    {id:"lemon",name:"lemon or lime",qty:"1",p:0,k:10,alts:[]},
+    {id:"cumin",name:"cumin powder",qty:"½ tsp",p:0,k:3,alts:[]},
+    {id:"chilli",name:"red chilli powder or paprika",qty:"½ tsp",p:0,k:3,alts:[]},
+    {id:"salt",name:"salt",qty:"½ tsp",p:0,k:0,ess:true,alts:[]},
+    {id:"oil",name:"oil",qty:"2 tsp",p:0,k:80,ess:true,alts:[]},
+    {id:"cheese",name:"grated cheese",qty:"20 g",p:5,k:80,alts:[]},
+    {id:"curd",name:"hung curd (as sour cream)",qty:"2 tbsp",p:3,k:30,alts:[]}
+  ],
+  steps:[
+    {t:"Finely chop these.",list:["tomato","onion","coriander"]},
+    {t:"Mix the chopped tomato and onion with a pinch of salt[lemon| and a squeeze of {lemon}]. This is your salsa.",any:["tomato","onion"]},
+    {t:"Warm the {rice}. Stir in a pinch of salt[coriander|, half the chopped coriander][lemon| and a squeeze of {lemon}]. This is your cilantro-lime rice."},
+    {t:"Heat 1 tsp {oil} in a pan on medium. Add the {paneer} cubes and cook until golden on two sides.",timer:240,only:["paneer","notskip"],tip:"Or air fry at 200°C for 8 minutes."},
+    {t:"Move the paneer to a plate. In the same pan, add the rest of the oil and the {beans}[corn| with the {corn}].[cumin| Add {cumin}.][chilli| Add {chilli}.] Add {salt}."},
+    {t:"Add 3 tbsp water. Cook, mashing a few beans with your spoon, until warm and saucy.",timer:180},
+    {t:"Put the rice in a bowl. Arrange the beans[paneer|, paneer] and salsa on top in sections."},
+    {t:"Finish it off and mix as you eat.",list:["cheese","curd"]}
+  ]
+},
+{
+  id:"salad",cat:"meals",name:"Thai Peanut Crunch Salad",time:25,af:true,img:"img/salad.webp",tint:"#A5DDC4",
+  cook:["#5FD3A1","#F2C14E","#9B7BE0","#0E3A2A"],
+  lede:"A Salad Days-style big bowl: crunchy cabbage, edamame and air-fried tofu with a creamy peanut-lime dressing.",
+  ings:[
+    {id:"tofu",name:"firm tofu",qty:"120 g",p:17,k:170,ess:true,alts:[{name:"paneer",qty:"100 g",p:18,k:265}]},
+    {id:"edamame",name:"frozen edamame",qty:"½ cup",p:8,k:95,alts:[{name:"frozen green peas",qty:"½ cup",p:4,k:60},{name:"boiled chickpeas",qty:"½ cup",p:7,k:135}]},
+    {id:"cabbage",name:"purple or green cabbage",qty:"1½ cups, shredded",p:1.5,k:30,ess:true,alts:[{name:"lettuce",qty:"2 cups",p:1,k:15}]},
+    {id:"carrot",name:"carrot",qty:"1",p:0.5,k:25,alts:[]},
+    {id:"cucumber",name:"cucumber",qty:"½",p:0.3,k:8,alts:[]},
+    {id:"pb",name:"peanut butter",qty:"1 tbsp",p:4,k:95,ess:true,alts:[]},
+    {id:"soy",name:"soy sauce",qty:"1 tbsp",p:1,k:10,ess:true,alts:[{name:"salt",qty:"¼ tsp",p:0,k:0}]},
+    {id:"lemon",name:"lime or lemon",qty:"1",p:0,k:10,ess:true,alts:[]},
+    {id:"honey",name:"honey",qty:"1 tsp",p:0,k:20,alts:[{name:"jaggery powder",qty:"1 tsp",p:0,k:20}]},
+    {id:"oil",name:"oil",qty:"1 tsp",p:0,k:40,ess:true,alts:[]},
+    {id:"peanuts",name:"roasted peanuts",qty:"1 tbsp",p:2.5,k:55,alts:[]},
+    {id:"coriander",name:"fresh coriander",qty:"a handful",p:0,k:2,alts:[]},
+    {id:"sesame",name:"sesame seeds",qty:"1 tsp",p:0.5,k:15,alts:[]}
+  ],
+  steps:[
+    {t:"Pat the {tofu} dry with a towel and cut it into small cubes. Toss with the {oil} and a pinch of salt."},
+    {t:"Air fry the cubes at 200°C.",timer:480},
+    {t:"Shake the basket and air fry until golden and crisp.",timer:240},
+    {t:"Meanwhile, boil the {edamame} in salted water, then drain and cool under cold water.",timer:180,only:["edamame","notskip"]},
+    {t:"Shred or thinly slice these.",list:["cabbage","carrot","cucumber"],tip:"Thin is key. Use a peeler to make carrot ribbons."},
+    {t:"Make the dressing: mix {pb}, {soy}, juice of the {lemon}[honey| and {honey}] with 2 tbsp warm water until smooth and pourable."},
+    {t:"Put the vegetables in a big bowl. Pour over most of the dressing and toss well."},
+    {t:"Top with the tofu[edamame| and edamame]. Drizzle the rest of the dressing.[peanuts| Crush the {peanuts} over.][coriander| Add {coriander}.][sesame| Sprinkle {sesame}.]"}
+  ]
+},
+{
+  id:"soba",cat:"meals",name:"Soba Bowl with Jammy Eggs",time:25,img:"img/soba.webp",tint:"#F2C3B3",
+  cook:["#F49C8A","#F7C66B","#9B7BE0","#4A1A14"],
+  lede:"Cold buckwheat noodles, soft jammy eggs, edamame and crunchy veg in a sesame-soy dressing. Light but very filling.",
+  ings:[
+    {id:"soba",name:"soba noodles",qty:"70 g",p:9.5,k:240,ess:true,alts:[{name:"whole wheat noodles",qty:"70 g",p:8,k:250,note:"Cook as per the packet."}]},
+    {id:"eggs",name:"eggs",qty:"2",p:12.6,k:145,ess:true,egg:true,alts:[]},
+    {id:"edamame",name:"frozen edamame",qty:"½ cup",p:8,k:95,alts:[{name:"frozen green peas",qty:"½ cup",p:4,k:60}]},
+    {id:"soy",name:"soy sauce",qty:"1½ tbsp",p:1,k:15,ess:true,alts:[]},
+    {id:"sesoil",name:"sesame oil",qty:"1 tsp",p:0,k:40,ess:true,alts:[{name:"any oil",qty:"1 tsp",p:0,k:40}]},
+    {id:"lemon",name:"rice vinegar or lemon juice",qty:"1 tsp",p:0,k:2,alts:[]},
+    {id:"honey",name:"honey",qty:"½ tsp",p:0,k:10,alts:[]},
+    {id:"cabbage",name:"purple cabbage",qty:"½ cup",p:0.5,k:10,alts:[]},
+    {id:"cucumber",name:"cucumber",qty:"½",p:0.3,k:8,alts:[]},
+    {id:"scallion",name:"spring onion",qty:"1",p:0,k:5,alts:[]},
+    {id:"sesame",name:"black or white sesame",qty:"1 tsp",p:0.5,k:15,alts:[]}
+  ],
+  steps:[
+    {t:"Bring a pot of water to a boil. Gently lower in the {eggs} with a spoon."},
+    {t:"Boil for exactly 6½ minutes for soft, jammy yolks.",timer:390},
+    {t:"Lift the eggs into a bowl of cold water and leave them there."},
+    {t:"In the same boiling water, cook the {soba}[edamame| and {edamame}].",timer:300,tip:"Check the packet. Most soba cooks in 4–5 minutes."},
+    {t:"Drain and rinse under cold water, rubbing gently with your hands. This stops them clumping."},
+    {t:"Make the dressing: mix {soy} and {sesoil}[lemon| with {lemon}][honey| and {honey}]."},
+    {t:"Slice these thinly.",list:["cabbage","cucumber","scallion"]},
+    {t:"Toss the noodles with half the dressing and put them in a bowl."},
+    {t:"Peel the eggs carefully and cut them in half."},
+    {t:"Arrange the eggs and vegetables on top. Pour over the rest of the dressing.[sesame| Sprinkle {sesame}.]"}
+  ]
+},
+{
+  id:"quinoa",cat:"meals",name:"Egg-Topped Quinoa Bowl",time:25,img:"img/quinoa.webp",tint:"#DFE8D3",
+  cook:["#8FD39B","#F7D16A","#F49C8A","#163A20"],
+  lede:"Fluffy quinoa with chickpeas, crunchy veg and jammy eggs, finished with a lemony yogurt dressing.",
+  ings:[
+    {id:"quinoa",name:"quinoa",qty:"⅓ cup (60 g)",p:8.5,k:220,ess:true,alts:[{name:"dalia (broken wheat)",qty:"⅓ cup",p:7,k:205,note:"Same steps, just cook it about 5 minutes longer."}]},
+    {id:"eggs",name:"eggs",qty:"2",p:12.6,k:145,ess:true,egg:true,alts:[]},
+    {id:"chana",name:"boiled chickpeas",qty:"½ cup",p:7,k:135,alts:[{name:"boiled rajma",qty:"½ cup",p:7,k:115}]},
+    {id:"tomato",name:"cherry tomatoes",qty:"6",p:0.5,k:15,alts:[{name:"tomato",qty:"1",p:1,k:20}]},
+    {id:"cucumber",name:"cucumber",qty:"½",p:0.3,k:8,alts:[]},
+    {id:"corn",name:"sweet corn",qty:"¼ cup",p:1,k:30,alts:[]},
+    {id:"spinach",name:"baby spinach",qty:"a handful",p:0.5,k:5,alts:[{name:"lettuce",qty:"a handful",p:0.3,k:3}]},
+    {id:"curd",name:"hung curd",qty:"2 tbsp",p:3,k:30,ess:true,alts:[]},
+    {id:"lemon",name:"lemon",qty:"½",p:0,k:5,ess:true,alts:[]},
+    {id:"oilo",name:"olive oil",qty:"1 tsp",p:0,k:40,alts:[]},
+    {id:"salt",name:"salt and pepper",qty:"to taste",p:0,k:0,ess:true,alts:[]}
+  ],
+  steps:[
+    {t:"Rinse the {quinoa} in a strainer under running water for 30 seconds.",tip:"This washes off a bitter coating."},
+    {t:"Put it in a pot with ⅔ cup water and a pinch of salt. Bring it to a boil."},
+    {t:"Cover, turn the heat to low and cook until the water is gone.",timer:900},
+    {t:"Meanwhile, boil water in another pot. Gently lower in the {eggs} and boil.",timer:420,tip:"7 minutes gives a jammy, just-set yolk."},
+    {t:"Move the eggs to cold water. Peel and halve them."},
+    {t:"Chop these.",list:["tomato","cucumber"]},
+    {t:"Make the dressing: mix the {curd}, juice of the {lemon}[oilo|, {oilo}] and {salt} with 1 tbsp water."},
+    {t:"Fluff the quinoa with a fork and put it in a bowl.[spinach| Tuck the {spinach} on one side.]"},
+    {t:"Arrange the toppings in little sections, then add the eggs.",list:["chana","tomato","cucumber","corn"]},
+    {t:"Drizzle the dressing over and eat."}
+  ]
+},
+{
+  id:"padthai",cat:"meals",name:"Tofu Pad Thai",time:30,af:true,img:"img/padthai.webp",tint:"#D57461",
+  cook:["#E8704F","#F2B43C","#7CC46B","#3D140B"],
+  lede:"Sweet, sour, nutty noodles with crispy air-fried tofu and egg. Better than takeaway, and ready in 30 minutes.",
+  ings:[
+    {id:"noodles",name:"flat rice noodles",qty:"75 g",p:5,k:270,ess:true,alts:[{name:"whole wheat noodles",qty:"75 g",p:9,k:260}]},
+    {id:"tofu",name:"firm tofu",qty:"100 g",p:14,k:140,ess:true,alts:[{name:"paneer",qty:"80 g",p:14.5,k:210}]},
+    {id:"egg",name:"egg",qty:"1",p:6.3,k:72,egg:true,alts:[]},
+    {id:"soy",name:"soy sauce",qty:"1 tbsp",p:1,k:10,ess:true,alts:[]},
+    {id:"tamarind",name:"tamarind paste",qty:"1 tsp",p:0,k:10,ess:true,alts:[{name:"lemon juice",qty:"1 tbsp",p:0,k:4}]},
+    {id:"sugar",name:"jaggery or brown sugar",qty:"1 tsp",p:0,k:20,ess:true,alts:[]},
+    {id:"chilli",name:"chilli flakes",qty:"a pinch",p:0,k:1,alts:[]},
+    {id:"oil",name:"oil",qty:"2 tsp",p:0,k:80,ess:true,alts:[]},
+    {id:"garlic",name:"garlic",qty:"2 cloves",p:0,k:8,alts:[]},
+    {id:"scallion",name:"spring onion",qty:"2",p:0.5,k:10,alts:[]},
+    {id:"sprouts",name:"bean sprouts",qty:"½ cup",p:1.5,k:15,alts:[{name:"shredded cabbage",qty:"½ cup",p:0.5,k:10}]},
+    {id:"peanuts",name:"roasted peanuts",qty:"2 tbsp",p:5,k:110,alts:[]},
+    {id:"lemon",name:"lime or lemon wedge",qty:"1",p:0,k:3,alts:[]}
+  ],
+  steps:[
+    {t:"Soak the {noodles} in hot water until soft but still a little firm.",timer:600,tip:"Check the packet. Over-soaked noodles turn mushy in the pan."},
+    {t:"Pat the {tofu} dry and cut it into small cubes. Toss with 1 tsp of the {oil}."},
+    {t:"Air fry the cubes at 200°C until golden. Shake the basket halfway.",timer:600},
+    {t:"Make the sauce: mix {soy}, {tamarind}, {sugar}[chilli| and {chilli}] with 2 tbsp water."},
+    {t:"Chop these.",list:["garlic","scallion"]},
+    {t:"Drain the noodles."},
+    {t:"Heat the rest of the {oil} in a large pan on high.[garlic| Add the {garlic} and stir for 20 seconds.]",timer:20},
+    {t:"Push everything to one side. Crack in the {egg} and scramble it quickly.",timer:45,only:["egg","notskip"]},
+    {t:"Add the noodles and the sauce. Toss with tongs or two forks until the noodles soak it all up.",timer:120},
+    {t:"Add the crispy tofu[sprouts| and {sprouts}][scallion| and the spring onion]. Toss for 1 minute.",timer:60},
+    {t:"Plate it up.[peanuts| Crush the {peanuts} and sprinkle on top.][lemon| Squeeze the {lemon} over.]"}
+  ]
+},
+{
+  id:"sub",cat:"sandwich",name:"Paneer Tikka Sub",time:30,af:true,img:"img/sub.webp",tint:"#F8C840",
+  cook:["#F7C23C","#F27E3C","#7CC46B","#4A2A05"],
+  lede:"Your own Subway-style 6-inch: air-fried paneer tikka, melted cheese, crunchy veg and mint mayo, in a soft sub roll.",
+  ings:[
+    {id:"paneer",name:"paneer",qty:"100 g",p:18,k:265,ess:true,alts:[{name:"firm tofu",qty:"120 g",p:17,k:170},{name:"boiled eggs, sliced",qty:"2",p:12.6,k:145,egg:true}]},
+    {id:"curd",name:"hung curd",qty:"3 tbsp",p:5,k:50,ess:true,alts:[{name:"thick regular curd",qty:"3 tbsp",p:2,k:35}]},
+    {id:"tikka",name:"tikka masala or garam masala",qty:"1 tsp",p:0,k:5,ess:true,alts:[{name:"red chilli + cumin powder",qty:"½ tsp each",p:0,k:5}]},
+    {id:"salt",name:"salt",qty:"½ tsp",p:0,k:0,ess:true,alts:[]},
+    {id:"bun",name:"6-inch multigrain sub roll",qty:"1",p:7,k:200,ess:true,alts:[{name:"hot dog bun or 2 bread slices",qty:"1",p:6,k:180}]},
+    {id:"cheese",name:"cheese slice",qty:"1",p:4,k:60,alts:[]},
+    {id:"mint",name:"mint chutney",qty:"1 tsp",p:0,k:5,alts:[]},
+    {id:"lettuce",name:"lettuce",qty:"2 leaves",p:0.3,k:3,alts:[{name:"cabbage, shredded",qty:"¼ cup",p:0.3,k:5}]},
+    {id:"tomato",name:"tomato",qty:"½",p:0.4,k:10,alts:[]},
+    {id:"onion",name:"red onion",qty:"¼",p:0.2,k:10,alts:[]},
+    {id:"cucumber",name:"cucumber",qty:"¼",p:0.2,k:5,alts:[]},
+    {id:"jalapeno",name:"jalapeños",qty:"a few",p:0,k:3,alts:[]}
+  ],
+  steps:[
+    {t:"Cut the {paneer} into cubes. In a bowl, mix 1 tbsp of the {curd} with {tikka} and {salt}. Toss the paneer in it.",only:["paneer","notalt1"]},
+    {t:"Air fry the paneer at 200°C until the edges look charred.",timer:480,only:["paneer","notalt1"]},
+    {t:"Slice the {paneer} and sprinkle with {tikka} and a pinch of {salt}.",only:["paneer","alt1"]},
+    {t:"Make the sauce: mix the rest of the {curd}[mint| with {mint}] and a pinch of salt. This is your mint mayo."},
+    {t:"Slice these thinly.",list:["tomato","onion","cucumber"]},
+    {t:"Slit the {bun} along one side, without cutting all the way through.[cheese| Lay the {cheese} inside.]"},
+    {t:"Toast the open bun in the air fryer at 180°C until the cheese melts.",timer:120},
+    {t:"Fill it with the paneer and the vegetables.",list:["lettuce","tomato","onion","cucumber","jalapeno"]},
+    {t:"Drizzle the mint mayo over the filling. Close the bun, press gently and eat."}
+  ]
+},
+{
+  id:"avotoast",cat:"sandwich",name:"Avocado Egg Toast",time:15,img:"img/avotoast.webp",tint:"#A09081",
+  cook:["#9BD15B","#F7D16A","#C9B39B","#1E2A12"],
+  lede:"The café classic: crisp sourdough, smashed avocado and a runny fried egg. No avocado? Use hung curd instead.",
+  ings:[
+    {id:"eggs",name:"eggs",qty:"2",p:12.6,k:145,ess:true,egg:true,alts:[]},
+    {id:"bread",name:"sourdough bread",qty:"2 slices",p:8,k:190,ess:true,alts:[{name:"whole wheat bread",qty:"2 slices",p:7,k:160}]},
+    {id:"avocado",name:"ripe avocado",qty:"½",p:1.5,k:120,ess:true,alts:[{name:"hung curd",qty:"3 tbsp",p:5,k:50,note:"A creamy spread with lemon and pepper. More protein, too."}]},
+    {id:"lemon",name:"lemon",qty:"½",p:0,k:5,alts:[]},
+    {id:"salt",name:"salt and black pepper",qty:"a pinch",p:0,k:0,ess:true,alts:[]},
+    {id:"butter",name:"butter or oil",qty:"1 tsp",p:0,k:35,ess:true,alts:[]},
+    {id:"feta",name:"feta or crumbled paneer",qty:"30 g",p:5,k:80,alts:[]},
+    {id:"chilli",name:"chilli flakes",qty:"a pinch",p:0,k:1,alts:[]}
+  ],
+  steps:[
+    {t:"Toast the {bread} until golden and crisp. Use a toaster, a pan, or the air fryer at 180°C.",timer:180},
+    {t:"Scoop the {avocado} into a bowl. Mash it with a fork, leaving it a little chunky. Add {salt}[lemon| and a squeeze of {lemon}].",only:["avocado","have"]},
+    {t:"Mix the {avocado} with {salt}[lemon| and a squeeze of {lemon}] until smooth.",only:["avocado","alt"]},
+    {t:"Heat the {butter} in a non-stick pan on medium-low.",timer:60},
+    {t:"Crack in the {eggs}. Cook until the whites are set and the yolks are still runny.",timer:180,tip:"If the top of the whites stays see-through, cover with a lid for the last minute."},
+    {t:"Spread the mash thickly on both toasts."},
+    {t:"Slide one egg onto each toast. Add a pinch of salt and pepper.[feta| Crumble the {feta} on top.][chilli| Sprinkle the {chilli}.]"}
+  ]
+},
+{
+  id:"peachtoast",cat:"sandwich",name:"Peach & Berry Whipped Paneer Toast",time:10,img:"img/peachtoast.webp",tint:"#0F294C",
+  cook:["#3B6FD1","#F2A66B","#9B7BE0","#0B1730"],
+  lede:"Paneer blended until it's fluffy like ricotta, spread on toast with peaches, berries and honey. Sweet, and secretly high-protein.",
+  ings:[
+    {id:"paneer",name:"paneer",qty:"80 g",p:14.5,k:210,ess:true,alts:[{name:"hung curd",qty:"100 g",p:10,k:95,note:"No blender needed, just whisk."}]},
+    {id:"milk",name:"milk",qty:"2 tbsp",p:1,k:20,ess:true,alts:[{name:"water",qty:"2 tbsp",p:0,k:0}]},
+    {id:"bread",name:"sourdough bread",qty:"2 slices",p:8,k:190,ess:true,alts:[{name:"whole wheat bread",qty:"2 slices",p:7,k:160}]},
+    {id:"peach",name:"peach",qty:"1",p:1,k:60,alts:[{name:"mango",qty:"½",p:0.8,k:65},{name:"banana",qty:"1",p:1.3,k:105}]},
+    {id:"berries",name:"blackberries or blueberries",qty:"a handful",p:0.5,k:25,alts:[{name:"pomegranate seeds",qty:"2 tbsp",p:0.5,k:20}]},
+    {id:"honey",name:"honey",qty:"2 tsp",p:0,k:40,alts:[]},
+    {id:"seeds",name:"pumpkin seeds",qty:"1 tbsp",p:3,k:55,alts:[{name:"chopped almonds",qty:"1 tbsp",p:2,k:50}]}
+  ],
+  steps:[
+    {t:"Put the {paneer}, {milk} and a pinch of salt in a small blender jar.",only:["paneer","have"]},
+    {t:"Blend until smooth and fluffy, like cream cheese. Scrape down the sides once or twice.",only:["paneer","have"],tip:"The small chutney jar works best for small amounts."},
+    {t:"Whisk the {paneer} with {milk} and a pinch of salt until smooth and fluffy.",only:["paneer","alt"]},
+    {t:"Toast the {bread} until golden and crisp. Use a toaster, a pan, or the air fryer at 180°C.",timer:180},
+    {t:"Slice the {peach} into thin wedges.",only:["peach","notskip"]},
+    {t:"Spread a thick layer of the whipped paneer on each toast."},
+    {t:"Arrange the fruit on top.",list:["peach","berries"]},
+    {t:"[honey|Drizzle with {honey}. ][seeds|Sprinkle the {seeds}. ]Eat right away, while the toast is still crisp."}
+  ]
+},
+{
+  id:"lassi",cat:"snack",name:"Mango Protein Lassi",time:5,img:"img/lassi.webp",tint:"#D96491",
+  cook:["#F2A63C","#F25C8A","#F7D16A","#4A1230"],
+  lede:"Thick, cold mango lassi made with Greek yogurt. A drink that counts as a snack.",
+  ings:[
+    {id:"curd",name:"Greek yogurt or hung curd",qty:"150 g",p:15,k:145,ess:true,alts:[{name:"regular curd",qty:"150 g",p:5,k:90}]},
+    {id:"milk",name:"cold milk",qty:"150 ml",p:5,k:90,ess:true,alts:[{name:"soy milk",qty:"150 ml",p:4.5,k:65}]},
+    {id:"mango",name:"ripe mango",qty:"1 cup chopped",p:1.4,k:100,ess:true,alts:[{name:"frozen mango",qty:"1 cup",p:1.4,k:100},{name:"banana",qty:"1",p:1.3,k:105}]},
+    {id:"honey",name:"honey",qty:"1 tsp",p:0,k:20,alts:[]},
+    {id:"cardamom",name:"cardamom powder",qty:"a pinch",p:0,k:1,alts:[]},
+    {id:"chia",name:"chia seeds",qty:"1 tsp",p:1,k:20,alts:[]},
+    {id:"ice",name:"ice cubes",qty:"3–4",p:0,k:0,alts:[]}
+  ],
+  steps:[
+    {t:"Peel the {mango} and cut the flesh into chunks.",only:["mango","have"]},
+    {t:"Put the {curd}, {milk} and {mango} in a blender.[cardamom| Add the {cardamom}.][honey| Add the {honey}.][ice| Add the {ice}.]"},
+    {t:"Blend until smooth and frothy.",timer:45},
+    {t:"Taste it. Add more honey if it's sour, or more milk if it's too thick."},
+    {t:"Pour into a glass.[chia| Sprinkle the {chia} on top.] Drink it cold."}
+  ]
+},
+{
+  id:"hummus",cat:"snack",name:"Hummus Snack Plate",time:15,img:"img/hummus.webp",tint:"#ECCC7C",
+  cook:["#F2C94C","#F28C50","#8FD39B","#4A3305"],
+  lede:"Homemade hummus with a boiled egg, crunchy veg sticks and roasted chana. A snack box you'll actually look forward to.",
+  ings:[
+    {id:"chana",name:"boiled chickpeas",qty:"½ cup",p:7,k:135,ess:true,alts:[]},
+    {id:"tahini",name:"tahini",qty:"1 tbsp",p:2.5,k:90,ess:true,alts:[{name:"peanut butter",qty:"1 tbsp",p:4,k:95},{name:"roasted sesame seeds",qty:"1 tbsp",p:1.5,k:50}]},
+    {id:"lemon",name:"lemon",qty:"½",p:0,k:5,ess:true,alts:[]},
+    {id:"garlic",name:"garlic",qty:"1 small clove",p:0,k:4,alts:[]},
+    {id:"oilo",name:"olive oil",qty:"1 tsp",p:0,k:40,alts:[]},
+    {id:"salt",name:"salt",qty:"¼ tsp",p:0,k:0,ess:true,alts:[]},
+    {id:"egg",name:"egg",qty:"1",p:6.3,k:72,egg:true,alts:[]},
+    {id:"veg",name:"carrot and cucumber",qty:"1 each",p:1,k:35,alts:[]},
+    {id:"roasted",name:"roasted chana",qty:"2 tbsp",p:4,k:70,alts:[{name:"roasted peanuts",qty:"1 tbsp",p:2.5,k:55}]},
+    {id:"paprika",name:"paprika or red chilli powder",qty:"a pinch",p:0,k:1,alts:[]}
+  ],
+  steps:[
+    {t:"Put the {egg} in a small pot of water and bring it to a boil.",only:["egg","notskip"]},
+    {t:"Once boiling, cook for 9 minutes.",timer:540,only:["egg","notskip"]},
+    {t:"Meanwhile, put the {chana}, {tahini}, juice of the {lemon}[garlic|, {garlic}] and {salt} in a blender with 3 tbsp cold water."},
+    {t:"Blend until very smooth and creamy.",timer:90,tip:"Add a spoon of water at a time if it's too thick. Hummus should be soft and spreadable."},
+    {t:"Cool the egg in cold water, then peel it and cut it in half.",only:["egg","notskip"]},
+    {t:"Cut the {veg} into sticks.",only:["veg","notskip"]},
+    {t:"Spoon the hummus onto a plate and swirl it with the back of the spoon.[oilo| Drizzle the {oilo}.][paprika| Dust with {paprika}.]"},
+    {t:"Arrange everything around it and dip away.",list:["egg","veg","roasted"]}
+  ]
+}];
+
+const CATS=[["breakfast","Breakfast","Açaí, pancakes, oats and eggs"],["meals","Bowls & meals","Burrito bowls, salads, noodles and more"],["sandwich","Sandwiches & toasts","Subs, toasts and grilled sandwiches"],["snack","Snacks & drinks","For the 5 pm hunger"]];
+const INDIAN=["bhurji","omelette","tikka","chilla","pulao","bowl","paneersand","chickpeas","chaat","lassi"];
+RECIPES.forEach(r=>r.cuisine=INDIAN.includes(r.id)?"indian":"global");
+RECIPES.sort((a,b)=>(a.cuisine==="global"?0:1)-(b.cuisine==="global"?0:1));
+
+// ---------- state ----------
+const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
+let showKcal=store.get("pp5-kcal",true), choices=store.get("pp5-choices",{}), tab=store.get("pp5-tab","all"), quick=store.get("pp5-quick","");
+let view={name:"home",id:null}, homeScroll=0;
+const app=document.getElementById("app"), cookRoot=document.getElementById("cook-root");
+const byId=id=>RECIPES.find(r=>r.id===id);
+const cap=s=>s.charAt(0).toUpperCase()+s.slice(1);
+const fmt=n=>Math.round(n);
+const mmss=s=>{s=Math.max(0,Math.ceil(s));return Math.floor(s/60)+":"+String(s%60).padStart(2,"0")};
+const tlabel=s=>s>=60?(s%60?Math.floor(s/60)+" min "+s%60+" s":s/60+" min"):s+" sec";
+const AF='<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><rect x="5" y="3" width="14" height="18" rx="4"/><path d="M8 13h8M9 7h.01M12 7h3"/></svg>';
+const EGG='<svg width="13" height="15" viewBox="0 0 20 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M10 2C5.5 2 3 9 3 14a7 7 0 0 0 14 0c0-5-2.5-12-7-12z"/></svg>';
+
+function cOf(r,id){return (choices[r.id]||{})[id]||{s:"have"}}
+function stateOf(r,id){return cOf(r,id).s}
+function match(r,id,want){const c=cOf(r,id),s=c.s,a=c.a||0;
+  if(want==="notskip")return s!=="skip";if(want==="have"||want==="alt"||want==="skip")return s===want;
+  const m=want.match(/^(not)?alt(\d)$/);if(m){const hit=s==="alt"&&a===+m[2];return m[1]?!hit:hit}return true}
+function resolve(r,ing){const c=cOf(r,ing.id);
+  if(c.s==="have")return {...ing,swapped:false};
+  if(c.s==="alt"){const a=ing.alts[c.a||0];return {...ing,...a,id:ing.id,swapped:true}}
+  return null}
+function totals(r){let p=0,k=0;r.ings.forEach(i=>{const x=resolve(r,i);if(x){p+=x.p;k+=x.k}});return {p,k}}
+function baseP(r){return r.ings.reduce((s,i)=>s+i.p,0)}
+const hasEgg=r=>r.ings.some(i=>{const x=resolve(r,i);return x&&x.egg});
+function setChoice(r,id,val){choices[r.id]=choices[r.id]||{};if(val.s==="have")delete choices[r.id][id];else choices[r.id][id]=val;store.set("pp5-choices",choices)}
+function okStep(r,st){
+  if(st.only&&!match(r,st.only[0],st.only[1]))return false;
+  if(st.any&&st.any.every(id=>stateOf(r,id)==="skip"))return false;
+  if(st.list&&st.list.every(id=>stateOf(r,id)==="skip"))return false;return true}
+function render(r,st){
+  const used=[];
+  let t=st.t.replace(/\[(\w+)\|([^\]]*)\]/g,(m,id,inner)=>stateOf(r,id)==="skip"?"":inner);
+  t=t.replace(/\{(\w+)\}/g,(m,id)=>{const ing=r.ings.find(i=>i.id===id);const x=ing&&resolve(r,ing);if(!x)return "";if(!used.find(u=>u.id===x.id))used.push(x);return '<em class="ing">'+x.name+'</em>'});
+  let list=null;
+  if(st.list)list=st.list.map(id=>resolve(r,r.ings.find(i=>i.id===id))).filter(Boolean);
+  return {html:t.trim(),used:list?[]:used,list}}
+function stepsFor(r){return r.steps.filter(s=>okStep(r,s)).map(s=>({...s,...render(r,s)}))}
+
+// ---------- home ----------
+const QUICK=[["global","Café-style"],["indian","Indian"],["af","Air fryer"],["egg","With eggs"],["eggless","Eggless"],["quick","15 min or less"],["nocook","No stove"]];
+const NOCOOK=["bowl","overnight","yogurt","chaat","acai","lassi"];
+function passes(r){if(quick==="global"||quick==="indian")return r.cuisine===quick;if(quick==="af")return !!r.af;if(quick==="egg")return hasEgg(r);if(quick==="eggless")return !hasEgg(r);if(quick==="quick")return r.time<=15;if(quick==="nocook")return NOCOOK.includes(r.id);return true}
+function kcalBtn(){return '<button class="kcal-btn" role="switch" aria-checked="'+showKcal+'" id="kcal">kcal <i></i></button>'}
+const ICON_SM=s=>s.replace(/width="\d+" height="\d+"/,'width="14" height="14"');
+function home(){
+  const pool=RECIPES.filter(passes);
+  const count=c=>pool.filter(r=>r.cat===c).length;
+  const SHORT={breakfast:"Breakfast",meals:"Bowls",sandwich:"Sandwiches",snack:"Snacks"};
+  const tabs=[["all","All",pool.length]].concat(CATS.map(([k])=>[k,SHORT[k],count(k)]));
+  let body="";
+  if(!pool.length)body='<p class="empty">No recipes match. Try another filter.</p>';
+  else if(tab==="all"){
+    body=CATS.map(([k,l,d])=>{const rs=pool.filter(r=>r.cat===k);if(!rs.length)return "";
+      return '<section class="sec"><div class="sec-top"><div><h2>'+l+'</h2><p>'+d+'</p></div>'+(rs.length>2?'<button class="see" data-tab="'+k+'">See all '+rs.length+'</button>':'')+'</div><div class="row">'+rs.map(mini).join("")+'</div></section>'}).join("");
+  } else {
+    const c=CATS.find(x=>x[0]===tab),rs=pool.filter(r=>r.cat===tab);
+    body='<section class="sec"><div class="sec-top"><div><h2>'+c[1]+'</h2><p>'+c[2]+'</p></div></div>'+(rs.length?'<div class="grid2">'+rs.map(mini).join("")+'</div>':'<p class="empty">No '+c[1].toLowerCase()+' match this filter.</p>')+'</section>';
+  }
+  app.innerHTML='<div class="home"><div class="col">'+
+    '<header class="top"><div class="brand"><svg width="26" height="26" viewBox="0 0 34 34" aria-hidden="true"><circle cx="15" cy="17" r="13" fill="var(--accent)"/><circle cx="15" cy="17" r="7.5" fill="var(--pop)"/><rect x="26" y="15" width="8" height="4" rx="2" fill="var(--accent)"/></svg>Protein Pan</div>'+'<div class="top-r">'+kitchenBtn()+kcalBtn()+'</div></header>'+
+    '<section class="hello"><h1>What are we cooking today?</h1><p>'+RECIPES.length+' high-protein recipes. One step and one timer on screen at a time.</p></section>'+kitchenStrip()+
+    '<div class="tabs-wrap" id="tabs-wrap"><div class="tabs" role="tablist" aria-label="Recipe type">'+tabs.map(([k,l,n])=>'<button class="tab" role="tab" data-tab="'+k+'" aria-selected="'+(tab===k)+'">'+l+' <i class="num">'+n+'</i></button>').join("")+'</div>'+
+    '<div class="quick" role="group" aria-label="Quick filters">'+QUICK.map(([k,l])=>'<button class="qchip" data-q="'+k+'" aria-pressed="'+(quick===k)+'">'+(k==="af"?ICON_SM(AF):k==="egg"?ICON_SM(EGG):'')+l+'</button>').join("")+'</div></div>'+
+    body+
+    '<p class="foot">Protein and calories are approximate, per 1 serving.</p></div></div>';
+  document.getElementById("kcal").onclick=()=>{showKcal=!showKcal;store.set("pp5-kcal",showKcal);rehome()};
+  app.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{tab=b.dataset.tab;store.set("pp5-tab",tab);home();
+    const tw=document.getElementById("tabs-wrap");if(window.scrollY>tw.offsetTop)window.scrollTo(0,tw.offsetTop-8);
+    const sel=app.querySelector('.tab[aria-selected="true"]');sel&&sel.scrollIntoView({inline:"center",block:"nearest"})});
+  app.querySelectorAll(".qchip").forEach(b=>b.onclick=()=>{quick=quick===b.dataset.q?"":b.dataset.q;store.set("pp5-quick",quick);rehome()});
+  app.querySelectorAll(".mini").forEach(b=>b.onclick=()=>{homeScroll=window.scrollY;go("detail",b.dataset.id)});
+  bindKitchenLinks();
+  onScroll();
+}
+function rehome(){const y=window.scrollY;home();window.scrollTo(0,y)}
+function onScroll(){const tw=document.getElementById("tabs-wrap");if(tw)tw.style.setProperty("--sh",tw.getBoundingClientRect().top<=parseFloat(getComputedStyle(tw).top)+1?1:0)}
+window.addEventListener("scroll",onScroll,{passive:true});
+function mini(r){const t=totals(r);
+  const b=(r.af?'<span title="Air fryer">'+ICON_SM(AF)+'</span>':'')+(hasEgg(r)?'<span title="Has eggs">'+ICON_SM(EGG)+'</span>':'');
+  return '<button class="mini" data-id="'+r.id+'"><div class="mph" style="--tint:'+r.tint+'"><img src="'+r.img+'" alt="" loading="lazy" decoding="async">'+(b?'<div class="badges">'+b+'</div>':'')+'<span class="pg num">'+fmt(t.p)+' g</span></div>'+
+  '<div><h3>'+r.name+'</h3></div><div class="m num">'+r.time+' min'+(showKcal?' · '+fmt(t.k)+' kcal':'')+(r.af?' · Air fryer':'')+'</div></button>'}
+
+// ---------- detail ----------
+function detail(keepScroll){
+  const r=byId(view.id),t=totals(r),d=fmt(t.p)-fmt(baseP(r)),steps=stepsFor(r);
+  const before=(r.before||[]).filter(x=>!x.only||match(r,x.only[0],x.only[1]));
+  const changed=r.ings.filter(i=>stateOf(r,i.id)!=="have").length;
+  const n=showKcal?3:2;
+  app.innerHTML='<div class="hero" style="--tint:'+r.tint+'"><img src="'+r.img+'" alt="'+r.name+'"><button class="fab" id="back" aria-label="Back to recipes"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button></div>'+
+  '<div class="sheet"><div class="col">'+
+    (r.af?'<div class="needs">'+AF.replace('width="15" height="15"','width="26" height="26"')+'<div><b>You\'ll need an air fryer</b>'+(r.needs?'<span>Also: '+r.needs+'</span>':'<span>Any basket air fryer works.</span>')+'</div></div>':'')+
+    '<div class="eyebrow">'+(CATS.find(c=>c[0]===r.cat)||[0,''])[1]+'</div><h2>'+r.name+'</h2><p class="lede">'+r.lede+'</p>'+
+    '<div class="stats" style="--n:'+n+'"><div class="stat p"><div class="v num">'+fmt(t.p)+'<small>g</small></div><div class="l">Protein</div></div>'+
+    '<div class="stat"><div class="v num">'+r.time+'<small>min</small></div><div class="l">'+steps.length+' steps</div></div>'+
+    (showKcal?'<div class="stat"><div class="v num">'+fmt(t.k)+'</div><div class="l">kcal</div></div>':'')+'</div>'+
+    '<div class="delta">'+(d?((d>0?'+':'')+d+' g protein after your swaps'):'')+'</div>'+
+    before.map(x=>'<div class="note">'+x.t+'</div>').join("")+myPlatesBlock(r)+
+    '<div class="sec-h"><h3>Ingredients</h3><span>Serves 1'+(changed?' · '+changed+' changed':'')+'</span></div>'+
+    '<p class="help">Tap <b>Missing</b> on anything you don\'t have. You\'ll get a swap or can skip it, and the steps adjust.</p>'+
+    '<ul class="ings">'+r.ings.map(i=>ingRow(r,i)).join("")+'</ul>'+
+  '</div></div>'+
+  '<div class="cta-bar"><button class="cta" id="start">Start cooking <span>· '+steps.length+' steps</span></button></div>';
+  document.getElementById("back").onclick=()=>{go("home");window.scrollTo(0,homeScroll)};
+  document.getElementById("start").onclick=()=>startCook(r);
+  bindKitchenLinks();bindMyPlates(r);
+  app.querySelectorAll("[data-act]").forEach(el=>el.onclick=()=>{
+    const id=el.dataset.ing,ing=r.ings.find(i=>i.id===id),act=el.dataset.act;
+    if(act==="have")setChoice(r,id,{s:"have"});
+    else if(act==="miss")setChoice(r,id,ing.alts.length?{s:"alt",a:0}:{s:"skip"});
+    else if(act==="alt")setChoice(r,id,{s:"alt",a:+el.dataset.a});
+    else if(act==="skip")setChoice(r,id,{s:"skip"});
+    const y=window.scrollY;detail();window.scrollTo(0,y);
+    const f=app.querySelector('[data-ing="'+id+'"][data-act="'+act+'"]');if(f)f.focus({preventScroll:true});
+  });
+}
+function ingRow(r,i){
+  const c=cOf(r,i.id),s=c.s,x=resolve(r,i),noSwap=i.ess&&!i.alts.length;
+  let opts="";
+  if(s!=="have"){
+    opts='<div class="opts"><span class="lab">'+(i.alts.length?'Use instead':'No swap needed')+'</span><div class="chips">'+
+      i.alts.map((a,n)=>'<button class="chip" data-ing="'+i.id+'" data-act="alt" data-a="'+n+'" aria-pressed="'+(s==="alt"&&(c.a||0)===n)+'">'+cap(a.name)+(a.qty?'<small>'+a.qty+'</small>':'')+'</button>').join("")+
+      (i.ess?'':'<button class="chip" data-ing="'+i.id+'" data-act="skip" aria-pressed="'+(s==="skip")+'">Skip it<small>still works</small></button>')+'</div>'+
+      (s==="alt"&&x&&x.note?'<span class="why">'+x.note+'</span>':'')+'</div>';
+  }
+  return '<li class="ing'+(s==="skip"?' off':'')+(s!=="have"?' miss':'')+'"><div class="ing-row"><div class="ing-name"><b>'+cap(x?x.name:i.name)+'</b><span class="q num">'+[x?x.qty:i.qty,x&&x.p>=1?fmt(x.p)+' g protein':'',x&&x.swapped?'instead of '+i.name:''].filter(Boolean).join(' · ')+'</span></div>'+
+    (noSwap?'<span class="need">Needed</span>':'<div class="seg" role="group" aria-label="Do you have '+i.name+'?"><button data-ing="'+i.id+'" data-act="have" aria-pressed="'+(s==="have")+'">Have</button><button class="m" data-ing="'+i.id+'" data-act="miss" aria-pressed="'+(s!=="have")+'">Missing</button></div>')+
+  '</div>'+opts+'</li>';
+}
+
+// ---------- cook mode ----------
+let ck=null,actx=null,wake=null;
+function startCook(r){
+  ensureAudio();
+  ck={r,steps:stepsFor(r),i:0,timers:{},done:false};
+  const c=r.cook;
+  cookRoot.innerHTML='<div class="cook" role="dialog" aria-modal="true" aria-label="Cooking '+r.name+'" style="--c1:'+c[0]+';--c2:'+c[1]+';--c3:'+c[2]+';--c4:'+c[3]+'"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="vig"></div><div class="ui" id="cook-ui"></div></div>';
+  document.body.style.overflow="hidden";
+  getWake();
+  ck.tick=setInterval(tick,250);
+  bindSwipe();
+  drawCook();
+}
+function getWake(){try{navigator.wakeLock&&navigator.wakeLock.request("screen").then(w=>wake=w).catch(()=>{})}catch(e){}}
+function closeCook(){if(!ck)return;stopVoice();clearInterval(ck.tick);ck=null;cookRoot.innerHTML="";document.body.style.overflow="";try{wake&&wake.release()}catch(e){}wake=null}
+function remain(t){return t.running?(t.endAt-Date.now())/1000:t.left}
+function drawCook(){
+  const ui=document.getElementById("cook-ui");if(!ui)return;
+  const {r,steps,i}=ck,n=steps.length;
+  const top='<div class="c-top"><button class="x" id="c-close" aria-label="Exit cooking"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button><img class="thumb" src="'+r.img+'" alt=""><div class="c-title">'+r.name+'</div><div class="c-count num">'+(ck.done?'Done':(i+1)+' / '+n)+'</div>'+voiceBtns()+'</div>'+
+    '<div class="bars">'+steps.map((s,k)=>'<i class="'+(ck.done||k<=i?'on':'')+'"></i>').join("")+'</div><div class="running" id="running"></div>'+listenPill();
+  if(ck.done){
+    const t=totals(r);
+    const sp=ck.saved&&plates.find(x=>x.id===ck.saved);
+    ui.innerHTML=top+'<div class="stage"><div class="card-s done">'+
+      (sp?'<img class="mine-photo" src="'+purl(sp)+'" alt="Your '+r.name+'"><span class="saved">Saved to My kitchen</span><div class="big num">'+fmt(t.p)+' g</div><p>of protein on your plate. Enjoy it.</p><div class="row"><button id="to-kitchen">Open My kitchen</button><button class="ghost" id="again">Cook something else</button></div>'
+        :'<img src="'+r.img+'" alt="'+r.name+'"><div class="s-lab">You made it</div><div class="big num">'+fmt(t.p)+' g</div><p>of protein on your plate. Snap your plate to keep it in My kitchen.</p><div class="row"><button class="cam" id="snap">'+ICON_CAM+'Add a photo of your plate</button><button class="ghost" id="nophoto">Save without a photo</button></div><button class="skip" id="again">Not now</button>')+
+      '</div></div>';
+    document.getElementById("c-close").onclick=closeCook;
+    document.getElementById("again").onclick=()=>{closeCook();go("home")};
+    const tk=document.getElementById("to-kitchen");if(tk)tk.onclick=()=>{closeCook();go("kitchen")};
+    const sn=document.getElementById("snap");if(sn)sn.onclick=()=>pickPhoto(b=>openSaveSheet(r,b));
+    const np=document.getElementById("nophoto");if(np)np.onclick=()=>openSaveSheet(r,null);
+    bindVoice();if(!sp)say("You made it! "+r.name+" is ready, with "+fmt(t.p)+" grams of protein. Snap a photo of your plate to save it.");
+    return;
+  }
+  const s=steps[i];
+  const list=s.list?'<ul class="s-list">'+s.list.map(u=>'<li>'+cap(u.name)+(u.qty?'<em>'+u.qty+'</em>':'')+'</li>').join("")+'</ul>':'';
+  const chips=s.used.length?'<div class="s-chips">'+s.used.map(u=>'<span>'+cap(u.name)+(u.qty?' <em>'+u.qty+'</em>':'')+'</span>').join("")+'</div>':'';
+  ui.innerHTML=top+'<div class="stage" id="stage"><div class="card-s"><div class="s-head"><div class="s-lab">Step '+(i+1)+'</div>'+(TTS?'<button class="again" id="read-again">'+ICON.play+'<span>Read again</span></button>':'')+'</div><p class="s-text">'+s.html+'</p>'+list+chips+(s.tip?'<p class="tip">'+s.tip+'</p>':'')+(s.timer?timerHTML(i):'')+'</div></div>'+
+    (i===0?'<p class="swipe">Swipe or tap Next to move between steps</p>':'')+
+    '<div class="nav"><button class="prev" id="prev" '+(i===0?'disabled':'')+' aria-label="Previous step"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><button class="next" id="next">'+(i===n-1?'Finish':'Next step')+'</button></div>';
+  document.getElementById("c-close").onclick=closeCook;
+  document.getElementById("prev").onclick=()=>move(-1);
+  document.getElementById("next").onclick=()=>move(1);
+  if(s.timer){
+    document.getElementById("t-go").onclick=()=>toggleTimer(i);
+    document.getElementById("t-reset").onclick=()=>{ck.timers[i]={total:s.timer,left:s.timer,running:false};updateTimer();renderRunning()};
+    document.getElementById("t-add").onclick=()=>{const t=getT(i);if(t.fin){t.fin=false;t.left=0}if(t.running)t.endAt+=30000;else t.left+=30;t.total=Math.max(t.total,remain(t));updateTimer()};
+  }
+  updateTimer();renderRunning();
+  bindVoice();
+  const ra=document.getElementById("read-again");if(ra)ra.onclick=()=>speakStep(true);
+  speakStep();
+}
+function getT(i){const s=ck.steps[i];return ck.timers[i]||(ck.timers[i]={total:s.timer,left:s.timer,running:false})}
+function timerHTML(i){const s=ck.steps[i];
+  return '<div class="timer" id="timer"><div class="ring"><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="44" fill="none" stroke="#ECECE6" stroke-width="9"/><circle id="arc" cx="50" cy="50" r="44" fill="none" stroke="var(--c4)" stroke-width="9" stroke-linecap="round" stroke-dasharray="276.46" stroke-dashoffset="0"/></svg><div class="t" id="t-txt">'+mmss(s.timer)+'</div></div>'+
+  '<div class="info"><b id="t-state">'+tlabel(s.timer)+' timer</b><span>Keeps running if you go to another step.</span></div>'+
+  '<div class="t-btns"><button class="go" id="t-go">Start timer</button><button id="t-add" aria-label="Add 30 seconds">+30s</button><button id="t-reset" aria-label="Reset timer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 12a8 8 0 1 0 2.5-5.8M4 4v4h4"/></svg></button></div></div>'}
+function toggleTimer(i){
+  ensureAudio();const t=getT(i);
+  if(t.fin){t.left=t.total;t.fin=false}
+  if(t.running){t.left=remain(t);t.running=false}else{t.endAt=Date.now()+t.left*1000;t.running=true}
+  updateTimer();renderRunning();
+}
+function updateTimer(){
+  if(!ck||ck.done)return;const s=ck.steps[ck.i];if(!s.timer)return;
+  const t=ck.timers[ck.i],left=t?remain(t):s.timer,total=t?t.total:s.timer;
+  const txt=document.getElementById("t-txt");if(!txt)return;
+  txt.textContent=mmss(left);
+  document.getElementById("arc").setAttribute("stroke-dashoffset",(276.46*(1-Math.max(0,left)/total)).toFixed(1));
+  document.getElementById("t-go").textContent=t&&t.fin?"Restart":(t&&t.running?"Pause":(t&&t.left<t.total?"Resume":"Start timer"));
+  document.getElementById("t-state").textContent=t&&t.fin?"Time's up!":(t&&t.running?"Running…":tlabel(total)+" timer");
+}
+function renderRunning(){
+  const el=document.getElementById("running");if(!el||!ck)return;
+  const items=Object.entries(ck.timers).filter(([k,t])=>+k!==ck.i&&(t.running||t.fin));
+  el.innerHTML=items.map(([k,t])=>'<button class="run'+(t.fin?' done':'')+' num" data-k="'+k+'">'+(t.fin?'':'<i></i>')+'<span>Step '+(+k+1)+' · '+(t.fin?'done':mmss(remain(t)))+'</span></button>').join("");
+  el.querySelectorAll(".run").forEach(b=>b.onclick=()=>{ck.i=+b.dataset.k;ck.done=false;drawCook()});
+}
+function tick(){
+  if(!ck)return;
+  Object.entries(ck.timers).forEach(([k,t])=>{
+    if(t.running&&remain(t)<=0){t.running=false;t.left=0;t.fin=true;chime();
+      try{navigator.vibrate&&navigator.vibrate([300,150,300,150,300])}catch(e){}
+      toast("Step "+(+k+1)+" timer is done");
+      setTimeout(()=>say("Step "+(+k+1)+" timer is done."),1500);
+      if(+k===ck.i){const tm=document.getElementById("timer");if(tm){tm.classList.remove("finished");void tm.offsetWidth;tm.classList.add("finished")}}
+      renderRunning()}
+  });
+  updateTimer();
+  const el=document.getElementById("running");
+  if(el)Object.entries(ck.timers).filter(([k,t])=>+k!==ck.i&&(t.running||t.fin)).forEach(([k,t],n)=>{const b=el.children[n];if(b&&t.running)b.lastChild.textContent='Step '+(+k+1)+' · '+mmss(remain(t))});
+}
+// ---------- voice: read-aloud (speechSynthesis) + hands-free commands (speech recognition) ----------
+const TTS=typeof window.speechSynthesis!=="undefined"&&typeof window.SpeechSynthesisUtterance!=="undefined";
+const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+let readOn=store.get("pp5-read",true), micOn=false, micBlocked=false, rec=null, voice=null, speaking=false, heard="";
+const ICON={
+  spkOn:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></svg>',
+  spkOff:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5L6 9H3v6h3l5 4V5z"/><path d="M22 9l-6 6M16 9l6 6"/></svg>',
+  mic:'<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
+  play:'<svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"/></svg>'
+};
+function pickVoice(){if(!TTS)return;try{const vs=speechSynthesis.getVoices();voice=vs.find(v=>/en[-_]IN/i.test(v.lang))||vs.find(v=>/en[-_]GB/i.test(v.lang))||vs.find(v=>/^en/i.test(v.lang))||null}catch(e){}}
+if(TTS){pickVoice();try{speechSynthesis.addEventListener("voiceschanged",pickVoice)}catch(e){}}
+function plain(h){
+  return h.replace(/<[^>]+>/g,"")
+    .replace(/(\d)½/g,"$1 and a half").replace(/½/g,"half").replace(/¼/g,"a quarter").replace(/¾/g,"three quarters").replace(/⅓/g,"one third").replace(/⅔/g,"two thirds")
+    .replace(/°C/g," degrees").replace(/(\d)\s?–\s?(\d)/g,"$1 to $2").replace(/\btbsp\b/g,"tablespoon").replace(/\btsp\b/g,"teaspoon")
+    .replace(/(\d)\s?g\b/g,"$1 grams").replace(/(\d)\s?ml\b/g,"$1 millilitres").replace(/\bmin\b/g,"minutes").replace(/·/g,",");
+}
+function say(text){
+  if(!TTS||!readOn)return;
+  try{
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(plain(text));
+    if(voice){u.voice=voice;u.lang=voice.lang}else u.lang="en-IN";
+    u.rate=0.95;
+    u.onstart=()=>{speaking=true;markReading(true)};
+    u.onend=u.onerror=()=>{speaking=false;markReading(false)};
+    speechSynthesis.speak(u);
+  }catch(e){}
+}
+function markReading(on){const b=document.getElementById("read-again");if(b){b.classList.toggle("on",on);b.lastChild.textContent=on?"Reading…":"Read again"}}
+function speakStep(force){
+  if(!ck||ck.done)return;
+  if(force&&!readOn){readOn=true;store.set("pp5-read",true);refreshVoiceUI()}
+  const s=ck.steps[ck.i];let t="Step "+(ck.i+1)+". "+s.html;
+  if(s.list)t+=" "+s.list.map(u=>u.name+(u.qty?", "+u.qty:"")).join(". ")+".";
+  else if(s.used.length)t+=" You'll need: "+s.used.map(u=>u.name+(u.qty?", "+u.qty:"")).join(". ")+".";
+  if(s.tip)t+=" Tip: "+s.tip;
+  if(s.timer)t+=" This step has a "+tlabel(s.timer)+" timer."+(micOn?" Say start timer when you're ready.":" Tap start when you're ready.");
+  say(t);
+}
+function voiceBtns(){
+  return (TTS?'<button class="ibtn" id="v-read" aria-pressed="'+readOn+'" aria-label="Read steps aloud">'+(readOn?ICON.spkOn:ICON.spkOff)+'</button>':'')+
+    (SR&&!micBlocked?'<button class="ibtn mic" id="v-mic" aria-pressed="'+micOn+'" aria-label="Voice commands">'+ICON.mic+'</button>':'');
+}
+function listenPill(){return '<div class="listen" id="listen"'+(micOn?'':' hidden')+'><span><b>Listening.</b> Say “next”, “back”, “repeat” or “start timer”.</span><span class="heard" id="heard">'+(heard?'“'+heard+'”':'')+'</span></div>'}
+function refreshVoiceUI(){
+  const r=document.getElementById("v-read");if(r){r.setAttribute("aria-pressed",readOn);r.innerHTML=readOn?ICON.spkOn:ICON.spkOff}
+  const m=document.getElementById("v-mic");if(m){if(micBlocked)m.remove();else m.setAttribute("aria-pressed",micOn)}
+  const l=document.getElementById("listen");if(l)l.hidden=!micOn;
+}
+function bindVoice(){
+  const r=document.getElementById("v-read");
+  if(r)r.onclick=()=>{readOn=!readOn;store.set("pp5-read",readOn);if(!readOn){try{speechSynthesis.cancel()}catch(e){}}refreshVoiceUI();if(readOn)speakStep();toast(readOn?"Reading steps aloud":"Read-aloud off")};
+  const m=document.getElementById("v-mic");
+  if(m)m.onclick=()=>{micOn?stopMic():startMic()};
+}
+function micFail(){
+  micBlocked=true;micOn=false;try{rec&&rec.abort()}catch(e){}rec=null;refreshVoiceUI();
+  toast("Microphone isn't available here, so voice commands are off. Read-aloud still works.");
+}
+function startMic(){
+  if(!SR)return;
+  try{
+    rec=new SR();rec.lang="en-IN";rec.continuous=true;rec.interimResults=false;rec.maxAlternatives=1;
+    rec.onresult=e=>{
+      if(speaking)return; // ignore the app's own voice
+      const res=e.results[e.results.length-1];if(!res||!res.isFinal)return;
+      const t=(res[0].transcript||"").toLowerCase().trim();heard=t;
+      const h=document.getElementById("heard");if(h)h.textContent="“"+t+"”";
+      handleCmd(t);
+    };
+    rec.onerror=e=>{if(["not-allowed","service-not-allowed","audio-capture"].includes(e.error))micFail()};
+    rec.onend=()=>{if(micOn&&ck){try{rec.start()}catch(e){}}};
+    rec.start();micOn=true;refreshVoiceUI();
+    toast("Voice on. Say “next” or “back”.");
+  }catch(e){micFail()}
+}
+function stopMic(){micOn=false;try{rec&&rec.stop()}catch(e){}rec=null;refreshVoiceUI()}
+function stopVoice(){try{TTS&&speechSynthesis.cancel()}catch(e){}speaking=false;if(micOn){micOn=false;try{rec&&rec.abort()}catch(e){}rec=null}}
+function handleCmd(t){
+  if(!ck)return;
+  const has=re=>re.test(t);
+  if(has(/\b(next|aage|done|continue|go on)\b/))move(1);
+  else if(has(/\b(back|previous|peeche|pichhe)\b/))move(-1);
+  else if(has(/\b(start|pause|resume|timer)\b/)){if(!ck.done&&ck.steps[ck.i].timer)toggleTimer(ck.i)}
+  else if(has(/\b(repeat|again|read|what)\b/))speakStep(true);
+  else if(has(/\b(quiet|stop|mute|silence)\b/)){try{speechSynthesis.cancel()}catch(e){}}
+}
+
+function move(d){
+  if(!ck)return;
+  if(d>0&&ck.done)return;
+  if(d<0&&ck.done){ck.done=false;drawCook();return}
+  if(d>0&&ck.i===ck.steps.length-1){ck.done=true;drawCook();return}
+  const ni=Math.min(ck.steps.length-1,Math.max(0,ck.i+d));if(ni===ck.i)return;
+  ck.i=ni;drawCook();
+  try{navigator.vibrate&&navigator.vibrate(10)}catch(e){}
+  document.getElementById("live").textContent="Step "+(ck.i+1)+": "+ck.steps[ck.i].html.replace(/<[^>]+>/g,"");
+}
+function bindSwipe(){
+  const root=cookRoot.querySelector(".cook");let x0=null,y0=null;
+  root.addEventListener("touchstart",e=>{if(e.target.closest("button"))return;x0=e.touches[0].clientX;y0=e.touches[0].clientY},{passive:true});
+  root.addEventListener("touchend",e=>{if(x0===null)return;const dx=e.changedTouches[0].clientX-x0,dy=e.changedTouches[0].clientY-y0;x0=null;
+    if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)move(dx<0?1:-1)},{passive:true});
+}
+function ensureAudio(){try{if(!actx)actx=new (window.AudioContext||window.webkitAudioContext)();if(actx.state==="suspended")actx.resume()}catch(e){}}
+function chime(){if(!actx)return;try{[0,.18,.36,.9,1.08,1.26].forEach((d,n)=>{const o=actx.createOscillator(),g=actx.createGain();o.type="sine";o.frequency.value=[784,988,1319][n%3];
+  g.gain.setValueAtTime(0,actx.currentTime+d);g.gain.linearRampToValueAtTime(.35,actx.currentTime+d+.02);g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+d+.6);
+  o.connect(g).connect(actx.destination);o.start(actx.currentTime+d);o.stop(actx.currentTime+d+.65)})}catch(e){}}
+let toastT;
+function toast(msg){let t=document.querySelector(".toast");if(!t){t=document.createElement("div");t.className="toast";t.setAttribute("role","status");document.body.appendChild(t)}t.textContent=msg;clearTimeout(toastT);toastT=setTimeout(()=>t.remove(),4500)}
+document.addEventListener("keydown",e=>{
+  if(!ck)return;
+  if(sheetOpen()){if(e.key==="Escape")closeSheet();return}
+  if(e.key==="Escape")closeCook();
+  else if(e.key==="ArrowRight")move(1);
+  else if(e.key==="ArrowLeft")move(-1);
+});
+document.addEventListener("visibilitychange",()=>{if(ck&&document.visibilityState==="visible")getWake()});
+
+
+// ---------- My kitchen: plate gallery (photos stay on this device, in IndexedDB) ----------
+const PlateDB=(()=>{
+  let dbp=null,mem=[];
+  function open(){
+    if(dbp)return dbp;
+    dbp=new Promise(res=>{try{const rq=indexedDB.open("protein-pan",1);rq.onupgradeneeded=()=>{try{rq.result.createObjectStore("plates",{keyPath:"id"})}catch(e){}};rq.onsuccess=()=>res(rq.result);rq.onerror=()=>res(null);rq.onblocked=()=>res(null)}catch(e){res(null)}});
+    return dbp;
+  }
+  async function all(){const db=await open();if(!db)return mem.slice();return new Promise(res=>{try{const rq=db.transaction("plates").objectStore("plates").getAll();rq.onsuccess=()=>res(rq.result||[]);rq.onerror=()=>res(mem.slice())}catch(e){res(mem.slice())}})}
+  async function put(p){const db=await open();if(!db){mem=mem.filter(x=>x.id!==p.id);mem.push(p);return true}return new Promise(res=>{try{const tx=db.transaction("plates","readwrite");tx.objectStore("plates").put(p);tx.oncomplete=()=>res(true);tx.onerror=()=>res(false)}catch(e){res(false)}})}
+  async function del(id){const db=await open();mem=mem.filter(x=>x.id!==id);if(!db)return true;return new Promise(res=>{try{const tx=db.transaction("plates","readwrite");tx.objectStore("plates").delete(id);tx.oncomplete=()=>res(true);tx.onerror=()=>res(false)}catch(e){res(false)}})}
+  return {all,put,del};
+})();
+let plates=[];
+const purlCache={};
+function purl(p){if(p.photo){if(!purlCache[p.id]){try{purlCache[p.id]=URL.createObjectURL(p.photo)}catch(e){}}if(purlCache[p.id])return purlCache[p.id]}const r=byId(p.rid);return r?r.img:""}
+function platesFor(rid){return plates.filter(p=>p.rid===rid)}
+function fmtDate(ts){const d=new Date(ts),n=new Date();const day=x=>new Date(x.getFullYear(),x.getMonth(),x.getDate()).getTime();const diff=Math.round((day(n)-day(d))/864e5);
+  if(diff===0)return "Today";if(diff===1)return "Yesterday";return d.toLocaleDateString("en-GB",{day:"numeric",month:"short"})}
+const RATES=[["loved","Loved it"],["good","Good"],["work","Needs work"]];
+const ICON_CAM='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>';
+const ICON_PLATE='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/></svg>';
+PlateDB.all().then(ps=>{plates=(ps||[]).sort((a,b)=>b.at-a.at);if(!ck)redraw()});
+function redraw(){const y=window.scrollY;if(view.name==="kitchen")kitchen();else if(view.name==="detail")detail();else home();window.scrollTo(0,y)}
+
+// photo picking + shrinking
+const fileInput=document.createElement("input");fileInput.type="file";fileInput.accept="image/*";fileInput.hidden=true;fileInput.id="plate-file";document.body.appendChild(fileInput);
+function pickPhoto(cb){fileInput.value="";fileInput.onchange=async()=>{const f=fileInput.files&&fileInput.files[0];if(!f)return;try{cb(await shrink(f))}catch(e){toast("Couldn't read that photo. Try another one.")}};fileInput.click()}
+function shrink(file){return new Promise((res,rej)=>{const url=URL.createObjectURL(file);const im=new Image();
+  im.onload=()=>{try{const M=1280,sc=Math.min(1,M/Math.max(im.naturalWidth,im.naturalHeight));const c=document.createElement("canvas");c.width=Math.round(im.naturalWidth*sc);c.height=Math.round(im.naturalHeight*sc);c.getContext("2d").drawImage(im,0,0,c.width,c.height);URL.revokeObjectURL(url);c.toBlob(b=>b?res(b):rej(),"image/jpeg",.82)}catch(e){URL.revokeObjectURL(url);rej(e)}};
+  im.onerror=()=>{URL.revokeObjectURL(url);rej()};im.src=url})}
+
+// bottom sheet
+const sheetRoot=document.createElement("div");sheetRoot.id="sheet-root";document.body.appendChild(sheetRoot);
+function sheetOpen(){return !!sheetRoot.firstChild}
+function closeSheet(){sheetRoot.innerHTML=""}
+function showSheet(inner){
+  sheetRoot.innerHTML='<div class="sheet-ov" id="sheet-ov"><div class="sheet-p" role="dialog" aria-modal="true">'+inner+'</div></div>';
+  document.getElementById("sheet-ov").onclick=e=>{if(e.target.id==="sheet-ov")closeSheet()};
+}
+function openSaveSheet(r,blob){
+  let rating="",tmpUrl=blob?URL.createObjectURL(blob):r.img;
+  const t=totals(r);
+  showSheet('<div class="sheet-img" style="--tint:'+r.tint+'"><img src="'+tmpUrl+'" alt="Your plate">'+(blob?'':'<span class="nophoto">No photo</span>')+'</div>'+
+    '<div><div class="eyebrow">Save to My kitchen</div><h3 class="sheet-t">'+r.name+'</h3><div class="sheet-m num">'+fmtDate(Date.now())+' · '+fmt(t.p)+' g protein</div></div>'+
+    '<div class="field"><span class="lab">How did it turn out?</span><div class="chips">'+RATES.map(([k,l])=>'<button class="chip" data-rate="'+k+'" aria-pressed="false">'+l+'</button>').join("")+'</div></div>'+
+    '<label class="field" for="plate-note"><span class="lab">Note for next time</span><textarea id="plate-note" rows="2" placeholder="e.g. less salt, more chilli, cook paneer 1 min less"></textarea></label>'+
+    (blob?'':'<button class="linkbtn" id="sheet-addphoto">'+ICON_CAM+'Add a photo instead</button>')+
+    '<div class="sheet-btns"><button class="btn-g" id="sheet-cancel">Cancel</button><button class="btn-p" id="sheet-save">Save plate</button></div>');
+  sheetRoot.querySelectorAll("[data-rate]").forEach(b=>b.onclick=()=>{rating=rating===b.dataset.rate?"":b.dataset.rate;sheetRoot.querySelectorAll("[data-rate]").forEach(x=>x.setAttribute("aria-pressed",x.dataset.rate===rating))});
+  document.getElementById("sheet-cancel").onclick=()=>{if(blob)URL.revokeObjectURL(tmpUrl);closeSheet()};
+  const ap=document.getElementById("sheet-addphoto");if(ap)ap.onclick=()=>pickPhoto(b=>openSaveSheet(r,b));
+  document.getElementById("sheet-save").onclick=async()=>{
+    const note=(document.getElementById("plate-note").value||"").trim().slice(0,280);
+    const p={id:String(Date.now()),rid:r.id,name:r.name,at:Date.now(),p:Math.round(t.p),photo:blob||null,rating,note};
+    const ok=await PlateDB.put(p);
+    if(blob)URL.revokeObjectURL(tmpUrl);
+    plates.unshift(p);closeSheet();
+    try{navigator.storage&&navigator.storage.persist&&navigator.storage.persist()}catch(e){}
+    toast(ok?"Saved to My kitchen":"Saved for now. This browser may not keep it after you close it.");
+    if(ck&&ck.r.id===r.id){ck.saved=p.id;drawCook()}else redraw();
+  };
+}
+function openPlateSheet(id){
+  const p=plates.find(x=>x.id===id);if(!p)return;const r=byId(p.rid);
+  const rl=(RATES.find(x=>x[0]===p.rating)||[0,""])[1];
+  showSheet('<div class="sheet-img" style="--tint:'+(r?r.tint:"#ccc")+'"><img src="'+purl(p)+'" alt="'+p.name+'">'+(p.photo?'':'<span class="nophoto">No photo</span>')+'</div>'+
+    '<div><h3 class="sheet-t">'+p.name+'</h3><div class="sheet-m num">'+fmtDate(p.at)+' · '+p.p+' g protein'+(rl?' · '+rl:'')+'</div></div>'+
+    (p.note?'<div class="note"><b>Your note:</b> '+esc(p.note)+'</div>':'')+
+    '<div class="sheet-btns" id="plate-btns"><button class="btn-g danger" id="plate-del">Delete</button>'+(r?'<button class="btn-p" id="plate-again">Cook again</button>':'')+'</div>');
+  const again=document.getElementById("plate-again");if(again)again.onclick=()=>{closeSheet();go("detail",p.rid)};
+  document.getElementById("plate-del").onclick=()=>{
+    document.getElementById("plate-btns").innerHTML='<span class="confirm">Delete this plate for good?</span><button class="btn-g" id="del-no">Keep</button><button class="btn-p danger" id="del-yes">Delete</button>';
+    document.getElementById("del-no").onclick=()=>openPlateSheet(id);
+    document.getElementById("del-yes").onclick=async()=>{await PlateDB.del(id);plates=plates.filter(x=>x.id!==id);if(purlCache[id]){try{URL.revokeObjectURL(purlCache[id])}catch(e){}delete purlCache[id]}closeSheet();toast("Plate deleted");redraw()};
+  };
+}
+function esc(s){return String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]))}
+
+// pieces used on other screens
+function kitchenBtn(){return '<button class="kbtn" id="open-kitchen" aria-label="My kitchen, '+plates.length+' plates">'+ICON_PLATE+'<span class="kl">My kitchen</span>'+(plates.length?'<i class="num">'+plates.length+'</i>':'')+'</button>'}
+function kitchenStrip(){
+  if(!plates.length)return "";
+  return '<section class="sec kstrip"><div class="sec-top"><div><h2>My kitchen</h2><p class="num">'+plates.length+' plate'+(plates.length>1?'s':'')+' cooked · '+plates.reduce((s,p)=>s+p.p,0)+' g protein</p></div><button class="see" data-kitchen="1">See all</button></div>'+
+    '<div class="row">'+plates.slice(0,10).map(p=>'<button class="kthumb" data-plate="'+p.id+'"><img src="'+purl(p)+'" alt="'+p.name+'" loading="lazy"><span>'+fmtDate(p.at)+'</span></button>').join("")+'</div></section>';
+}
+function myPlatesBlock(r){
+  const mine=platesFor(r.id);
+  if(!mine.length)return '<button class="linkbtn mine-add" id="add-plate">'+ICON_CAM+'Made this already? Add your plate</button>';
+  const last=mine.find(p=>p.note);
+  return '<div class="mine"><div class="mine-h"><b>You\'ve made this '+(mine.length===1?'once':mine.length+' times')+'</b><button class="see" id="add-plate">+ Add plate</button></div>'+
+    '<div class="row">'+mine.map(p=>'<button class="kthumb" data-plate="'+p.id+'"><img src="'+purl(p)+'" alt="Your '+p.name+'" loading="lazy"><span>'+fmtDate(p.at)+'</span></button>').join("")+'</div>'+
+    (last?'<div class="note"><b>Last time ('+fmtDate(last.at)+') you noted:</b> '+esc(last.note)+'</div>':'')+'</div>';
+}
+function bindKitchenLinks(){
+  const k=document.getElementById("open-kitchen");if(k)k.onclick=()=>{homeScroll=window.scrollY;go("kitchen")};
+  app.querySelectorAll("[data-kitchen]").forEach(b=>b.onclick=()=>{homeScroll=window.scrollY;go("kitchen")});
+  app.querySelectorAll("[data-plate]").forEach(b=>b.onclick=()=>openPlateSheet(b.dataset.plate));
+}
+function bindMyPlates(r){const a=document.getElementById("add-plate");if(a)a.onclick=()=>pickPhoto(b=>openSaveSheet(r,b))}
+
+// the My kitchen screen
+function kitchen(){
+  const week=Date.now()-7*864e5;
+  const stats=[[plates.length,"Plates"],[plates.reduce((s,p)=>s+p.p,0)+"<small>g</small>","Protein cooked"],[new Set(plates.map(p=>p.rid)).size+"<small>/"+RECIPES.length+"</small>","Recipes tried"],[plates.filter(p=>p.at>=week).length,"This week"]];
+  app.innerHTML='<div class="home"><div class="col">'+
+    '<header class="top"><button class="kback" id="k-back" aria-label="Back to recipes"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><h1 class="k-title">My kitchen</h1><span style="width:44px"></span></header>'+
+    '<div class="kstats">'+stats.map(([v,l])=>'<div class="stat"><div class="v num">'+v+'</div><div class="l">'+l+'</div></div>').join("")+'</div>'+
+    (plates.length?
+      '<div class="kgrid">'+plates.map(p=>{const rl=(RATES.find(x=>x[0]===p.rating)||[0,""])[1];return '<button class="kcard" data-plate="'+p.id+'"><div class="kph" style="--tint:'+((byId(p.rid)||{}).tint||"#ddd")+'"><img src="'+purl(p)+'" alt="Your '+p.name+'" loading="lazy">'+(p.photo?'':'<span class="nophoto">No photo</span>')+(rl?'<span class="krate">'+rl+'</span>':'')+'</div><b>'+p.name+'</b><span class="num">'+fmtDate(p.at)+' · '+p.p+' g</span></button>'}).join("")+'</div>'
+      :'<div class="kempty"><div class="kempty-ic">'+ICON_CAM.replace('width="20" height="20"','width="34" height="34"')+'</div><h2>Your plates will live here</h2><p>When you finish a recipe, snap a photo of what you made. Every plate you cook gets saved here.</p><button class="btn-p" id="k-go">Find something to cook</button></div>')+
+    '<p class="foot">Photos stay on this device. They aren\'t uploaded anywhere.</p></div></div>';
+  document.getElementById("k-back").onclick=()=>{go("home");window.scrollTo(0,homeScroll)};
+  const g=document.getElementById("k-go");if(g)g.onclick=()=>go("home");
+  bindKitchenLinks();
+}
+
+document.addEventListener("keydown",e=>{if(!ck&&sheetOpen()&&e.key==="Escape")closeSheet()});
+function go(name,id){closeSheet();view={name,id:id||null};name==="detail"?detail():name==="kitchen"?kitchen():home();window.scrollTo(0,0)}
+home();
+</script>
+
+<div id="install-tip" hidden style="position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:50;background:#1C231E;color:#fff;border-radius:18px;padding:14px 16px;display:flex;gap:12px;align-items:center;box-shadow:0 14px 40px rgba(0,0,0,.35);font:500 14.5px/1.4 'DM Sans',system-ui,sans-serif;max-width:520px;margin:0 auto">
+  <img src="icons/icon-192.png" alt="" width="40" height="40" style="border-radius:10px;flex:none">
+  <span id="install-msg" style="flex:1">Install Protein Pan: tap <b>Share</b>, then <b>Add to Home Screen</b>.</span>
+  <button id="install-go" hidden style="border:0;background:#5CCF97;color:#0D1A12;font-weight:700;border-radius:999px;padding:9px 14px">Install</button>
+  <button id="install-x" aria-label="Dismiss" style="border:0;background:none;color:#fff;font-size:20px;padding:4px 6px;opacity:.8">×</button>
+</div>
+<script>
+(function(){
+  if('serviceWorker' in navigator){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){})})}
+  var standalone=(window.matchMedia&&matchMedia('(display-mode: standalone)').matches)||navigator.standalone===true;
+  var tip=document.getElementById('install-tip'),seen=false;
+  try{seen=localStorage.getItem('pp-install-tip')==='x'}catch(e){}
+  function hide(){tip.hidden=true;try{localStorage.setItem('pp-install-tip','x')}catch(e){}}
+  document.getElementById('install-x').onclick=hide;
+  if(standalone||seen)return;
+  var ios=/iphone|ipad|ipod/i.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+  if(ios){setTimeout(function(){tip.hidden=false},1500);return}
+  var deferred=null;
+  window.addEventListener('beforeinstallprompt',function(e){e.preventDefault();deferred=e;
+    document.getElementById('install-msg').textContent='Install Protein Pan on your home screen.';
+    var b=document.getElementById('install-go');b.hidden=false;tip.hidden=false;
+    b.onclick=function(){deferred.prompt();deferred.userChoice.finally(hide)}});
+})();
+</script>
+</body>
+</html>
