@@ -294,7 +294,103 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .done .skip{border:0;background:none;color:#fff;opacity:.85;font-weight:600;font-size:14.5px;min-height:40px;text-decoration:underline;text-underline-offset:3px}
 .done .saved{display:inline-flex;gap:6px;align-items:center;background:rgba(255,255,255,.2);border-radius:999px;padding:6px 12px;font-weight:700;font-size:14px}
 .done img.mine-photo{border-radius:24px;width:200px;height:200px}
+/* ================= v7 ================= */
+/* cook tools row */
+.tools{display:flex;gap:6px;margin-top:10px;overflow-x:auto;scrollbar-width:none;padding-bottom:2px}
+.tools::-webkit-scrollbar{display:none}
+.tool{flex:none;border:0;background:rgba(0,0,0,.24);color:#fff;border-radius:999px;min-height:38px;padding:6px 12px 6px 10px;font-size:13.5px;font-weight:700;display:inline-flex;align-items:center;gap:6px;position:relative}
+.tool svg{width:17px;height:17px}
+.tool[aria-pressed="true"]{background:#fff;color:#1b1b1b}
+.tool.mic[aria-pressed="true"]::after{content:"";position:absolute;top:5px;right:6px;width:7px;height:7px;border-radius:50%;background:#E5484D;animation:pulse 1s infinite}
+/* step card: you'll need first */
+.rlab{font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;font-weight:700;opacity:.82;margin-bottom:8px}
+.need .s-list li span{font-weight:700}
+.role{display:inline-block;margin-left:8px;background:#fff;color:#1b1b1b;border-radius:999px;padding:2px 9px;letter-spacing:.02em;text-transform:none;font-size:12.5px}
+.s-text .term{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-decoration:underline;text-decoration-style:dotted;text-decoration-thickness:2px;text-underline-offset:5px;text-decoration-color:rgba(255,255,255,.75)}
+.s-text .term:focus-visible{outline:2px solid #fff;outline-offset:2px;border-radius:4px}
+.cues{background:rgba(255,255,255,.12);border-radius:18px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.cue{display:flex;gap:10px;align-items:flex-start;font-size:15px;line-height:1.4}
+.cue b{flex:none;font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;background:rgba(255,255,255,.2);border-radius:999px;padding:3px 8px;margin-top:1px;min-width:62px;text-align:center}
+.cue-warn b{background:#FFE14D;color:#1b1b1b}
+.while{background:rgba(255,255,255,.12);border-radius:18px;padding:12px 14px;display:flex;flex-direction:column;gap:8px}
+.while p{margin:0;font-size:15px;line-height:1.4}
+.while-go{align-self:flex-start;border:0;background:#fff;color:#1b1b1b;border-radius:999px;min-height:40px;padding:0 16px;font-weight:700;font-size:14px}
+.while-hint{font-size:12.5px;opacity:.75}
+.helpbtn{align-self:flex-start;border:0;background:none;color:#fff;opacity:.9;font-weight:700;font-size:14px;display:inline-flex;align-items:center;gap:6px;min-height:40px;padding:0;text-decoration:underline;text-underline-offset:3px}
+.clean{font-size:14px;opacity:.85;margin:4px 0 0;max-width:34ch}
+/* get ready screen */
+.ready .s-text{font-family:var(--display);font-weight:400}
+.ready-sub{margin:-6px 0 0;font-size:15.5px;opacity:.9}
+.split{display:flex;gap:10px;align-items:center;background:rgba(255,255,255,.14);border-radius:14px;padding:10px 12px;font-size:14.5px}
+.rgroup{display:flex;flex-direction:column}
+.rprog{font-weight:700;font-size:14px;opacity:.85}
+.checks{display:flex;flex-direction:column;gap:6px}
+.chk{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:0;border-radius:14px;padding:11px 14px;min-height:50px;background:var(--surface);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line);font-weight:600;font-size:15.5px;line-height:1.3}
+.chk i{width:22px;height:22px;border-radius:7px;box-shadow:inset 0 0 0 2px var(--line);flex:none;display:grid;place-items:center;transition:background .15s}
+.chk[aria-pressed="true"] i{background:var(--accent);box-shadow:none}
+.chk[aria-pressed="true"] i::after{content:"";width:6px;height:11px;border:solid #fff;border-width:0 2.5px 2.5px 0;transform:translate(0,-1px) rotate(45deg)}
+.chk[aria-pressed="true"] span{text-decoration:line-through;opacity:.55}
+.chk span{flex:1;min-width:0}
+.chk span small{display:block;font-weight:500;color:var(--muted);font-size:12.5px;text-decoration:none}
+.chk em{margin-left:auto;font-style:normal;color:var(--muted);font-weight:500;font-size:14px;white-space:nowrap}
+.card-s .chk{background:rgba(255,255,255,.94);color:#1d1d1d;box-shadow:none}
+.card-s .chk i{box-shadow:inset 0 0 0 2px #c9c9c2}
+.card-s .chk[aria-pressed="true"] i{background:#17694A}
+.card-s .chk em{color:#555}
+/* alarm: full screen, rings until dismissed */
+#alarm-layer{position:relative;z-index:60}
+.alarm{position:fixed;inset:0;z-index:60;background:var(--c4);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;cursor:pointer;
+  padding:calc(24px + env(safe-area-inset-top,0px)) max(24px,env(safe-area-inset-right,0px)) calc(24px + env(safe-area-inset-bottom,0px)) max(24px,env(safe-area-inset-left,0px));animation:alarmbg 1.3s ease-in-out infinite alternate}
+@keyframes alarmbg{from{background:var(--c4)}to{background:color-mix(in srgb,var(--c1) 70%,var(--c4))}}
+.al-bell{animation:ringbell 1s ease-in-out infinite;transform-origin:50% 10%}
+@keyframes ringbell{0%,50%,100%{transform:rotate(0)}10%,30%{transform:rotate(14deg)}20%,40%{transform:rotate(-14deg)}}
+.al-t{font-family:var(--display);font-size:clamp(32px,9vw,46px);line-height:1.1}
+.al-s{margin:0;font-size:17px;opacity:.92;max-width:30ch}
+.al-more{margin:0;font-weight:700;opacity:.85}
+.al-done{margin-top:18px;border:0;background:#fff;color:#1b1b1b;font-weight:800;font-size:24px;border-radius:999px;width:min(100%,420px);min-height:88px;box-shadow:0 18px 40px -16px rgba(0,0,0,.6)}
+.al-hint{font-size:14px;opacity:.8}
+@media (prefers-reduced-motion:reduce){.alarm,.al-bell{animation:none}}
+/* sheets: words, help, share, together */
+.term-p{margin:0;font-size:16px;line-height:1.5;color:var(--ink)}
+.sizeg{margin:0;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:14px;color:var(--ink);overflow-x:auto}
+.sizeg svg{width:100%;max-width:480px;height:auto;display:block}
+.sizeg figcaption{font-size:14px;color:var(--muted);margin-top:6px;font-weight:600}
+.helps{display:flex;flex-direction:column;gap:8px}
+.help{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:0 14px}
+.help summary{cursor:pointer;font-weight:700;font-size:15.5px;min-height:50px;display:flex;align-items:center;list-style:none}
+.help summary::-webkit-details-marker{display:none}
+.help summary::after{content:"+";margin-left:auto;font-size:20px;color:var(--muted)}
+.help[open] summary::after{content:"–"}
+.help p{margin:0 0 14px;color:var(--ink);line-height:1.5}
+.cardprev{border-radius:18px;overflow:hidden;background:var(--surface);border:1px solid var(--line);aspect-ratio:4/5;max-height:56vh;display:grid;place-items:center;color:var(--muted);font-weight:600;max-width:100%}
+.cardprev img{width:100%;height:100%;object-fit:contain;display:block;-webkit-touch-callout:default}
+.cap{margin:12px 0;font-size:14.5px;color:var(--muted);background:var(--surface);border:1px dashed var(--line);border-radius:12px;padding:10px 12px;user-select:text;-webkit-user-select:text}
+.hint{font-size:13px;color:var(--muted);margin:10px 0 0}
+.as-btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none}
+.btn-p{display:inline-flex;align-items:center;justify-content:center;gap:8px}
+.btn-p.wide{width:100%;flex:none}
+.field input{font:inherit;font-size:16px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px;width:100%;min-height:48px}
+.field input:focus{outline:2px solid var(--accent);outline-offset:1px}
+/* home tools */
+.htools{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:16px}
+.htool{display:flex;align-items:center;gap:10px;text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:18px;padding:12px;min-height:64px;color:var(--ink)}
+.htool svg{flex:none;width:22px;height:22px;color:var(--accent)}
+.htool span{min-width:0;display:flex;flex-direction:column}
+.htool b{font-size:14.5px;line-height:1.2}
+.htool small{font-size:12.5px;color:var(--muted);font-weight:500;margin-top:2px}
+/* pantry + grocery */
+.pgroup{margin-top:16px}
+.plab{font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:700;margin-bottom:8px}
+.almost{display:flex;flex-direction:column;gap:8px}
+.alm{display:flex;align-items:center;gap:10px;background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:8px 12px 8px 8px}
+.alm-r{flex:1;min-width:0;display:flex;align-items:center;gap:12px;border:0;background:none;padding:0;text-align:left;color:var(--ink)}
+.alm-r img{width:56px;height:56px;border-radius:12px;object-fit:cover;flex:none}
+.alm-r span{display:flex;flex-direction:column;min-width:0}
+.alm-r b{font-size:15px;line-height:1.25}
+.alm-r small{color:var(--warn);font-size:13px;font-weight:600}
+.glist{list-style:none;margin:16px 0 0;padding:0;display:flex;flex-direction:column;gap:6px}
 </style>
+
 
 <div id="app"></div>
 <div id="cook-root"></div>
@@ -1114,6 +1210,7 @@ function okStep(r,st){
 function render(r,st){
   const used=[];
   let t=st.t.replace(/\[(\w+)\|([^\]]*)\]/g,(m,id,inner)=>stateOf(r,id)==="skip"?"":inner);
+  t=glossify(t);
   t=t.replace(/\{(\w+)\}/g,(m,id)=>{const ing=r.ings.find(i=>i.id===id);const x=ing&&resolve(r,ing);if(!x)return "";if(!used.find(u=>u.id===x.id))used.push(x);return '<em class="ing">'+x.name+'</em>'});
   let list=null;
   if(st.list)list=st.list.map(id=>resolve(r,r.ings.find(i=>i.id===id))).filter(Boolean);
@@ -1142,7 +1239,7 @@ function home(){
   }
   app.innerHTML='<div class="home"><div class="col">'+
     '<header class="top"><div class="brand"><svg width="26" height="26" viewBox="0 0 34 34" aria-hidden="true"><circle cx="15" cy="17" r="13" fill="var(--accent)"/><circle cx="15" cy="17" r="7.5" fill="var(--pop)"/><rect x="26" y="15" width="8" height="4" rx="2" fill="var(--accent)"/></svg>Protein Pan</div>'+'<div class="top-r">'+kitchenBtn()+kcalBtn()+'</div></header>'+
-    '<section class="hello"><h1>What are we cooking today?</h1><p>'+RECIPES.length+' high-protein recipes. One step and one timer on screen at a time.</p></section>'+kitchenStrip()+
+    '<section class="hello"><h1>What are we cooking today?</h1><p>'+RECIPES.length+' high-protein recipes. One step and one timer on screen at a time.</p></section>'+homeTools()+kitchenStrip()+
     '<div class="tabs-wrap" id="tabs-wrap"><div class="tabs" role="tablist" aria-label="Recipe type">'+tabs.map(([k,l,n])=>'<button class="tab" role="tab" data-tab="'+k+'" aria-selected="'+(tab===k)+'">'+l+' <i class="num">'+n+'</i></button>').join("")+'</div>'+
     '<div class="quick" role="group" aria-label="Quick filters">'+QUICK.map(([k,l])=>'<button class="qchip" data-q="'+k+'" aria-pressed="'+(quick===k)+'">'+(k==="af"?ICON_SM(AF):k==="egg"?ICON_SM(EGG):'')+l+'</button>').join("")+'</div></div>'+
     body+
@@ -1153,7 +1250,7 @@ function home(){
     const sel=app.querySelector('.tab[aria-selected="true"]');sel&&sel.scrollIntoView({inline:"center",block:"nearest"})});
   app.querySelectorAll(".qchip").forEach(b=>b.onclick=()=>{quick=quick===b.dataset.q?"":b.dataset.q;store.set("pp5-quick",quick);rehome()});
   app.querySelectorAll(".mini").forEach(b=>b.onclick=()=>{homeScroll=window.scrollY;go("detail",b.dataset.id)});
-  bindKitchenLinks();
+  bindKitchenLinks();bindHomeTools();
   onScroll();
 }
 function rehome(){const y=window.scrollY;home();window.scrollTo(0,y)}
@@ -1181,12 +1278,13 @@ function detail(keepScroll){
     before.map(x=>'<div class="note">'+x.t+'</div>').join("")+myPlatesBlock(r)+
     '<div class="sec-h"><h3>Ingredients</h3><span>Serves 1'+(changed?' · '+changed+' changed':'')+'</span></div>'+
     '<p class="help">Tap <b>Missing</b> on anything you don\'t have. You\'ll get a swap or can skip it, and the steps adjust.</p>'+
-    '<ul class="ings">'+r.ings.map(i=>ingRow(r,i)).join("")+'</ul>'+
+    '<ul class="ings">'+r.ings.map(i=>ingRow(r,i)).join("")+'</ul>'+groceryBtn(r)+
   '</div></div>'+
   '<div class="cta-bar"><button class="cta" id="start">Start cooking <span>· '+steps.length+' steps</span></button></div>';
   document.getElementById("back").onclick=()=>{go("home");window.scrollTo(0,homeScroll)};
   document.getElementById("start").onclick=()=>startCook(r);
   bindKitchenLinks();bindMyPlates(r);
+  const ag=document.getElementById("add-groc");if(ag)ag.onclick=()=>addGrocery(missingFor(r).map(i=>({name:i.name,qty:i.qty,from:r.name})));
   app.querySelectorAll("[data-act]").forEach(el=>el.onclick=()=>{
     const id=el.dataset.ing,ing=r.ings.find(i=>i.id===id),act=el.dataset.act;
     if(act==="have")setChoice(r,id,{s:"have"});
@@ -1215,7 +1313,7 @@ function ingRow(r,i){
 let ck=null,actx=null,wake=null;
 function startCook(r){
   ensureAudio();
-  ck={r,steps:stepsFor(r),i:0,timers:{},done:false};
+  ck={r,steps:stepsFor(r),i:-1,timers:{},done:false,ready:new Set()};ck.equip=equipFor(r,ck.steps);ck.allIngs=r.ings.map(x=>resolve(r,x)).filter(Boolean);
   const c=r.cook;
   cookRoot.innerHTML='<div class="cook" role="dialog" aria-modal="true" aria-label="Cooking '+r.name+'" style="--c1:'+c[0]+';--c2:'+c[1]+';--c3:'+c[2]+';--c4:'+c[3]+'"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div><div class="vig"></div><div class="ui" id="cook-ui"></div></div>';
   document.body.style.overflow="hidden";
@@ -1223,48 +1321,87 @@ function startCook(r){
   ck.tick=setInterval(tick,250);
   bindSwipe();
   drawCook();
+  if(musicOn)startMusic();
 }
 function getWake(){try{navigator.wakeLock&&navigator.wakeLock.request("screen").then(w=>wake=w).catch(()=>{})}catch(e){}}
-function closeCook(){if(!ck)return;stopVoice();clearInterval(ck.tick);ck=null;cookRoot.innerHTML="";document.body.style.overflow="";try{wake&&wake.release()}catch(e){}wake=null}
+function closeCook(){if(!ck)return;stopVoice();stopAlarmSound();alarmQ=[];alarmRoot.innerHTML="";stopMusic();clearInterval(ck.tick);ck=null;cookRoot.innerHTML="";document.body.style.overflow="";try{wake&&wake.release()}catch(e){}wake=null}
 function remain(t){return t.running?(t.endAt-Date.now())/1000:t.left}
 function drawCook(){
   const ui=document.getElementById("cook-ui");if(!ui)return;
   const {r,steps,i}=ck,n=steps.length;
-  const top='<div class="c-top"><button class="x" id="c-close" aria-label="Exit cooking"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button><img class="thumb" src="'+r.img+'" alt=""><div class="c-title">'+r.name+'</div><div class="c-count num">'+(ck.done?'Done':(i+1)+' / '+n)+'</div>'+voiceBtns()+'</div>'+
-    '<div class="bars">'+steps.map((s,k)=>'<i class="'+(ck.done||k<=i?'on':'')+'"></i>').join("")+'</div><div class="running" id="running"></div>'+listenPill();
+  const count=ck.done?'Done':(i<0?'Get ready':(i+1)+' / '+n);
+  const top='<div class="c-top"><button class="x" id="c-close" aria-label="Exit cooking"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button><img class="thumb" src="'+r.img+'" alt=""><div class="c-title">'+r.name+'</div><div class="c-count num">'+count+'</div></div>'+
+    '<div class="bars">'+steps.map((s,k)=>'<i class="'+(ck.done||k<=i?'on':'')+'"></i>').join("")+'</div>'+toolsRow()+'<div class="running" id="running"></div>'+listenPill();
   if(ck.done){
     const t=totals(r);
     const sp=ck.saved&&plates.find(x=>x.id===ck.saved);
+    const clean='<p class="clean">Soak the pan in warm soapy water now. It wipes clean after you eat.</p>';
     ui.innerHTML=top+'<div class="stage"><div class="card-s done">'+
-      (sp?'<img class="mine-photo" src="'+purl(sp)+'" alt="Your '+r.name+'"><span class="saved">Saved to My kitchen</span><div class="big num">'+fmt(t.p)+' g</div><p>of protein on your plate. Enjoy it.</p><div class="row"><button id="to-kitchen">Open My kitchen</button><button class="ghost" id="again">Cook something else</button></div>'
+      (sp?'<img class="mine-photo" src="'+purl(sp)+'" alt="Your '+r.name+'"><span class="saved">Saved to My kitchen</span><div class="big num">'+fmt(t.p)+' g</div><p>of protein on your plate. Enjoy it.</p><div class="row"><button class="cam" id="share-card">'+ICON2.share+'Share your plate card</button><button class="ghost" id="to-kitchen">Open My kitchen</button></div><button class="skip" id="again">Cook something else</button>'
         :'<img src="'+r.img+'" alt="'+r.name+'"><div class="s-lab">You made it</div><div class="big num">'+fmt(t.p)+' g</div><p>of protein on your plate. Snap your plate to keep it in My kitchen.</p><div class="row"><button class="cam" id="snap">'+ICON_CAM+'Add a photo of your plate</button><button class="ghost" id="nophoto">Save without a photo</button></div><button class="skip" id="again">Not now</button>')+
-      '</div></div>';
+      clean+'</div></div>';
     document.getElementById("c-close").onclick=closeCook;
     document.getElementById("again").onclick=()=>{closeCook();go("home")};
     const tk=document.getElementById("to-kitchen");if(tk)tk.onclick=()=>{closeCook();go("kitchen")};
+    const sc=document.getElementById("share-card");if(sc)sc.onclick=()=>openShareSheet(sp.id);
     const sn=document.getElementById("snap");if(sn)sn.onclick=()=>pickPhoto(b=>openSaveSheet(r,b));
     const np=document.getElementById("nophoto");if(np)np.onclick=()=>openSaveSheet(r,null);
-    bindVoice();if(!sp)say("You made it! "+r.name+" is ready, with "+fmt(t.p)+" grams of protein. Snap a photo of your plate to save it.");
+    bindTools();
+    if(!sp)sayParts(["You made it! "+r.name+" is ready, with "+fmt(t.p)+" grams of protein.","Snap a photo of your plate to save it.","And soak the pan now, so it wipes clean later."]);
+    return;
+  }
+  if(i<0){
+    ui.innerHTML=top+readyHTML();
+    document.getElementById("c-close").onclick=closeCook;
+    document.getElementById("next").onclick=()=>move(1);
+    bindReady();bindTools();
+    const ra=document.getElementById("read-again");if(ra)ra.onclick=()=>speakStep(true);
+    speakStep();
     return;
   }
   const s=steps[i];
-  const list=s.list?'<ul class="s-list">'+s.list.map(u=>'<li>'+cap(u.name)+(u.qty?'<em>'+u.qty+'</em>':'')+'</li>').join("")+'</ul>':'';
-  const chips=s.used.length?'<div class="s-chips">'+s.used.map(u=>'<span>'+cap(u.name)+(u.qty?' <em>'+u.qty+'</em>':'')+'</span>').join("")+'</div>':'';
-  ui.innerHTML=top+'<div class="stage" id="stage"><div class="card-s"><div class="s-head"><div class="s-lab">Step '+(i+1)+'</div>'+(TTS?'<button class="again" id="read-again">'+ICON.play+'<span>Read again</span></button>':'')+'</div><p class="s-text">'+s.html+'</p>'+list+chips+(s.tip?'<p class="tip">'+s.tip+'</p>':'')+(s.timer?timerHTML(i):'')+'</div></div>'+
-    (i===0?'<p class="swipe">Swipe or tap Next to move between steps</p>':'')+
-    '<div class="nav"><button class="prev" id="prev" '+(i===0?'disabled':'')+' aria-label="Previous step"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><button class="next" id="next">'+(i===n-1?'Finish':'Next step')+'</button></div>';
+  const items=s.list||s.used;
+  const need=items.length?'<div class="need"><div class="rlab">You\'ll need</div><ul class="s-list">'+items.map(u=>'<li><span>'+cap(u.name)+'</span>'+(u.qty?'<em>'+u.qty+'</em>':'')+'</li>').join("")+'</ul></div>':'';
+  const role=togetherOn?roleOf(s):null;
+  ui.innerHTML=top+'<div class="stage" id="stage"><div class="card-s">'+
+    '<div class="s-head"><div class="s-lab">Step '+(i+1)+(role?' <span class="role">'+esc(role.name)+' · '+role.role+'</span>':'')+'</div>'+(TTS?'<button class="again" id="read-again">'+ICON.play+'<span>Read again</span></button>':'')+'</div>'+
+    need+
+    '<p class="s-text">'+s.html+'</p>'+
+    cuesHTML(s)+
+    (s.tip?'<p class="tip">'+s.tip+'</p>':'')+
+    (s.timer?timerHTML(i)+whileHTML(i):'')+
+    '<button class="helpbtn" id="help">'+ICON2.help+'Something\'s wrong?</button>'+
+    '</div></div>'+
+    (i===0?'<p class="swipe">Swipe, or tap Next to move between steps. Tap underlined words for help.</p>':'')+
+    '<div class="nav"><button class="prev" id="prev" aria-label="Previous step"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><button class="next" id="next">'+(i===n-1?'Finish':'Next step')+'</button></div>';
   document.getElementById("c-close").onclick=closeCook;
   document.getElementById("prev").onclick=()=>move(-1);
   document.getElementById("next").onclick=()=>move(1);
   if(s.timer){
     document.getElementById("t-go").onclick=()=>toggleTimer(i);
     document.getElementById("t-reset").onclick=()=>{ck.timers[i]={total:s.timer,left:s.timer,running:false};updateTimer();renderRunning()};
-    document.getElementById("t-add").onclick=()=>{const t=getT(i);if(t.fin){t.fin=false;t.left=0}if(t.running)t.endAt+=30000;else t.left+=30;t.total=Math.max(t.total,remain(t));updateTimer()};
+    document.getElementById("t-add").onclick=()=>{const t=getT(i);if(t.fin){t.fin=false;t.left=0}if(t.running)t.endAt+=30000;else t.left+=30;t.total=Math.max(t.total,remain(t));t.warned=remain(t)<=30;updateTimer()};
   }
   updateTimer();renderRunning();
-  bindVoice();
+  bindTools();
   const ra=document.getElementById("read-again");if(ra)ra.onclick=()=>speakStep(true);
   speakStep();
+}
+function speakStep(force){
+  if(!ck||ck.done)return;
+  if(force&&!readOn){readOn=true;store.set("pp5-read",true);refreshVoiceUI()}
+  if(ck.i<0){
+    sayParts(["Let's get ready.","Take out: "+ck.equip.join(". ")+".","Then put these on the counter. "+ck.allIngs.map(qtyPhrase).join(". ")+".",(micOn?"Say next":"Tap the button")+" when you're ready."]);
+    return;
+  }
+  const s=ck.steps[ck.i],items=s.list||s.used;
+  const role=togetherOn?roleOf(s):null;
+  const parts=["Step "+(ck.i+1)+"."+(role?" "+role.name+", this one's yours.":"")];
+  if(items.length)parts.push("You'll need: "+items.map(qtyPhrase).join(". ")+".");
+  parts.push(s.html);
+  if(s.tip)parts.push("Tip: "+s.tip);
+  if(s.timer)parts.push("This step has a "+tlabel(s.timer)+" timer."+(micOn?" Say start timer when you're ready.":" Tap start when you're ready."));
+  sayParts(parts);
 }
 function getT(i){const s=ck.steps[i];return ck.timers[i]||(ck.timers[i]={total:s.timer,left:s.timer,running:false})}
 function timerHTML(i){const s=ck.steps[i];
@@ -1273,12 +1410,12 @@ function timerHTML(i){const s=ck.steps[i];
   '<div class="t-btns"><button class="go" id="t-go">Start timer</button><button id="t-add" aria-label="Add 30 seconds">+30s</button><button id="t-reset" aria-label="Reset timer"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M4 12a8 8 0 1 0 2.5-5.8M4 4v4h4"/></svg></button></div></div>'}
 function toggleTimer(i){
   ensureAudio();const t=getT(i);
-  if(t.fin){t.left=t.total;t.fin=false}
+  if(t.fin){t.left=t.total;t.fin=false;t.warned=false}
   if(t.running){t.left=remain(t);t.running=false}else{t.endAt=Date.now()+t.left*1000;t.running=true}
   updateTimer();renderRunning();
 }
 function updateTimer(){
-  if(!ck||ck.done)return;const s=ck.steps[ck.i];if(!s.timer)return;
+  if(!ck||ck.done||ck.i<0)return;const s=ck.steps[ck.i];if(!s.timer)return;
   const t=ck.timers[ck.i],left=t?remain(t):s.timer,total=t?t.total:s.timer;
   const txt=document.getElementById("t-txt");if(!txt)return;
   txt.textContent=mmss(left);
@@ -1295,10 +1432,10 @@ function renderRunning(){
 function tick(){
   if(!ck)return;
   Object.entries(ck.timers).forEach(([k,t])=>{
-    if(t.running&&remain(t)<=0){t.running=false;t.left=0;t.fin=true;chime();
-      try{navigator.vibrate&&navigator.vibrate([300,150,300,150,300])}catch(e){}
-      toast("Step "+(+k+1)+" timer is done");
-      setTimeout(()=>say("Step "+(+k+1)+" timer is done."),1500);
+    if(t.running&&!t.warned&&t.total>=90&&remain(t)<=30&&remain(t)>0){t.warned=true;softBeep();say("30 seconds left on step "+(+k+1)+".")}
+    if(t.running&&remain(t)<=0){t.running=false;t.left=0;t.fin=true;
+      fireAlarm(+k);
+      setTimeout(()=>say("Step "+(+k+1)+" timer is done."),700);
       if(+k===ck.i){const tm=document.getElementById("timer");if(tm){tm.classList.remove("finished");void tm.offsetWidth;tm.classList.add("finished")}}
       renderRunning()}
   });
@@ -1324,36 +1461,15 @@ function plain(h){
     .replace(/°C/g," degrees").replace(/(\d)\s?–\s?(\d)/g,"$1 to $2").replace(/\btbsp\b/g,"tablespoon").replace(/\btsp\b/g,"teaspoon")
     .replace(/(\d)\s?g\b/g,"$1 grams").replace(/(\d)\s?ml\b/g,"$1 millilitres").replace(/\bmin\b/g,"minutes").replace(/·/g,",");
 }
-function say(text){
-  if(!TTS||!readOn)return;
-  try{
-    speechSynthesis.cancel();
-    const u=new SpeechSynthesisUtterance(plain(text));
-    if(voice){u.voice=voice;u.lang=voice.lang}else u.lang="en-IN";
-    u.rate=0.95;
-    u.onstart=()=>{speaking=true;markReading(true)};
-    u.onend=u.onerror=()=>{speaking=false;markReading(false)};
-    speechSynthesis.speak(u);
-  }catch(e){}
-}
+function say(text){sayParts([text])}
 function markReading(on){const b=document.getElementById("read-again");if(b){b.classList.toggle("on",on);b.lastChild.textContent=on?"Reading…":"Read again"}}
-function speakStep(force){
-  if(!ck||ck.done)return;
-  if(force&&!readOn){readOn=true;store.set("pp5-read",true);refreshVoiceUI()}
-  const s=ck.steps[ck.i];let t="Step "+(ck.i+1)+". "+s.html;
-  if(s.list)t+=" "+s.list.map(u=>u.name+(u.qty?", "+u.qty:"")).join(". ")+".";
-  else if(s.used.length)t+=" You'll need: "+s.used.map(u=>u.name+(u.qty?", "+u.qty:"")).join(". ")+".";
-  if(s.tip)t+=" Tip: "+s.tip;
-  if(s.timer)t+=" This step has a "+tlabel(s.timer)+" timer."+(micOn?" Say start timer when you're ready.":" Tap start when you're ready.");
-  say(t);
-}
 function voiceBtns(){
   return (TTS?'<button class="ibtn" id="v-read" aria-pressed="'+readOn+'" aria-label="Read steps aloud">'+(readOn?ICON.spkOn:ICON.spkOff)+'</button>':'')+
     (SR&&!micBlocked?'<button class="ibtn mic" id="v-mic" aria-pressed="'+micOn+'" aria-label="Voice commands">'+ICON.mic+'</button>':'');
 }
 function listenPill(){return '<div class="listen" id="listen"'+(micOn?'':' hidden')+'><span><b>Listening.</b> Say “next”, “back”, “repeat” or “start timer”.</span><span class="heard" id="heard">'+(heard?'“'+heard+'”':'')+'</span></div>'}
 function refreshVoiceUI(){
-  const r=document.getElementById("v-read");if(r){r.setAttribute("aria-pressed",readOn);r.innerHTML=readOn?ICON.spkOn:ICON.spkOff}
+  const r=document.getElementById("v-read");if(r){r.setAttribute("aria-pressed",readOn);r.innerHTML=(readOn?ICON.spkOn:ICON.spkOff)+'<span>Read aloud</span>'}
   const m=document.getElementById("v-mic");if(m){if(micBlocked)m.remove();else m.setAttribute("aria-pressed",micOn)}
   const l=document.getElementById("listen");if(l)l.hidden=!micOn;
 }
@@ -1388,6 +1504,7 @@ function stopMic(){micOn=false;try{rec&&rec.stop()}catch(e){}rec=null;refreshVoi
 function stopVoice(){try{TTS&&speechSynthesis.cancel()}catch(e){}speaking=false;if(micOn){micOn=false;try{rec&&rec.abort()}catch(e){}rec=null}}
 function handleCmd(t){
   if(!ck)return;
+  if(alarmQ.length&&/\b(done|stop|okay|ok|got it|thanks)\b/.test(t)){dismissAlarm();return}
   const has=re=>re.test(t);
   if(has(/\b(next|aage|done|continue|go on)\b/))move(1);
   else if(has(/\b(back|previous|peeche|pichhe)\b/))move(-1);
@@ -1401,10 +1518,10 @@ function move(d){
   if(d>0&&ck.done)return;
   if(d<0&&ck.done){ck.done=false;drawCook();return}
   if(d>0&&ck.i===ck.steps.length-1){ck.done=true;drawCook();return}
-  const ni=Math.min(ck.steps.length-1,Math.max(0,ck.i+d));if(ni===ck.i)return;
+  const ni=Math.min(ck.steps.length-1,Math.max(-1,ck.i+d));if(ni===ck.i)return;
   ck.i=ni;drawCook();
   try{navigator.vibrate&&navigator.vibrate(10)}catch(e){}
-  document.getElementById("live").textContent="Step "+(ck.i+1)+": "+ck.steps[ck.i].html.replace(/<[^>]+>/g,"");
+  document.getElementById("live").textContent=ck.i<0?"Get ready":"Step "+(ck.i+1)+": "+stripTags(ck.steps[ck.i].html);
 }
 function bindSwipe(){
   const root=cookRoot.querySelector(".cook");let x0=null,y0=null;
@@ -1413,13 +1530,14 @@ function bindSwipe(){
     if(Math.abs(dx)>60&&Math.abs(dx)>Math.abs(dy)*1.5)move(dx<0?1:-1)},{passive:true});
 }
 function ensureAudio(){try{if(!actx)actx=new (window.AudioContext||window.webkitAudioContext)();if(actx.state==="suspended")actx.resume()}catch(e){}}
-function chime(){if(!actx)return;try{[0,.18,.36,.9,1.08,1.26].forEach((d,n)=>{const o=actx.createOscillator(),g=actx.createGain();o.type="sine";o.frequency.value=[784,988,1319][n%3];
+function chime(k){k=k||0;if(!actx)return;try{[0,.18,.36,.9,1.08,1.26].forEach((d,n)=>{const o=actx.createOscillator(),g=actx.createGain();o.type="sine";o.frequency.value=[784,988,1319][n%3]*[1,1.122,.891][k%3];
   g.gain.setValueAtTime(0,actx.currentTime+d);g.gain.linearRampToValueAtTime(.35,actx.currentTime+d+.02);g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+d+.6);
   o.connect(g).connect(actx.destination);o.start(actx.currentTime+d);o.stop(actx.currentTime+d+.65)})}catch(e){}}
 let toastT;
 function toast(msg){let t=document.querySelector(".toast");if(!t){t=document.createElement("div");t.className="toast";t.setAttribute("role","status");document.body.appendChild(t)}t.textContent=msg;clearTimeout(toastT);toastT=setTimeout(()=>t.remove(),4500)}
 document.addEventListener("keydown",e=>{
   if(!ck)return;
+  if(alarmQ.length&&["Escape"," ","Enter"].includes(e.key)){e.preventDefault();dismissAlarm();return}
   if(sheetOpen()){if(e.key==="Escape")closeSheet();return}
   if(e.key==="Escape")closeCook();
   else if(e.key==="ArrowRight")move(1);
@@ -1451,7 +1569,7 @@ const RATES=[["loved","Loved it"],["good","Good"],["work","Needs work"]];
 const ICON_CAM='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>';
 const ICON_PLATE='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/></svg>';
 PlateDB.all().then(ps=>{plates=(ps||[]).sort((a,b)=>b.at-a.at);if(!ck)redraw()});
-function redraw(){const y=window.scrollY;if(view.name==="kitchen")kitchen();else if(view.name==="detail")detail();else home();window.scrollTo(0,y)}
+function redraw(){const y=window.scrollY;({detail,kitchen,pantry,grocery}[view.name]||home)();window.scrollTo(0,y)}
 
 // photo picking + shrinking
 const fileInput=document.createElement("input");fileInput.type="file";fileInput.accept="image/*";fileInput.hidden=true;fileInput.id="plate-file";document.body.appendChild(fileInput);
@@ -1497,8 +1615,9 @@ function openPlateSheet(id){
   showSheet('<div class="sheet-img" style="--tint:'+(r?r.tint:"#ccc")+'"><img src="'+purl(p)+'" alt="'+p.name+'">'+(p.photo?'':'<span class="nophoto">No photo</span>')+'</div>'+
     '<div><h3 class="sheet-t">'+p.name+'</h3><div class="sheet-m num">'+fmtDate(p.at)+' · '+p.p+' g protein'+(rl?' · '+rl:'')+'</div></div>'+
     (p.note?'<div class="note"><b>Your note:</b> '+esc(p.note)+'</div>':'')+
-    '<div class="sheet-btns" id="plate-btns"><button class="btn-g danger" id="plate-del">Delete</button>'+(r?'<button class="btn-p" id="plate-again">Cook again</button>':'')+'</div>');
+    '<button class="btn-p wide" id="plate-share">'+ICON2.share+' Share card</button><div class="sheet-btns" id="plate-btns"><button class="btn-g danger" id="plate-del">Delete</button>'+(r?'<button class="btn-g" id="plate-again">Cook again</button>':'')+'</div>');
   const again=document.getElementById("plate-again");if(again)again.onclick=()=>{closeSheet();go("detail",p.rid)};
+  document.getElementById("plate-share").onclick=()=>openShareSheet(p.id);
   document.getElementById("plate-del").onclick=()=>{
     document.getElementById("plate-btns").innerHTML='<span class="confirm">Delete this plate for good?</span><button class="btn-g" id="del-no">Keep</button><button class="btn-p danger" id="del-yes">Delete</button>';
     document.getElementById("del-no").onclick=()=>openPlateSheet(id);
@@ -1546,7 +1665,460 @@ function kitchen(){
 }
 
 document.addEventListener("keydown",e=>{if(!ck&&sheetOpen()&&e.key==="Escape")closeSheet()});
-function go(name,id){closeSheet();view={name,id:id||null};name==="detail"?detail():name==="kitchen"?kitchen():home();window.scrollTo(0,0)}
+
+// ================= v7 additions =================
+const HOSTED=!!document.querySelector('link[rel="manifest"]');
+const AC=!!(window.AudioContext||window.webkitAudioContext);
+const stripTags=h=>String(h).replace(/<[^>]+>/g,"");
+
+// ---------- speech: ingredient + quantity said together ----------
+function stripParen(s){return String(s||"").replace(/\s*\([^)]*\)/g,"").trim()}
+function qtyPhrase(u){
+  const name=stripParen(u.name);let q=stripParen(u.qty);
+  if(!q)return name;
+  let extra="";const ci=q.indexOf(",");if(ci>-1){extra=q.slice(ci+1).trim();q=q.slice(0,ci).trim()}
+  let out;
+  if(/^(a|an)\s/i.test(q)||/\b(g|ml|tsp|tbsp|cups?|slices?|cloves?|stalks?|leaves|handful|pinch|pieces?|piece|florets|each)\b/i.test(q))out=q+" of "+name;
+  else if(/^[\d½¼¾⅓⅔.\s–-]+(small|medium|large)?$/i.test(q))out=q+" "+name;
+  else out=name+", "+q;
+  return extra?out+", "+extra:out;
+}
+let speakQueue=0;
+function sayParts(parts){
+  if(!TTS||!readOn)return;
+  try{
+    speechSynthesis.cancel();speakQueue=0;
+    parts.filter(Boolean).forEach(p=>{
+      const u=new SpeechSynthesisUtterance(plain(p));
+      if(voice){u.voice=voice;u.lang=voice.lang}else u.lang="en-IN";
+      u.rate=0.95;
+      u.onstart=()=>{speaking=true;markReading(true);duck(true)};
+      u.onend=u.onerror=()=>{speakQueue--;if(speakQueue<=0){speakQueue=0;speaking=false;markReading(false);duck(false)}};
+      speakQueue++;speechSynthesis.speak(u);
+    });
+  }catch(e){}
+}
+
+// ---------- get ready: equipment + ingredients ----------
+function equipFor(r,steps){
+  const t=steps.map(s=>stripTags(s.html)).join(" ").toLowerCase()+" "+(r.needs||"").toLowerCase();
+  const out=[];const add=(re,label)=>{if(re.test(t)&&!out.includes(label))out.push(label)};
+  if(/chop|slice|cut |cut the|dice|cubes|wedges|strips|halve/.test(t))out.push("Knife and chopping board");
+  add(/grate/,"Grater");
+  add(/tawa|flat pan/,"Flat pan (tawa)");
+  add(/cast-iron|non-stick pan|\bpan\b/,"Pan (non-stick is easiest)");
+  add(/pressure cooker/,"Pressure cooker or deep pot");
+  add(/\bpot\b/,"Pot");
+  add(/lid|cover/,"Lid");
+  add(/blend/,"Blender or mixer jar");
+  add(/air fry/,"Air fryer");
+  add(/muffin cup/,"6 muffin cups");
+  add(/bowl/,"Mixing bowl");
+  add(/whisk|beat with a fork|mash|fork/,"Fork or whisk");
+  add(/flip|spatula|stir/,"Spatula");
+  add(/strainer|drain/,"Strainer");
+  add(/jar/,"Jar or box with a lid");
+  add(/glass/,"Glass");
+  add(/toast/,"Toaster, pan or air fryer");
+  add(/ladle/,"Ladle");
+  add(/towel/,"Clean kitchen towel");
+  out.push("Measuring spoons and cups");
+  return out;
+}
+function readyHTML(){
+  const {r}=ck;const done=ck.ready;const items=ck.equip.map((e,k)=>["e"+k,e,""]).concat(ck.allIngs.map(u=>["i"+u.id,cap(u.name),u.qty||""]));
+  const got=items.filter(x=>done.has(x[0])).length;
+  const split=togetherOn?'<div class="split">'+ICON.people+'<span><b>'+esc(names[0])+'</b> measures and chops. <b>'+esc(names[1])+'</b> gets the pans out.</span></div>':'';
+  return '<div class="stage" id="stage"><div class="card-s ready">'+
+    '<div class="s-head"><div class="s-lab">Before you start</div>'+(TTS?'<button class="again" id="read-again">'+ICON.play+'<span>Read again</span></button>':'')+'</div>'+
+    '<h2 class="s-text">Get everything ready</h2>'+
+    '<p class="ready-sub">Put it all on the counter before the stove goes on. Tick things off as you go.</p>'+split+
+    '<div class="rgroup"><div class="rlab">Take out</div><div class="checks">'+ck.equip.map((e,k)=>chk("e"+k,e,"",done)).join("")+'</div></div>'+
+    '<div class="rgroup"><div class="rlab">Ingredients</div><div class="checks">'+ck.allIngs.map(u=>chk("i"+u.id,cap(u.name),u.qty,done)).join("")+'</div></div>'+
+    '<div class="rprog num" id="rprog">'+got+' of '+items.length+' ready</div>'+
+  '</div></div>'+
+  '<div class="nav"><button class="prev" id="prev" disabled aria-label="Previous step"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><button class="next" id="next">I\'m ready, let\'s cook</button></div>';
+}
+function chk(key,label,qty,done){return '<button class="chk" data-chk="'+key+'" aria-pressed="'+done.has(key)+'"><i aria-hidden="true"></i><span>'+label+'</span>'+(qty?'<em>'+qty+'</em>':'')+'</button>'}
+function bindReady(){
+  document.querySelectorAll("[data-chk]").forEach(b=>b.onclick=()=>{
+    const k=b.dataset.chk;if(ck.ready.has(k))ck.ready.delete(k);else ck.ready.add(k);
+    b.setAttribute("aria-pressed",ck.ready.has(k));
+    const total=document.querySelectorAll("[data-chk]").length;
+    document.getElementById("rprog").textContent=ck.ready.size+" of "+total+" ready";
+    try{navigator.vibrate&&navigator.vibrate(8)}catch(e){}
+  });
+}
+
+// ---------- cooking words (tap to explain) + chop size guide ----------
+const TERMS=[
+ ["heat",/\b(medium-low|medium-high|medium heat|on medium|on high|high heat|on low|low heat|lowest heat)\b/i,"Heat levels","On a gas stove, high is a big flame that reaches the sides of the pan. Medium is about half, with the flame tips just touching the base. Low is the smallest flame that stays lit. On induction, high is 8–10, medium 5–6 and low 2–3."],
+ ["simmer",/\bsimmer\w*/i,"Simmer","Cook on low so only small, gentle bubbles rise at the edges. Not a rolling boil."],
+ ["boil",/\bboil(ing|s)?\b/i,"Boil","Big bubbles breaking across the whole surface, even while you stir."],
+ ["whisk",/\bwhisk\w*/i,"Whisk","Stir quickly in small circles with a fork or whisk, lifting a little, until smooth and slightly airy."],
+ ["toss",/\btoss\w*/i,"Toss","Mix gently by lifting from the bottom and turning over, so everything gets coated without breaking."],
+ ["patdry",/\bpat (it |them |the \w+ )?(completely )?dry\b/i,"Pat dry","Press gently with a clean towel or kitchen paper to soak up the water on the surface."],
+ ["pinch",/\b(a )?(tiny )?pinch\b/i,"A pinch","What you can hold between your thumb and one finger. About ⅛ teaspoon."],
+ ["finechop",/\b(very finely|finely chop\w*|chop (these )?(very )?finely)\b/i,"Finely chopped","Tiny pieces, about the size of a rice grain.",{mm:3,obj:"Rice grain"}],
+ ["dice",/\b(small cubes|small pieces|small bite-sized pieces|dice\w*)\b/i,"Small pieces","About the size of a pea.",{mm:7,obj:"Pea"}],
+ ["largecubes",/\blarge cubes\b/i,"Large cubes","About the size of a sugar cube, or a little bigger.",{mm:25,obj:"Sugar cube"}],
+ ["cubes",/\b(bite-sized (cubes|pieces)|cubes)\b/i,"Bite-sized cubes","About 2 cm on each side, like a dice.",{mm:20,obj:"Dice"}],
+ ["thinslice",/\b(thinly slice\w*|thin slices|thin rounds|thin wedges|strips|slice (these )?thinly)\b/i,"Thin slices","About as thick as a coin.",{mm:3,obj:"Coin",slice:true}],
+ ["chop",/\bchop\b/i,"Chop","Cut into small, roughly even pieces, about the size of your fingernail. Even sizes cook evenly.",{mm:10,obj:"Fingernail"}],
+ ["grate",/\bgrate\w*/i,"Grate","Rub it against the small holes of a grater to make fine shreds."],
+ ["crumble",/\bcrumble\w*/i,"Crumble","Break it apart with your fingers into small, uneven bits."],
+ ["mash",/\bmash\w*/i,"Mash","Press down again and again with a fork until mostly smooth."],
+ ["preheat",/\bpreheat\w*/i,"Preheat","Switch it on empty first, so it's already hot when the food goes in. Food cooks evenly and gets crispier."],
+ ["drain",/\bdrain\w*/i,"Drain","Pour into a strainer, or hold a lid against the pot and tilt it, to get rid of the water."],
+ ["rinse",/\brinse\w*/i,"Rinse","Run it under cold water and move it around with your hand."],
+ ["drizzle",/\bdrizzle\w*/i,"Drizzle","Pour a thin, slow stream over the top."],
+ ["jammy",/\bjammy\b/i,"Jammy","The yolk is set at the edges but soft and glossy in the middle, like jam."],
+ ["florets",/\bflorets\b/i,"Florets","The small tree-shaped pieces you cut off the thick stem."],
+ ["marinate",/\bmarinate\w*/i,"Marinate","Leave the food coated in the spice mix so the flavour soaks in."],
+ ["sizzle",/\bsizzle\w*/i,"Sizzle","The crackling hiss when food hits hot oil. No sizzle means the oil isn't hot yet."],
+ ["tawa",/\btawa\b/i,"Tawa","A flat Indian griddle pan. Any flat non-stick pan works."],
+ ["ladle",/\bladle\b/i,"Ladle","A deep serving spoon. One ladle holds about ¼ cup."],
+ ["fluff",/\bfluff\w*/i,"Fluff","Gently lift and separate the grains with a fork so they don't clump."],
+ ["stirfry",/\bstir-fry\b/i,"Stir-fry","Cook on high heat for a short time, stirring and tossing the whole time."],
+ ["scramble",/\bscramble (it|them)\b/i,"Scramble","Stir constantly while the egg cooks so it sets in soft curds."],
+ ["swirl",/\bswirl\w*/i,"Swirl","Tilt and turn the pan so the oil coats the whole base."],
+ ["wells",/\bwells\b/i,"Wells","Small hollows you press into the sauce with the back of a spoon, to hold the eggs."],
+ ["fold",/\bfold (it|the omelette )?over\b/i,"Fold over","Slide a spatula under one half, lift it, and lay it over the other half."]
+];
+function glossify(t){
+  const marks=[];let out=t;
+  TERMS.forEach(([key,re])=>{
+    const m=out.match(re);if(!m)return;const idx=m.index;
+    const before=out.slice(0,idx);
+    if((before.match(/\{/g)||[]).length>(before.match(/\}/g)||[]).length)return;
+    if(/[\u0001\u0002]/.test(m[0]))return;
+    marks.push([key,m[0]]);out=before+"\u0001"+(marks.length-1)+"\u0002"+out.slice(idx+m[0].length);
+  });
+  return out.replace(/\u0001(\d+)\u0002/g,(z,n)=>'<button type="button" class="term" data-term="'+marks[n][0]+'">'+marks[n][1]+'</button>');
+}
+function sizeSVG(sz){
+  const PX=12,mm=sz.mm,w=36*PX+40,piece=Math.max(5,mm*PX);
+  let ticks="";for(let i=0;i<=30;i++){const x=20+i*PX,h=i%10===0?16:i%5===0?11:6;ticks+='<line x1="'+x+'" y1="96" x2="'+x+'" y2="'+(96-h)+'" stroke="currentColor" stroke-width="'+(i%10===0?2:1)+'" opacity="'+(i%10===0?.9:.5)+'"/>';if(i%10===0)ticks+='<text x="'+x+'" y="114" font-size="12" text-anchor="middle" fill="currentColor" opacity=".8">'+(i/10)+' cm</text>'}
+  const shape=sz.slice?'<rect x="20" y="'+(80-piece)+'" width="150" height="'+piece+'" rx="1.5" fill="#F2A20C"/>':'<rect x="20" y="'+(80-piece)+'" width="'+piece+'" height="'+piece+'" rx="'+Math.min(6,piece/4)+'" fill="#F2A20C"/>';
+  return '<figure class="sizeg"><svg viewBox="0 0 '+w+' 122" role="img" aria-label="'+sz.obj+' size, about '+(mm>=10?(mm/10)+' cm':mm+' mm')+'">'+shape+ticks+'<line x1="20" y1="96" x2="'+(20+30*PX)+'" y2="96" stroke="currentColor" stroke-width="2"/></svg><figcaption>'+(sz.slice?'Thickness':'Size')+': about '+(mm>=10?(mm/10)+' cm':mm+' mm')+', like a '+sz.obj.toLowerCase()+'</figcaption></figure>';
+}
+function openTerm(key){
+  const t=TERMS.find(x=>x[0]===key);if(!t)return;
+  showSheet('<div class="eyebrow">Cooking word</div><h3 class="sheet-t">'+t[2]+'</h3>'+(t[4]?sizeSVG(t[4]):'')+'<p class="term-p">'+t[3]+'</p><div class="sheet-btns"><button class="btn-p" id="term-ok">Got it</button></div>');
+  document.getElementById("term-ok").onclick=closeSheet;
+  sayParts([t[2]+". "+t[3]]);
+}
+
+// ---------- "how to tell it's ready" cues ----------
+const CUES=[
+ [/sizzle/,[["hear","A steady crackle as the seeds hit the oil."],["see","Seeds turn one shade darker."],["warn","Black or smoking? It burned. Wipe the pan and redo this bit."]]],
+ [/onion[^.]*?(soft|golden)|until soft and light golden/,[["see","The onion turns see-through, then light brown at the edges."],["smell","Sweet, not sharp."]]],
+ [/golden brown/,[["see","An even light-brown colour, like a biscuit."]]],
+ [/mushy|thick sauce/,[["see","The tomato breaks apart when you press it with the spoon, and oil shines at the edges."]]],
+ [/to a boil|to boil|big bubbles/,[["see","Big bubbles break across the whole surface."]]],
+ [/simmer/,[["see","Small, lazy bubbles. If it splashes, turn the heat down."]]],
+ [/whites are set|just set|edges are set|almost firm/,[["see","No clear, jelly-like egg left. The middle still wobbles a little when you shake the pan."]]],
+ [/bubbles appear|top looks dry|edges look dry/,[["see","Small holes appear on top and the edges look dry, not wet."]]],
+ [/rattle|crisp/,[["see","Deep golden with a few darker spots."],["hear","They rattle and sound hollow when you shake the basket."]]],
+ [/charred/,[["see","Dark spots on the edges, not black all over."]]],
+ [/no lumps|pancake batter|smooth batter/,[["see","It pours off the spoon like thick cream, with no lumps."]]],
+ [/thick and creamy/,[["see","A spoon dragged through leaves a trail that slowly fills back in."]]],
+ [/melt/,[["see","The cheese edges look glossy and droop."]]],
+ [/soft but still a little firm/,[["feel","It bends easily but still has a tiny bite in the middle."]]],
+ [/puff up/,[["see","The chunks swell to about double and feel spongy."]]],
+ [/smells good|for (20|30) seconds/,[["smell","Strong and sweet. Move on before it turns brown, or it tastes bitter."]]],
+ [/water is gone|whistles?/,[["see","Little holes appear on the surface and no water is left at the bottom."],["hear","A whistle is the loud hiss from the cooker's top."]]],
+ [/just tender|bright/,[["see","The colours turn brighter and the veg still has a little crunch."]]],
+ [/frothy/,[["see","Small bubbles on top and an even colour, with no streaks of white."]]],
+ [/toothpick/,[["feel","A toothpick poked in the middle comes out clean."]]],
+ [/glossy/,[["see","Everything looks shiny and the sauce clings instead of pooling."]]],
+ [/thickens/,[["see","The batter looks a little thicker and holds a soft trail."]]],
+ [/golden|brown/,[["see","Golden brown with crisp edges."]]]
+];
+const CUE_ICON={see:"Look",smell:"Smell",hear:"Listen",feel:"Feel",warn:"Watch out"};
+function cuesFor(s){
+  const t=stripTags(s.html).toLowerCase();if(!(s.timer||/\buntil\b/.test(t)))return [];
+  let out=[];for(let k=0;k<CUES.length;k++){const [re,c]=CUES[k];if(re.test(t)){if(k===CUES.length-1&&out.length)break;out=out.concat(c);if(out.length>=3)break}}
+  return out.slice(0,3);
+}
+function cuesHTML(s){const c=cuesFor(s);if(!c.length)return "";return '<div class="cues"><div class="rlab">How to tell it\'s ready</div>'+c.map(([k,v])=>'<div class="cue cue-'+k+'"><b>'+CUE_ICON[k]+'</b><span>'+v+'</span></div>').join("")+'</div>'}
+
+// ---------- "something's wrong?" help ----------
+const HELP=[
+ ["Too salty",/./,"Add more of the main ingredient if you have extra, or stir in a spoon of curd or a splash of water. A squeeze of lemon hides salt too. Eat it with plain rice, roti or bread."],
+ ["Not enough flavour",/./,"Add salt a small pinch at a time, stir and taste. Then add a squeeze of lemon, or a pinch of chaat masala or garam masala."],
+ ["Too spicy",/chilli|paprika|masala/,"Stir in a spoon of curd, a little milk, or a pinch of sugar. Have some curd on the side."],
+ ["Sticking to the pan",/pan|tawa|stir|fry/,"Lower the heat. Add a teaspoon of oil or a splash of water and scrape gently with a flat spatula. Stir less often; food lets go when it's ready."],
+ ["Smoking or burning",/pan|heat|fry|toast|air fry/,"Take the pan off the heat now and turn the flame down. If the bottom is black, move the good part to a clean pan and don't scrape up the burnt layer."],
+ ["Too thick",/sauce|batter|oats|lassi|blend|dressing|hummus/,"Add water or milk one spoon at a time and stir until it loosens."],
+ ["Too watery or runny",/sauce|simmer|batter|oats|curd|dressing/,"Cook it uncovered on medium for a few more minutes, stirring, so the extra water dries off. For a batter, whisk in a spoon of flour or oats."],
+ ["It breaks when I flip it",/flip|chilla|pancake|omelette/,"Wait 30 more seconds; it lets go of the pan when it's ready. Slide a wide spatula all the way under before you lift."],
+ ["Paneer went hard or rubbery",/paneer/,"Add a splash of milk or water, cover and keep on low for 1 minute. Next time add paneer at the very end."],
+ ["Eggs still runny",/egg/,"Cover the pan with a lid on low heat for 1 more minute. The steam sets the top."],
+ ["Eggs overcooked or dry",/egg/,"Next time take them off the heat while they still look a little wet. For now, a spoon of butter or curd on top helps."],
+ ["Not crispy",/air fry|crisp|tofu|chickpea/,"Spread the pieces in one layer with gaps, add 2–4 more minutes and shake halfway. Next time, dry them really well first."],
+ ["Raw in the middle",/fry|chilla|pancake|muffin|cook/,"Lower the heat and cover with a lid for 1–2 minutes, so the inside catches up without burning the outside."],
+ ["Rice is mushy or hard",/rice|pulao|quinoa/,"Mushy: spread it on a plate so the steam escapes. Hard: sprinkle 2 tbsp water, cover and cook on the lowest heat for 5 minutes."],
+ ["Blender is stuck",/blend/,"Stop, stir with a spoon and add a splash of liquid. Then blend in short bursts."],
+ ["Smoky kitchen",/./,"Turn on the exhaust or open a window and lower the heat. Oil that smokes is too hot."]
+];
+function openHelp(){
+  const s=ck&&ck.i>=0?ck.steps[ck.i]:null;
+  const stepT=s?stripTags(s.html).toLowerCase():"";
+  const recT=ck?ck.steps.map(x=>stripTags(x.html)).join(" ").toLowerCase()+" "+ck.r.name.toLowerCase():"";
+  const scored=HELP.map(h=>[h,(h[1].source==="."?0.5:0)+(h[1].test(stepT)&&h[1].source!=="."?2:0)+(h[1].test(recT)&&h[1].source!=="."?1:0)]).filter(x=>x[1]>0).sort((a,b)=>b[1]-a[1]);
+  showSheet('<div class="eyebrow">Don\'t panic</div><h3 class="sheet-t">What\'s going wrong?</h3><p class="term-p">Most cooking mistakes can be fixed. Tap the one that matches.</p>'+
+    '<div class="helps">'+scored.map(([h],k)=>'<details class="help"'+(k===0?'':'')+'><summary>'+h[0]+'</summary><p>'+h[2]+'</p></details>').join("")+'</div>'+
+    '<div class="sheet-btns"><button class="btn-p" id="help-ok">Back to cooking</button></div>');
+  document.getElementById("help-ok").onclick=closeSheet;
+  sheetRoot.querySelectorAll("details.help").forEach(d=>d.addEventListener("toggle",()=>{if(d.open){sheetRoot.querySelectorAll("details.help").forEach(o=>{if(o!==d)o.open=false});sayParts([d.querySelector("summary").textContent+". "+d.querySelector("p").textContent])}}));
+}
+
+// ---------- juggling: what to do while a timer runs ----------
+const PREP_RE=/\b(chop|slice|cut|grate|crumble|peel|rinse|mash|mix|whisk|make the (sauce|dressing)|squeeze|shred)\b/;
+const STOVE_RE=/\b(heat|pan|pot|boil|simmer|cook|fry|air fry|preheat|toast|flip|stir-fry|whistle|melt|blend)\b/;
+function shortText(s){const t=stripTags(s.html).trim();const m=t.match(/^.*?[.!?](\s|$)/);let x=m?m[0].trim():t;if(x.length>80)x=x.slice(0,77).trim()+"…";return x}
+function whileHTML(i){
+  const s=ck.steps[i];if(!s.timer||s.timer<90)return "";
+  let j=-1;for(let k=i+1;k<ck.steps.length;k++){const t=stripTags(ck.steps[k].html).toLowerCase();if(ck.steps[k].timer||STOVE_RE.test(t))break;if(ck.steps[k].list||PREP_RE.test(t)){j=k;break}}
+  if(j>-1)return '<div class="while"><div class="rlab">While it cooks</div><p><b>Step '+(j+1)+':</b> '+shortText(ck.steps[j])+'</p><button class="while-go" data-goto="'+j+'">Do step '+(j+1)+' now</button><span class="while-hint">The timer keeps running. Tap it at the top to come back.</span></div>';
+  return '<div class="while"><div class="rlab">While it cooks</div><p>Clean as you go: rinse the chopping board and knife, and put used bowls in the sink. Less to wash later.</p></div>';
+}
+
+// ---------- alarm: rings until you dismiss it ----------
+let alarmQ=[],alarmLoop=null,alarmRings=0;
+const ICON_BELL='<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9a6 6 0 1 1 12 0c0 5 2 6.5 2 6.5H4S6 14 6 9z"/><path d="M10 19a2 2 0 0 0 4 0"/></svg>';
+function fireAlarm(k){if(!alarmQ.includes(k))alarmQ.push(k);showAlarm()}
+const alarmRoot=document.createElement("div");alarmRoot.id="alarm-layer";document.body.appendChild(alarmRoot);
+function showAlarm(){
+  const L=alarmRoot;if(!ck){L.innerHTML="";stopAlarmSound();return}
+  if(!alarmQ.length){L.innerHTML="";stopAlarmSound();return}
+  const k=alarmQ[0],s=ck.steps[k];
+  const cc=ck.r.cook;L.innerHTML='<div class="alarm" id="alarm" role="alertdialog" aria-label="Timer done" style="--c1:'+cc[0]+';--c2:'+cc[1]+';--c4:'+cc[3]+'"><div class="al-bell">'+ICON_BELL+'</div><div class="al-t">Step '+(k+1)+' timer is done</div><p class="al-s">'+shortText(s)+'</p>'+(alarmQ.length>1?'<p class="al-more">'+(alarmQ.length-1)+' more timer finished</p>':'')+'<button class="al-done" id="al-done">Done</button><span class="al-hint">Tap anywhere'+(micOn?', or say “done”':'')+' to stop the alarm</span></div>';
+  document.getElementById("alarm").onclick=dismissAlarm;
+  if(!alarmLoop)startAlarmSound(k);
+}
+function dismissAlarm(){alarmQ.shift();stopAlarmSound();showAlarm();renderRunning()}
+function startAlarmSound(k){
+  stopAlarmSound();alarmRings=0;
+  const ring=()=>{chime(k);try{navigator.vibrate&&navigator.vibrate([400,200,400])}catch(e){}if(++alarmRings>=70)stopAlarmSound()};
+  ring();alarmLoop=setInterval(ring,2600);
+}
+function stopAlarmSound(){clearInterval(alarmLoop);alarmLoop=null;try{navigator.vibrate&&navigator.vibrate(0)}catch(e){}}
+function softBeep(){if(!actx)return;try{const o=actx.createOscillator(),g=actx.createGain();o.type="sine";o.frequency.value=880;g.gain.setValueAtTime(0,actx.currentTime);g.gain.linearRampToValueAtTime(.2,actx.currentTime+.02);g.gain.exponentialRampToValueAtTime(.001,actx.currentTime+.4);o.connect(g).connect(actx.destination);o.start();o.stop(actx.currentTime+.45)}catch(e){}}
+
+// ---------- kitchen mood: generated lo-fi music ----------
+let musicOn=store.get("pp7-music",false),mus=null;
+function startMusic(){
+  ensureAudio();if(!actx||mus)return;
+  try{
+    const master=actx.createGain();master.gain.value=0;master.connect(actx.destination);
+    master.gain.setTargetAtTime(.15,actx.currentTime,.8);
+    const lp=actx.createBiquadFilter();lp.type="lowpass";lp.frequency.value=1600;lp.Q.value=.4;lp.connect(master);
+    const nb=actx.createBuffer(1,actx.sampleRate*2,actx.sampleRate);const d=nb.getChannelData(0);for(let i=0;i<d.length;i++)d[i]=(Math.random()*2-1)*(Math.random()<.002?1:.15);
+    const cr=actx.createBufferSource();cr.buffer=nb;cr.loop=true;const crf=actx.createBiquadFilter();crf.type="bandpass";crf.frequency.value=2500;const crg=actx.createGain();crg.gain.value=.05;cr.connect(crf).connect(crg).connect(master);cr.start();
+    const bpm=72,eighth=60/bpm/2;
+    const chords=[[48,55,64,71],[45,52,60,67],[41,48,57,64],[43,50,59,65]];
+    const scale=[72,74,76,79,81,84];
+    const hz=m=>440*Math.pow(2,(m-69)/12);
+    const note=(f,t,dur,type,vol)=>{const o=actx.createOscillator(),g=actx.createGain();o.type=type;o.frequency.value=f;o.detune.value=(Math.random()-.5)*8;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(vol,t+Math.min(.35,dur*.25));g.gain.exponentialRampToValueAtTime(.0006,t+dur);o.connect(g).connect(lp);o.start(t);o.stop(t+dur+.05)};
+    const kick=t=>{const o=actx.createOscillator(),g=actx.createGain();o.frequency.setValueAtTime(95,t);o.frequency.exponentialRampToValueAtTime(40,t+.16);g.gain.setValueAtTime(.5,t);g.gain.exponentialRampToValueAtTime(.001,t+.28);o.connect(g).connect(master);o.start(t);o.stop(t+.3)};
+    const noiseHit=(t,v,freq,len)=>{const s=actx.createBufferSource();s.buffer=nb;const f=actx.createBiquadFilter();f.type=freq>3000?"highpass":"bandpass";f.frequency.value=freq;const g=actx.createGain();g.gain.setValueAtTime(v,t);g.gain.exponentialRampToValueAtTime(.001,t+len);s.connect(f).connect(g).connect(master);s.start(t,Math.random()*1.5);s.stop(t+len+.02)};
+    mus={master,cr,next:actx.currentTime+.15,step:0,timer:null};
+    const sched=()=>{
+      if(!mus)return;
+      while(mus.next<actx.currentTime+.5){
+        const t=mus.next,st=mus.step,bar=Math.floor(st/8)%4,pos=st%8,swing=pos%2?eighth*.16:0,tt=t+swing;
+        if(pos===0){chords[bar].forEach((m,j)=>note(hz(m),tt,eighth*8.5,j===0?"sine":"triangle",j===0?.09:.035))}
+        if(pos===0||pos===5)kick(tt);
+        if(pos===4)noiseHit(tt,.08,1800,.18);
+        if(pos%2===1)noiseHit(tt,.025,8000,.04);
+        if(pos!==0&&Math.random()<.22)note(hz(scale[Math.floor(Math.random()*scale.length)]),tt,eighth*3,"sine",.035);
+        mus.next+=eighth;mus.step++;
+      }
+    };
+    sched();mus.timer=setInterval(sched,120);
+  }catch(e){mus=null}
+}
+function stopMusic(){if(!mus)return;const m=mus;mus=null;try{clearInterval(m.timer);m.master.gain.setTargetAtTime(0,actx.currentTime,.25);setTimeout(()=>{try{m.cr.stop();m.master.disconnect()}catch(e){}},1200)}catch(e){}}
+function duck(on){if(!mus||!actx)return;try{mus.master.gain.setTargetAtTime(on?.04:.15,actx.currentTime,.2)}catch(e){}}
+
+// ---------- cook together ----------
+let togetherOn=false,names=store.get("pp7-names",["You","Partner"]);
+function roleOf(s){
+  const t=stripTags(s.html).toLowerCase();
+  const stove=!!s.timer||STOVE_RE.test(t),prep=!!s.list||PREP_RE.test(t);
+  return (prep&&!stove)||(!prep&&!stove)?{name:names[0],role:"Prep"}:{name:names[1],role:"Stove"};
+}
+function openTogether(){
+  showSheet('<div class="eyebrow">Cook together</div><h3 class="sheet-t">Two people, one recipe</h3><p class="term-p">One person preps (chopping, measuring, mixing). The other runs the stove and the timers. Every step shows whose turn it is, and read-aloud says the name.</p>'+
+    '<label class="field" for="nm-a"><span class="lab">Who preps?</span><input id="nm-a" maxlength="20" value="'+esc(names[0])+'" autocomplete="off"></label>'+
+    '<label class="field" for="nm-b"><span class="lab">Who\'s on the stove?</span><input id="nm-b" maxlength="20" value="'+esc(names[1])+'" autocomplete="off"></label>'+
+    '<div class="sheet-btns">'+(togetherOn?'<button class="btn-g" id="tg-off">Cook solo</button>':'<button class="btn-g" id="tg-cancel">Cancel</button>')+'<button class="btn-p" id="tg-on">'+(togetherOn?'Save names':'Cook together')+'</button></div>');
+  const off=document.getElementById("tg-off");if(off)off.onclick=()=>{togetherOn=false;closeSheet();drawCook();toast("Cooking solo")};
+  const cancel=document.getElementById("tg-cancel");if(cancel)cancel.onclick=closeSheet;
+  document.getElementById("tg-on").onclick=()=>{const a=(document.getElementById("nm-a").value||"").trim()||"You",b=(document.getElementById("nm-b").value||"").trim()||"Partner";names=[a,b];store.set("pp7-names",names);togetherOn=true;closeSheet();drawCook();toast(a+" preps, "+b+" cooks")};
+}
+
+// ---------- tools row in cook mode ----------
+const ICON2={
+  music:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>',
+  people:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.8"/><path d="M15.5 14.2A5.5 5.5 0 0 1 21.5 20"/></svg>',
+  help:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9.5"/><path d="M9.5 9.2a2.6 2.6 0 0 1 5 .9c0 1.7-2.5 2.2-2.5 3.9M12 17.2h.01"/></svg>',
+  share:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V3M7 8l5-5 5 5"/><path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7"/></svg>'
+};
+ICON.people=ICON2.people;
+function tool(id,on,icon,label){return '<button class="tool'+(id==="v-mic"?" mic":"")+'" id="'+id+'" aria-pressed="'+on+'">'+icon+'<span>'+label+'</span></button>'}
+function toolsRow(){
+  return '<div class="tools" id="tools">'+
+    (TTS?tool("v-read",readOn,readOn?ICON.spkOn:ICON.spkOff,"Read aloud"):"")+
+    (SR&&!micBlocked?tool("v-mic",micOn,ICON.mic,"Voice"):"")+
+    (AC?tool("v-music",!!mus,ICON2.music,"Music"):"")+
+    tool("v-together",togetherOn,ICON2.people,togetherOn?esc(names[0])+" & "+esc(names[1]):"Together")+'</div>';
+}
+function bindTools(){
+  bindVoice();
+  const m=document.getElementById("v-music");
+  if(m)m.onclick=()=>{if(mus){stopMusic();musicOn=false}else{startMusic();musicOn=true;toast("Kitchen lo-fi on. It quietens while steps are read.")}store.set("pp7-music",musicOn);m.setAttribute("aria-pressed",!!mus)};
+  const g=document.getElementById("v-together");if(g)g.onclick=openTogether;
+  document.querySelectorAll(".term").forEach(b=>b.onclick=e=>{e.stopPropagation();openTerm(b.dataset.term)});
+  const h=document.getElementById("help");if(h)h.onclick=openHelp;
+  document.querySelectorAll("[data-goto]").forEach(b=>b.onclick=()=>{ck.i=+b.dataset.goto;drawCook()});
+}
+
+// ---------- shareable plate card ----------
+function lum(hex){const h=hex.replace("#","");const n=parseInt(h.length===3?h.split("").map(c=>c+c).join(""):h,16);const r=(n>>16&255)/255,g=(n>>8&255)/255,b=(n&255)/255;const f=c=>c<=.03928?c/12.92:Math.pow((c+.055)/1.055,2.4);return .2126*f(r)+.7152*f(g)+.0722*f(b)}
+function loadImg(src){return new Promise((res,rej)=>{const im=new Image();im.onload=()=>res(im);im.onerror=rej;im.src=src})}
+function rrect(x,X,Y,W,H,R){x.beginPath();x.moveTo(X+R,Y);x.arcTo(X+W,Y,X+W,Y+H,R);x.arcTo(X+W,Y+H,X,Y+H,R);x.arcTo(X,Y+H,X,Y,R);x.arcTo(X,Y,X+W,Y,R);x.closePath()}
+async function makeCard(p){
+  const r=byId(p.rid)||{tint:"#E8E2D6",time:0,name:p.name};
+  const W=1080,H=1350,c=document.createElement("canvas");c.width=W;c.height=H;const x=c.getContext("2d");
+  try{await Promise.all([document.fonts.load('64px "Young Serif"'),document.fonts.load('700 30px "DM Sans"'),document.fonts.load('500 28px "DM Sans"')])}catch(e){}
+  const bg=r.tint||"#E8E2D6",dark=lum(bg)<.3,ink=dark?"#FFFFFF":"#1C231E",sub=dark?"rgba(255,255,255,.78)":"rgba(28,35,30,.72)";
+  x.fillStyle=bg;x.fillRect(0,0,W,H);
+  // brand
+  x.fillStyle="#17694A";x.beginPath();x.arc(84,82,22,0,Math.PI*2);x.fill();x.fillStyle="#F2A20C";x.beginPath();x.arc(84,82,12,0,Math.PI*2);x.fill();
+  x.fillStyle=ink;x.font='700 30px "DM Sans", system-ui, sans-serif';x.textBaseline="middle";x.fillText("Protein Pan",120,84);
+  x.textAlign="right";x.fillStyle=sub;x.font='500 28px "DM Sans", system-ui, sans-serif';
+  x.fillText(new Date(p.at).toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"}),W-60,84);x.textAlign="left";
+  // photo
+  const PX=60,PY=140,PW=960,PH=860;
+  try{const im=await loadImg(purl(p));const s=Math.max(PW/im.naturalWidth,PH/im.naturalHeight),dw=im.naturalWidth*s,dh=im.naturalHeight*s;
+    x.save();rrect(x,PX,PY,PW,PH,44);x.clip();x.drawImage(im,PX+(PW-dw)/2,PY+(PH-dh)/2,dw,dh);x.restore()}catch(e){x.fillStyle="rgba(0,0,0,.1)";rrect(x,PX,PY,PW,PH,44);x.fill()}
+  // name (wrap up to 2 lines)
+  x.fillStyle=ink;x.textBaseline="alphabetic";let fs=66;x.font=fs+'px "Young Serif", Georgia, serif';
+  const words=p.name.split(" ");let lines=[""];words.forEach(w=>{const tr=(lines[lines.length-1]+" "+w).trim();if(x.measureText(tr).width>PW&&lines[lines.length-1]){lines.push(w)}else lines[lines.length-1]=tr});
+  if(lines.length>2){fs=54;x.font=fs+'px "Young Serif", Georgia, serif';lines=[""];words.forEach(w=>{const tr=(lines[lines.length-1]+" "+w).trim();if(x.measureText(tr).width>PW&&lines[lines.length-1])lines.push(w);else lines[lines.length-1]=tr})}
+  lines=lines.slice(0,2);let y=PY+PH+(lines.length>1?78:92);lines.forEach(l=>{x.fillText(l,PX,y);y+=fs+6});
+  // stat pills
+  const rl=(RATES.find(z=>z[0]===p.rating)||[0,""])[1];
+  const pills=[[p.p+" g protein",true]].concat(r.time?[[r.time+" min",false]]:[]).concat(rl?[[rl,false]]:[]);
+  let px=PX;const py=H-104;x.font='700 30px "DM Sans", system-ui, sans-serif';x.textBaseline="middle";
+  pills.forEach(([t,hot])=>{const w=x.measureText(t).width+48;x.fillStyle=hot?"#F2A20C":(dark?"rgba(255,255,255,.16)":"rgba(28,35,30,.08)");rrect(x,px,py-30,w,60,30);x.fill();x.fillStyle=hot?"#1C231E":ink;x.fillText(t,px+24,py+1);px+=w+14});
+  x.textAlign="right";x.fillStyle=sub;x.font='500 26px "DM Sans", system-ui, sans-serif';x.fillText("Learning to cook,",W-60,py-16);x.fillText("one step at a time",W-60,py+18);x.textAlign="left";
+  return new Promise(res=>c.toBlob(b=>res(b),"image/png"));
+}
+async function openShareSheet(id){
+  const p=plates.find(z=>z.id===id);if(!p)return;const r=byId(p.rid);
+  const caption="Cooked "+p.name+" today. "+p.p+" g protein"+(r&&r.time?" in "+r.time+" min":"")+". Learning to cook, one step at a time.";
+  showSheet('<div class="eyebrow">Share your plate</div><h3 class="sheet-t">'+p.name+'</h3><div class="cardprev" id="cardprev"><span>Making your card…</span></div><div id="share-btns"></div>');
+  let blob;try{blob=await makeCard(p)}catch(e){document.getElementById("cardprev").innerHTML='<span>Couldn\'t make the card. Try again.</span>';return}
+  if(!document.getElementById("cardprev"))return;
+  const url=URL.createObjectURL(blob);const fname="protein-pan-"+p.name.toLowerCase().replace(/[^a-z0-9]+/g,"-")+".png";
+  document.getElementById("cardprev").innerHTML='<img src="'+url+'" alt="Share card for '+esc(p.name)+'">';
+  const file=(()=>{try{return new File([blob],fname,{type:"image/png"})}catch(e){return null}})();
+  const canShare=!!(file&&navigator.canShare&&navigator.canShare({files:[file]}));
+  document.getElementById("share-btns").innerHTML=
+    '<p class="cap" id="cap">'+esc(caption)+'</p>'+
+    '<div class="sheet-btns">'+(canShare?'<button class="btn-p" id="sh-share">'+ICON2.share+' Share</button>':'')+
+    (HOSTED?'<a class="btn-g as-btn" id="sh-save" href="'+url+'" download="'+fname+'">Save image</a>':'')+
+    '<button class="btn-g" id="sh-copy">Copy caption</button>'+
+    '<a class="btn-g as-btn" href="https://x.com/intent/post?text='+encodeURIComponent(caption)+'" target="_blank" rel="noopener">Post on X</a></div>'+
+    '<p class="hint">'+(canShare?'Share sends the card to X, WhatsApp or Photos.':'Long-press the card to save it to Photos, then attach it to your post.')+'</p>';
+  const sh=document.getElementById("sh-share");if(sh)sh.onclick=async()=>{try{await navigator.share({files:[file],text:caption})}catch(e){}};
+  document.getElementById("sh-copy").onclick=async()=>{try{await navigator.clipboard.writeText(caption);toast("Caption copied")}catch(e){const c=document.getElementById("cap");const rg=document.createRange();rg.selectNodeContents(c);const sl=getSelection();sl.removeAllRanges();sl.addRange(rg);toast("Caption selected. Copy it from the menu.")}};
+}
+
+// ---------- pantry: what can I cook? ----------
+const PANTRY=[
+ ["Proteins",[["paneer","Paneer",/paneer/],["eggs","Eggs",/\beggs?\b/],["tofu","Tofu",/tofu/],["soya","Soya chunks",/soya/],["chickpeas","Chickpeas",/chickpeas/],["rajma","Rajma or beans",/rajma|kidney|black beans/],["moong","Moong dal",/moong/],["besan","Besan",/besan|gram flour/],["greek","Greek yogurt / hung curd",/greek yogurt|hung curd/],["curd","Curd",/\bcurd\b|dahi/],["milk","Milk",/\bmilk\b/],["cheese","Cheese",/cheese|feta/],["pb","Peanut butter",/peanut butter/],["peanuts","Peanuts",/\bpeanuts\b/],["rchana","Roasted chana",/roasted chana/],["edamame","Edamame",/edamame/]]],
+ ["Grains & bread",[["bread","Bread",/bread|sourdough|\bpav\b/],["subroll","Sub roll or bun",/sub roll|\bbun\b/],["oats","Oats",/oats/],["rice","Rice",/\brice\b(?! noodles)|basmati/],["quinoa","Quinoa",/quinoa|dalia/],["noodles","Noodles",/noodles|soba/],["atta","Atta or rotis",/\batta\b|rotis?\b/]]],
+ ["Veg & fruit",[["onion","Onion",/onion/],["tomato","Tomato",/tomato/],["capsicum","Capsicum",/capsicum/],["cucumber","Cucumber",/cucumber/],["cabbage","Cabbage or lettuce",/cabbage|lettuce/],["spinach","Spinach",/spinach/],["broccoli","Broccoli",/broccoli/],["carrot","Carrot",/carrot/],["peas","Peas",/\bpeas\b/],["corn","Corn",/corn\b/],["banana","Banana",/banana/],["apple","Apple",/apple/],["mango","Mango",/mango/],["berries","Berries or açaí",/berr|açaí|acai/],["peach","Peach",/peach/],["avocado","Avocado",/avocado/],["lemon","Lemon or lime",/lemon|lime/]]]
+];
+const PKEYS=PANTRY.flatMap(g=>g[1]);
+let pantrySel=new Set(store.get("pp7-pantry",[]));
+function keysFor(name){const n=name.toLowerCase();return PKEYS.filter(k=>k[2].test(n))}
+function ingCover(ing){
+  const opts=[{name:ing.name,alt:-1}].concat(ing.alts.map((a,j)=>({name:a.name,alt:j})));
+  for(const o of opts){const ks=keysFor(o.name);if(!ks.length){if(o.alt===-1)return {ok:true,via:-1};continue}if(ks.some(k=>pantrySel.has(k[0])))return {ok:true,via:o.alt}}
+  if(!ing.ess)return {ok:true,via:"skip"};
+  return {ok:false};
+}
+function pantryMatches(){
+  if(!pantrySel.size)return {ready:[],almost:[]};
+  const ready=[],almost=[];
+  RECIPES.forEach(r=>{
+    const uses=r.ings.filter(i=>keysFor(i.name).some(k=>pantrySel.has(k[0]))||i.alts.some(a=>keysFor(a.name).some(k=>pantrySel.has(k[0])))).length;
+    if(!uses)return;
+    const miss=r.ings.filter(i=>!ingCover(i).ok);
+    if(!miss.length)ready.push([r,uses]);else if(miss.length===1)almost.push([r,uses,miss[0]]);
+  });
+  ready.sort((a,b)=>b[1]-a[1]);almost.sort((a,b)=>b[1]-a[1]);
+  return {ready,almost};
+}
+function applyPantry(r){
+  let swaps=0,skips=0;
+  r.ings.forEach(i=>{const c=ingCover(i);if(!c.ok)return;if(c.via==="skip"){setChoice(r,i.id,{s:"skip"});skips++}else if(c.via>-1){setChoice(r,i.id,{s:"alt",a:c.via});swaps++}else setChoice(r,i.id,{s:"have"})});
+  if(swaps||skips)toast("Matched to your kitchen: "+(swaps?swaps+" swap"+(swaps>1?"s":""):"")+(swaps&&skips?", ":"")+(skips?skips+" skipped":"")+". Change anything below.");
+}
+function pantry(){
+  const {ready,almost}=pantryMatches();
+  app.innerHTML='<div class="home"><div class="col">'+
+    '<header class="top"><button class="kback" id="p-back" aria-label="Back to recipes"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><h1 class="k-title">What can I cook?</h1><span style="width:44px"></span></header>'+
+    '<p class="help" style="margin-top:12px">Tick what\'s in your kitchen. Salt, oil and spices are assumed.</p>'+
+    PANTRY.map(([g,items])=>'<div class="pgroup"><div class="plab">'+g+'</div><div class="chips">'+items.map(([k,l])=>'<button class="chip" data-pk="'+k+'" aria-pressed="'+pantrySel.has(k)+'">'+l+'</button>').join("")+'</div></div>').join("")+
+    '<section class="sec" id="p-results"><div class="sec-top"><div><h2>'+(pantrySel.size?ready.length+' ready to cook':'Your matches')+'</h2><p>'+(pantrySel.size?'Using what you ticked.':'Tick a few things above to see recipes.')+'</p></div>'+(pantrySel.size?'<button class="see" id="p-clear">Clear</button>':'')+'</div>'+
+    (ready.length?'<div class="grid2">'+ready.map(([r])=>mini(r)).join("")+'</div>':(pantrySel.size?'<p class="empty">Nothing fully matches yet. Check the almost-there list below.</p>':''))+'</section>'+
+    (almost.length?'<section class="sec"><div class="sec-top"><div><h2>Missing just one thing</h2><p>Add it to your grocery list.</p></div></div><div class="almost">'+almost.map(([r,u,i])=>'<div class="alm"><button class="alm-r" data-id="'+r.id+'"><img src="'+r.img+'" alt=""><span><b>'+r.name+'</b><small>Missing: '+i.name+'</small></span></button><button class="see" data-addg="'+r.id+'|'+i.id+'">+ List</button></div>').join("")+'</div></section>':'')+
+    '</div></div>';
+  document.getElementById("p-back").onclick=()=>go("home");
+  const cl=document.getElementById("p-clear");if(cl)cl.onclick=()=>{pantrySel.clear();store.set("pp7-pantry",[]);redraw()};
+  app.querySelectorAll("[data-pk]").forEach(b=>b.onclick=()=>{const k=b.dataset.pk;pantrySel.has(k)?pantrySel.delete(k):pantrySel.add(k);store.set("pp7-pantry",[...pantrySel]);redraw()});
+  app.querySelectorAll(".mini,.alm-r").forEach(b=>b.onclick=()=>{const r=byId(b.dataset.id);applyPantry(r);go("detail",r.id)});
+  app.querySelectorAll("[data-addg]").forEach(b=>b.onclick=()=>{const [rid,iid]=b.dataset.addg.split("|");const r=byId(rid),i=r.ings.find(z=>z.id===iid);addGrocery([{name:i.name,qty:i.qty,from:r.name}]);b.textContent="Added";b.disabled=true});
+}
+
+// ---------- grocery list ----------
+let groceries=store.get("pp7-grocery",[]);
+function saveGroceries(){store.set("pp7-grocery",groceries)}
+function addGrocery(items){let n=0;items.forEach(it=>{if(!groceries.some(g=>g.name.toLowerCase()===it.name.toLowerCase()&&!g.done)){groceries.push({id:String(Date.now())+Math.random().toString(36).slice(2,6),name:it.name,qty:it.qty||"",from:it.from||"",done:false});n++}});saveGroceries();toast(n?"Added "+n+" to your grocery list":"Already on your grocery list");return n}
+function missingFor(r){return r.ings.filter(i=>stateOf(r,i.id)!=="have")}
+function groceryBtn(r){const m=missingFor(r);if(!m.length)return "";return '<button class="linkbtn" id="add-groc">'+ICON_CART+'Add '+m.length+' missing item'+(m.length>1?'s':'')+' to grocery list</button>'}
+const ICON_CART='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 4h2l2.4 11h10.2L20 7H6.2"/><circle cx="9.5" cy="19.5" r="1.5"/><circle cx="17" cy="19.5" r="1.5"/></svg>';
+const ICON_PANTRY='<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2.5"/><path d="M4 9h16M4 15h16M10 6h4M10 12h4M10 18h4"/></svg>';
+function grocery(){
+  const open=groceries.filter(g=>!g.done),done=groceries.filter(g=>g.done);
+  const row=g=>'<li><button class="chk gchk" data-g="'+g.id+'" aria-pressed="'+g.done+'"><i aria-hidden="true"></i><span>'+cap(esc(g.name))+(g.from?'<small>for '+esc(g.from)+'</small>':'')+'</span>'+(g.qty?'<em>'+esc(g.qty)+'</em>':'')+'</button></li>';
+  app.innerHTML='<div class="home"><div class="col">'+
+    '<header class="top"><button class="kback" id="g-back" aria-label="Back to recipes"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button><h1 class="k-title">Grocery list</h1><span style="width:44px"></span></header>'+
+    (groceries.length?
+      '<ul class="glist">'+open.map(row).join("")+'</ul>'+(done.length?'<div class="plab" style="margin-top:18px">In the basket</div><ul class="glist">'+done.map(row).join("")+'</ul>':'')+
+      '<div class="sheet-btns" style="margin-top:18px"><button class="btn-p" id="g-copy">Copy list</button>'+(done.length?'<button class="btn-g" id="g-clear">Clear ticked</button>':'')+'</div>'
+      :'<div class="kempty"><div class="kempty-ic">'+ICON_CART.replace('width="20" height="20"','width="34" height="34"')+'</div><h2>Nothing to buy yet</h2><p>On any recipe, mark what you\'re missing and add it here. Or check what you can already cook.</p><button class="btn-p" id="g-pantry">What can I cook?</button></div>')+
+    '</div></div>';
+  document.getElementById("g-back").onclick=()=>go("home");
+  const gp=document.getElementById("g-pantry");if(gp)gp.onclick=()=>go("pantry");
+  app.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{const g=groceries.find(z=>z.id===b.dataset.g);g.done=!g.done;saveGroceries();redraw()});
+  const gc=document.getElementById("g-clear");if(gc)gc.onclick=()=>{groceries=groceries.filter(g=>!g.done);saveGroceries();redraw()};
+  const cp=document.getElementById("g-copy");if(cp)cp.onclick=async()=>{const txt="Grocery list\n"+open.map(g=>"- "+cap(g.name)+(g.qty?" ("+g.qty+")":"")).join("\n");try{await navigator.clipboard.writeText(txt);toast("List copied. Paste it in WhatsApp or Notes.")}catch(e){toast("Couldn't copy here. Long-press the items to select them.")}};
+}
+function homeTools(){
+  const open=groceries.filter(g=>!g.done).length;
+  return '<div class="htools"><button class="htool" id="go-pantry">'+ICON_PANTRY+'<span><b>What can I cook?</b><small>Pick what you have</small></span></button><button class="htool" id="go-grocery">'+ICON_CART+'<span><b>Grocery list</b><small class="num">'+(open?open+' item'+(open>1?'s':'')+' to buy':'Nothing to buy')+'</small></span></button></div>';
+}
+function bindHomeTools(){const a=document.getElementById("go-pantry");if(a)a.onclick=()=>{homeScroll=window.scrollY;go("pantry")};const b=document.getElementById("go-grocery");if(b)b.onclick=()=>{homeScroll=window.scrollY;go("grocery")}}
+
+function go(name,id){closeSheet();view={name,id:id||null};({detail,kitchen,pantry,grocery}[name]||home)();window.scrollTo(0,0)}
 home();
 </script>
 
