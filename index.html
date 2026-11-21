@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Protein Pan</title>
+<meta property="og:url" content="https://rupam.work/protein-pan/">
+<link rel="canonical" href="https://rupam.work/protein-pan/">
 <meta name="description" content="High-protein recipes, one step at a time.">
 <meta name="theme-color" content="#F5F7F2">
 <meta name="theme-color" content="#111511" media="(prefers-color-scheme: dark)">
@@ -17,6 +19,18 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap">
 <style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}body{margin:0;font:14px system-ui,-apple-system,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>
+.rw-by{position:fixed;left:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:2147483000;font:500 12px/1.2 system-ui,-apple-system,"Segoe UI",sans-serif;color:#fff}
+.rw-by summary{list-style:none;cursor:pointer;padding:7px 11px;border-radius:999px;background:rgba(18,18,22,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);opacity:.7;transition:opacity .2s;user-select:none}
+.rw-by summary::-webkit-details-marker{display:none}
+.rw-by summary:hover,.rw-by[open] summary{opacity:1}
+.rw-by div{position:absolute;left:0;bottom:calc(100% + 6px);min-width:170px;padding:6px;border-radius:12px;background:rgba(18,18,22,.86);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.rw-by a{display:block;padding:7px 9px;border-radius:8px;color:#fff;text-decoration:none;white-space:nowrap}
+.rw-by a:hover{background:rgba(255,255,255,.12)}
+.rw-by a.rw-home{opacity:.75}
+.rw-foot{max-width:720px;margin:40px auto 0;padding:24px 16px calc(32px + env(safe-area-inset-bottom,0px));font-size:13px;line-height:1.6;color:inherit;opacity:.7;text-align:center}
+.rw-foot a{color:inherit;text-decoration:underline;text-underline-offset:3px;margin:0 6px;white-space:nowrap}
+</style>
 </head>
 <body>
 <style>
@@ -429,6 +443,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 
 <div id="app"></div>
 <div id="cook-root"></div>
+<footer class="rw-foot">Made by <a href="https://rupam.work/" style="margin:0">Rupam</a>, a product designer. More things I made: <a href="https://rupam.work/gym/">Home Gym Diorama</a><a href="https://rupam.work/water-ring-toss/">Water Ring Toss</a><a href="https://rupam.work/corner-florist/">The Corner Florist</a></footer>
 <div class="sr" aria-live="polite" id="live"></div>
 
 <script>

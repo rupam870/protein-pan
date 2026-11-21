@@ -7,5 +7,5 @@ High-protein vegetarian (+ eggs) recipes for people learning to cook, one step a
 - Cook mode with timers, read-aloud steps and voice commands
 - My kitchen: a photo gallery of the plates you've cooked (photos stay on your device)
 
-Live app: https://rupam870.github.io/protein-pan/
+Live app: https://rupam.work/protein-pan/
 On iPhone, open it in Safari, tap Share, then Add to Home Screen.
